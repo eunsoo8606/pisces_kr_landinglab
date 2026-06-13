@@ -1493,16 +1493,38 @@
 
                         <!-- 개인정보 동의 및 약관 -->
                         <div class="form-agreement-row">
-                            <label class="custom-checkbox">
-                                <input type="checkbox" id="privacyAgree" name="privacyAgree">
-                                <span class="checkbox-mark"></span>
-                                <span class="agreement-text">개인정보 수집 및 이용에 동의합니다. (필수)</span>
-                            </label>
-                            <div class="privacy-detail-box">
-                                <p><strong>개인정보 수집 및 이용 안내</strong></p>
-                                <p>1. 수집 항목: 이름, 연락처, 이메일, 거주지 등 상담에 필요한 정보</p>
-                                <p>2. 수집 목적: 가맹 상담 신청 및 개설 문의에 대한 원활한 상담 진행과 답변 제공</p>
-                                <p>3. 보유 및 이용 기간: 목적 달성 후 지체 없이 파기 (단, 관계 법령에 따라 보존이 필요한 경우 예외)</p>
+                            <div class="agreement-check-wrap">
+                                <label class="custom-checkbox">
+                                    <input type="checkbox" id="privacyAgree" name="privacyAgree" checked>
+                                    <span class="checkbox-mark"></span>
+                                    <span class="agreement-text">개인정보 수집 및 이용에 동의합니다. (필수)</span>
+                                </label>
+                                <button type="button" id="btnOpenPrivacy" class="btn-privacy-view">[전문보기]</button>
+                            </div>
+
+                            <!-- 개인정보 보호정책 모달 팝업 -->
+                            <div id="privacyModal" class="privacy-modal">
+                                <div class="privacy-modal-overlay"></div>
+                                <div class="privacy-modal-content">
+                                    <div class="privacy-modal-header">
+                                        <h4>개인정보 수집 및 이용 동의</h4>
+                                        <button type="button" id="btnClosePrivacy" class="btn-modal-close">&times;</button>
+                                    </div>
+                                    <div class="privacy-modal-body">
+                                        <h5>1. 개인정보의 수집 및 이용 목적</h5>
+                                        <p>사이트 이용자의 문의 확인 및 답변을 위한 연락통지, 처리결과 통보 등을 목적으로 개인정보를 처리합니다.</p>
+
+                                        <h5>2. 처리하는 개인정보 항목</h5>
+                                        <ul>
+                                            <li><strong>필수항목 :</strong> 이름, 연락처 (접속 IP 정보, 쿠키, 서비스 이용 기록, 접속 로그)</li>
+                                            <li><strong>선택항목 :</strong> 이메일</li>
+                                        </ul>
+
+                                        <h5>3. 개인정보의 처리 및 보유 기간</h5>
+                                        <p>① 법령에 따른 개인정보 보유·이용기간 또는 정보주체로부터 개인정보를 수집 시에 동의 받은 개인정보 보유, 이용기간 내에서 개인정보를 처리, 보유합니다.</p>
+                                        <p>② 개인정보의 보유 기간은 5년입니다.</p>
+                                    </div>
+                                </div>
                             </div>
                         </div>
 

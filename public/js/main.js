@@ -1464,5 +1464,28 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+    // 개인정보 수집 및 이용 동의 모달 제어
+    const btnOpenPrivacy = document.getElementById('btnOpenPrivacy');
+    const btnClosePrivacy = document.getElementById('btnClosePrivacy');
+    const privacyModal = document.getElementById('privacyModal');
+    const privacyModalOverlay = document.querySelector('.privacy-modal-overlay');
+
+    if (btnOpenPrivacy && privacyModal) {
+        // 모달 열기
+        btnOpenPrivacy.addEventListener('click', () => {
+            privacyModal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        });
+
+        // 모달 닫기 함수
+        const closePrivacyModal = () => {
+            privacyModal.classList.remove('active');
+            document.body.style.overflow = '';
+        };
+
+        if (btnClosePrivacy) btnClosePrivacy.addEventListener('click', closePrivacyModal);
+        if (privacyModalOverlay) privacyModalOverlay.addEventListener('click', closePrivacyModal);
+    }
+
 
 });

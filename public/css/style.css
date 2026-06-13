@@ -5376,42 +5376,167 @@ footer {
     transform: rotate(45deg) scale(1);
 }
 
-.privacy-detail-box {
+.agreement-check-wrap {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
     width: 100%;
-    height: 110px;
-    background: rgba(0, 0, 0, 0.3);
-    border: 1px solid rgba(255, 255, 255, 0.05);
-    border-radius: 8px;
-    padding: 15px 20px;
+}
+
+.btn-privacy-view {
+    background: none;
+    border: none;
+    color: #00a8cc;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    text-decoration: underline;
+    transition: color 0.3s ease;
+    padding: 0;
+    outline: none;
+}
+
+.btn-privacy-view:hover {
+    color: #ffb703;
+}
+
+/* 개인정보 보호정책 모달 팝업 */
+.privacy-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 10000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.4s ease, visibility 0.4s ease;
+}
+
+.privacy-modal.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+.privacy-modal-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+}
+
+.privacy-modal-content {
+    position: relative;
+    width: 90%;
+    max-width: 600px;
+    background: #00182e;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 16px;
+    box-shadow: 0 30px 80px rgba(0, 0, 0, 0.6);
+    overflow: hidden;
+    z-index: 10001;
+    transform: scale(0.9);
+    transition: transform 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+}
+
+.privacy-modal.active .privacy-modal-content {
+    transform: scale(1);
+}
+
+.privacy-modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 25px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    background: rgba(255, 255, 255, 0.01);
+}
+
+.privacy-modal-header h4 {
+    font-family: 'Noto Serif KR', serif;
+    font-size: 18px;
+    font-weight: 700;
+    color: #ffffff;
+    margin: 0;
+}
+
+.btn-modal-close {
+    background: none;
+    border: none;
+    color: rgba(255, 255, 255, 0.5);
+    font-size: 28px;
+    font-weight: 300;
+    cursor: pointer;
+    transition: color 0.3s ease;
+    outline: none;
+    line-height: 1;
+}
+
+.btn-modal-close:hover {
+    color: #ffffff;
+}
+
+.privacy-modal-body {
+    padding: 25px;
+    max-height: 400px;
     overflow-y: auto;
-    font-size: 13px;
-    color: rgba(255, 255, 255, 0.45);
-    line-height: 1.8;
+    color: rgba(255, 255, 255, 0.75);
+    font-size: 14px;
+    line-height: 1.7;
 }
 
-.privacy-detail-box p {
+.privacy-modal-body h5 {
+    font-size: 15px;
+    font-weight: 700;
+    color: #ffb703;
+    margin: 20px 0 10px;
+}
+
+.privacy-modal-body h5:first-child {
+    margin-top: 0;
+}
+
+.privacy-modal-body p {
+    margin-bottom: 12px;
+    word-break: keep-all;
+}
+
+.privacy-modal-body ul {
+    margin-bottom: 16px;
+    padding-left: 20px;
+}
+
+.privacy-modal-body li {
     margin-bottom: 6px;
+    list-style-type: disc;
 }
 
-.privacy-detail-box p strong {
-    color: rgba(255, 255, 255, 0.7);
+.privacy-modal-body strong {
+    color: #ffffff;
 }
 
-/* 스크롤바 커스텀 */
-.privacy-detail-box::-webkit-scrollbar {
+/* 모달 바디 스크롤바 커스텀 */
+.privacy-modal-body::-webkit-scrollbar {
     width: 6px;
 }
 
-.privacy-detail-box::-webkit-scrollbar-track {
+.privacy-modal-body::-webkit-scrollbar-track {
     background: transparent;
 }
 
-.privacy-detail-box::-webkit-scrollbar-thumb {
+.privacy-modal-body::-webkit-scrollbar-thumb {
     background: rgba(255, 255, 255, 0.1);
     border-radius: 3px;
 }
 
-.privacy-detail-box::-webkit-scrollbar-thumb:hover {
+.privacy-modal-body::-webkit-scrollbar-thumb:hover {
     background: rgba(255, 255, 255, 0.2);
 }
 
