@@ -1328,6 +1328,141 @@ document.addEventListener('DOMContentLoaded', () => {
             stagger: 0.2,
             ease: 'power2.out'
         }, '-=0.8');
+    // 5. 창업 상담 신청 문의하기 (Inquiry Form) 핸들링
+
+    // 이메일 도메인 자동 선택/직접입력 토글 로직
+    const emailDomainSelect = document.getElementById('emailDomainSelect');
+    const inquirerEmailDomain = document.getElementById('inquirerEmailDomain');
+
+    if (emailDomainSelect && inquirerEmailDomain) {
+        emailDomainSelect.addEventListener('change', function() {
+            const selectedVal = this.value;
+            if (selectedVal === "") {
+                // 직접 입력 선택 시
+                inquirerEmailDomain.value = "";
+                inquirerEmailDomain.readOnly = false;
+                inquirerEmailDomain.focus();
+            } else {
+                // 도메인 선택 시 자동 입력 및 수정 불가 처리
+                inquirerEmailDomain.value = selectedVal;
+                inquirerEmailDomain.readOnly = true;
+            }
+        });
+    }
+
+    // GSAP ScrollTrigger 문의하기 섹션 등장 애니메이션
+    if (document.querySelector('.section-inquiry')) {
+        gsap.fromTo('.inquiry-header > *', 
+            { opacity: 0, y: 30 },
+            {
+                opacity: 1,
+                y: 0,
+                stagger: 0.15,
+                duration: 1.0,
+                ease: 'power3.out',
+                scrollTrigger: {
+                    trigger: '.section-inquiry',
+                    start: 'top 80%'
+                }
+            }
+        );
+
+        gsap.to('.inquiry-form-card', {
+            opacity: 1,
+            y: 0,
+            duration: 1.2,
+            ease: 'power4.out',
+            scrollTrigger: {
+                trigger: '.inquiry-form-card',
+                start: 'top 85%'
+            }
+        });
+    }
+
+    // 폼 유효성 검사 및 전송 연출
+    const inquiryForm = document.getElementById('inquiryForm');
+    if (inquiryForm) {
+        inquiryForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            // 필드 선택
+            const nameInput = document.getElementById('inquirerName');
+            const phoneInput = document.getElementById('inquirerPhone');
+            const emailIdInput = document.getElementById('inquirerEmailId');
+            const emailDomainInput = document.getElementById('inquirerEmailDomain');
+            const addressInput = document.getElementById('inquirerAddress');
+            const privacyAgree = document.getElementById('privacyAgree');
+            const submitBtn = this.querySelector('.btn-submit');
+
+            // 1) 이름 유효성 검사
+            if (!nameInput.value.trim()) {
+                alert('성함을 입력해 주세요.');
+                nameInput.focus();
+                return;
+            }
+
+            // 2) 연락처 유효성 검사
+            const phoneVal = phoneInput.value.trim();
+            if (!phoneVal) {
+                alert('연락처를 입력해 주세요.');
+                phoneInput.focus();
+                return;
+            }
+            // 하이픈 제거 또는 포맷 정규식 (기본적인 모바일 전화번호 형태 검증)
+            const phoneReg = /^(01[016789]{1}|02|0[3-9]{1}[0-9]{1})-[0-9]{3,4}-[0-9]{4}$/;
+            const phoneRegNoHyphen = /^(01[016789]{1}|02|0[3-9]{1}[0-9]{1})[0-9]{3,4}[0-9]{4}$/;
+            if (!phoneReg.test(phoneVal) && !phoneRegNoHyphen.test(phoneVal)) {
+                alert('올바른 연락처 형식을 입력해 주세요. (예: 010-1234-5678 또는 하이픈 없이 입력)');
+                phoneInput.focus();
+                return;
+            }
+
+            // 3) 이메일 유효성 검사
+            if (!emailIdInput.value.trim()) {
+                alert('이메일 아이디를 입력해 주세요.');
+                emailIdInput.focus();
+                return;
+            }
+            if (!emailDomainInput.value.trim()) {
+                alert('이메일 도메인을 입력해 주세요.');
+                emailDomainInput.focus();
+                return;
+            }
+
+            // 4) 거주지 유효성 검사
+            if (!addressInput.value.trim()) {
+                alert('거주지를 입력해 주세요.');
+                addressInput.focus();
+                return;
+            }
+
+            // 5) 개인정보 동의 유효성 검사
+            if (!privacyAgree.checked) {
+                alert('개인정보 수집 및 이용에 동의해 주세요.');
+                privacyAgree.focus();
+                return;
+            }
+
+            // 제출 진행 연출 (제출 완료 애니메이션)
+            if (submitBtn) {
+                const origBtnHtml = submitBtn.innerHTML;
+                submitBtn.disabled = true;
+                submitBtn.innerHTML = `<span>상담 신청을 전송 중입니다...</span>`;
+                submitBtn.style.opacity = '0.8';
+
+                setTimeout(() => {
+                    alert('성공적으로 창업 상담 신청이 접수되었습니다.\n담당자가 빠른 시일 내에 기재해주신 연락처로 연락드리겠습니다.');
+                    // 폼 초기화
+                    inquiryForm.reset();
+                    if (emailDomainInput) emailDomainInput.readOnly = false;
+                    
+                    submitBtn.disabled = false;
+                    submitBtn.innerHTML = origBtnHtml;
+                    submitBtn.style.opacity = '1';
+                }, 2000);
+            }
+        });
+    }
 
 
 });

@@ -1352,4 +1352,173 @@
             </div>
         </section>
 
+        <!-- 상담 신청 및 문의하기 섹션 -->
+        <section class="section-inquiry">
+            <div class="container inquiry-container">
+                <div class="inquiry-header">
+                    <span class="inquiry-subtitle">FRANCHISE INQUIRY</span>
+                    <h2 class="inquiry-title">창업 상담 신청</h2>
+                    <p class="inquiry-notice"><span class="required-dot-legend"></span> 표시 항목은 필수입력항목입니다.</p>
+                </div>
+
+                <div class="inquiry-form-card">
+                    <form id="inquiryForm" class="inquiry-form">
+                        <!-- 상담자 정보 그룹 -->
+                        <div class="form-group-title-wrap">
+                            <h3 class="form-group-title">상담자 정보</h3>
+                        </div>
+
+                        <!-- 방문경로 (라디오) -->
+                        <div class="form-row">
+                            <div class="form-label-cell">
+                                <span class="required-dot"></span>
+                                <label>방문경로</label>
+                            </div>
+                            <div class="form-input-cell">
+                                <div class="radio-group">
+                                    <label class="custom-radio">
+                                        <input type="radio" name="visitPath" value="매장방문" checked>
+                                        <span class="radio-mark"></span>
+                                        매장방문
+                                    </label>
+                                    <label class="custom-radio">
+                                        <input type="radio" name="visitPath" value="인스타그램">
+                                        <span class="radio-mark"></span>
+                                        인스타그램
+                                    </label>
+                                    <label class="custom-radio">
+                                        <input type="radio" name="visitPath" value="페이스북">
+                                        <span class="radio-mark"></span>
+                                        페이스북
+                                    </label>
+                                    <label class="custom-radio">
+                                        <input type="radio" name="visitPath" value="네이버">
+                                        <span class="radio-mark"></span>
+                                        네이버
+                                    </label>
+                                    <label class="custom-radio">
+                                        <input type="radio" name="visitPath" value="기타">
+                                        <span class="radio-mark"></span>
+                                        기타
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 창업경험 (라디오) -->
+                        <div class="form-row">
+                            <div class="form-label-cell">
+                                <span class="required-dot"></span>
+                                <label>창업경험</label>
+                            </div>
+                            <div class="form-input-cell">
+                                <div class="radio-group">
+                                    <label class="custom-radio">
+                                        <input type="radio" name="experience" value="유" checked>
+                                        <span class="radio-mark"></span>
+                                        유
+                                    </label>
+                                    <label class="custom-radio">
+                                        <input type="radio" name="experience" value="무">
+                                        <span class="radio-mark"></span>
+                                        무
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 이름 (인풋) -->
+                        <div class="form-row">
+                            <div class="form-label-cell">
+                                <span class="required-dot"></span>
+                                <label for="inquirerName">이름</label>
+                            </div>
+                            <div class="form-input-cell">
+                                <input type="text" id="inquirerName" name="inquirerName" class="form-control" placeholder="성함을 입력해 주세요.">
+                            </div>
+                        </div>
+
+                        <!-- 연락처 (인풋) -->
+                        <div class="form-row">
+                            <div class="form-label-cell">
+                                <span class="required-dot"></span>
+                                <label for="inquirerPhone">연락처</label>
+                            </div>
+                            <div class="form-input-cell">
+                                <input type="text" id="inquirerPhone" name="inquirerPhone" class="form-control" placeholder="연락처를 입력해 주세요. (예: 010-0000-0000)">
+                            </div>
+                        </div>
+
+                        <!-- 이메일 (인풋 조합) -->
+                        <div class="form-row">
+                            <div class="form-label-cell">
+                                <span class="required-dot"></span>
+                                <label for="inquirerEmailId">이메일</label>
+                            </div>
+                            <div class="form-input-cell email-input-group">
+                                <input type="text" id="inquirerEmailId" name="inquirerEmailId" class="form-control" placeholder="이메일 아이디">
+                                <span class="email-separator">@</span>
+                                <input type="text" id="inquirerEmailDomain" name="inquirerEmailDomain" class="form-control" placeholder="도메인 입력">
+                                <select id="emailDomainSelect" class="form-control email-select">
+                                    <option value="">직접입력</option>
+                                    <option value="naver.com">naver.com</option>
+                                    <option value="gmail.com">gmail.com</option>
+                                    <option value="daum.net">daum.net</option>
+                                    <option value="hanmail.net">hanmail.net</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <!-- 거주지 (인풋) -->
+                        <div class="form-row">
+                            <div class="form-label-cell">
+                                <span class="required-dot"></span>
+                                <label for="inquirerAddress">거주지</label>
+                            </div>
+                            <div class="form-input-cell">
+                                <input type="text" id="inquirerAddress" name="inquirerAddress" class="form-control" placeholder="시/군/구 단위까지 거주지를 입력해 주세요.">
+                            </div>
+                        </div>
+
+                        <!-- 문의내용 (텍스트에어리어) -->
+                        <div class="form-row">
+                            <div class="form-label-cell align-top">
+                                <span class="required-dot"></span>
+                                <label for="inquirerMessage">문의내용</label>
+                            </div>
+                            <div class="form-input-cell">
+                                <textarea id="inquirerMessage" name="inquirerMessage" class="form-control textarea-control" placeholder="창업 희망 지역, 매장 규모, 예산 등 세부 문의 사항을 작성해 주세요."></textarea>
+                            </div>
+                        </div>
+
+                        <!-- 개인정보 동의 및 약관 -->
+                        <div class="form-agreement-row">
+                            <label class="custom-checkbox">
+                                <input type="checkbox" id="privacyAgree" name="privacyAgree">
+                                <span class="checkbox-mark"></span>
+                                <span class="agreement-text">개인정보 수집 및 이용에 동의합니다. (필수)</span>
+                            </label>
+                            <div class="privacy-detail-box">
+                                <p><strong>개인정보 수집 및 이용 안내</strong></p>
+                                <p>1. 수집 항목: 이름, 연락처, 이메일, 거주지 등 상담에 필요한 정보</p>
+                                <p>2. 수집 목적: 가맹 상담 신청 및 개설 문의에 대한 원활한 상담 진행과 답변 제공</p>
+                                <p>3. 보유 및 이용 기간: 목적 달성 후 지체 없이 파기 (단, 관계 법령에 따라 보존이 필요한 경우 예외)</p>
+                            </div>
+                        </div>
+
+                        <!-- 전송 버튼 -->
+                        <div class="form-submit-wrap">
+                            <button type="submit" class="btn-submit">
+                                <span>상담 신청 완료하기</span>
+                                <svg class="submit-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <line x1="5" y1="12" x2="19" y2="12"></line>
+                                    <polyline points="12 5 19 12 12 19"></polyline>
+                                </svg>
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </section>
+
         <%- include('layout/footer') %>
