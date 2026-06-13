@@ -5062,8 +5062,9 @@ footer {
 .section-inquiry {
     position: relative;
     width: 100%;
-    background: url('/images/sec_4.png') center center / cover no-repeat;
-    padding: 140px 0;
+    background: url('/images/sec_4.png') center top / cover no-repeat;
+    background-attachment: fixed;
+    padding: 90px 0;
     overflow: hidden;
     font-family: 'Pretendard', sans-serif;
 }
@@ -5130,7 +5131,7 @@ footer {
     -webkit-backdrop-filter: blur(20px);
     border: 1px solid rgba(255, 255, 255, 0.05);
     border-radius: 24px;
-    padding: 60px 80px;
+    padding: 50px 60px;
     box-shadow: 0 40px 100px rgba(0, 0, 0, 0.5);
     opacity: 0;
     transform: translateY(50px);
