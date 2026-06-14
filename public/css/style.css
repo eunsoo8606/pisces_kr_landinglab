@@ -379,6 +379,23 @@ main {
     font-weight: 800;
 }
 
+.brand-name-wrap {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-top: 10px;
+}
+
+.brand-prefix {
+    font-family: 'Noto Serif KR', serif;
+    font-size: 44px;
+    font-weight: 800;
+    color: #ffffff;
+    letter-spacing: -1.5px;
+    line-height: 1.1;
+    text-shadow: 0 0 15px rgba(255, 255, 255, 0.1);
+}
+
 .brand-name {
     font-family: 'Noto Serif KR', serif;
     font-size: 84px;
@@ -503,6 +520,12 @@ main {
     .hero-features {
         gap: 10px;
     }
+    .brand-prefix {
+        font-size: 38px;
+    }
+    .brand-name {
+        font-size: 72px;
+    }
 }
 
 @media (max-width: 768px) {
@@ -532,6 +555,12 @@ main {
     }
     .underline-line {
         display: none; /* 모바일에서는 가독성을 위해 언더라인 비활성화 */
+    }
+    .brand-prefix {
+        font-size: 26px !important;
+    }
+    .brand-name {
+        font-size: 52px !important;
     }
 }
 
