@@ -663,7 +663,8 @@
                     </div>
                 </div>
 
-                <div class="month-tabs-wrap">
+                <!-- 데스크톱 전용 1~12월 수평 탭 -->
+                <div class="month-tabs-wrap desktop-only">
                     <div class="month-tabs">
                         <% for(let m=1; m<=12; m++) { %>
                             <button class="month-tab <%= m === 1 ? 'active' : '' %>" data-month="<%= m %>">
@@ -671,6 +672,23 @@
                             </button>
                             <% } %>
                     </div>
+                </div>
+
+                <!-- 모바일 전용 단일 월 캐러셀 스위처 -->
+                <div class="mobile-month-selector mobile-only">
+                    <button class="month-arrow-btn prev-month" id="prevMonthBtn" aria-label="이전 달">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
+                            <polyline points="15 18 9 12 15 6"></polyline>
+                        </svg>
+                    </button>
+                    <span class="active-month-text" id="activeMonthDisplay">1월</span>
+                    <button class="month-arrow-btn next-month" id="nextMonthBtn" aria-label="다음 달">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
+                            <polyline points="9 18 15 12 9 6"></polyline>
+                        </svg>
+                    </button>
                 </div>
             </div>
 
@@ -704,7 +722,7 @@
             <!-- 메인 카피 영역 -->
             <div class="fillet-header">
                 <span class="fillet-subtitle">칼 없는 주방, 주방장 없는 횟집</span>
-                <h2 class="fillet-title">가장 완벽하고 쉬운 <span class="highlight">'필렛 시스템'</span></h2>
+                <h2 class="fillet-title">가장 완벽하고 쉬운 <br class="mobile-br"><span class="highlight">'필렛 시스템'</span></h2>
                 <p class="fillet-desc">
                     그 흔한 고깃집, 치킨집 장사보다 더 쉽습니다.<br>
                     까다로운 원어 손질과 주방 관리는 물고기자리 본사가 책임지겠습니다.
@@ -740,6 +758,8 @@
                 </div>
             </div>
         </div>
+    </section>
+
         <!-- 열 번째 섹션: 자체생산센터 (비교 섹션) -->
         <section class="section-factory">
             <!-- 배경 오버레이 (가독성을 위한 그라디언트 딤 처리) -->
@@ -1379,6 +1399,7 @@
         </section>
 
         <!-- 상담 신청 및 문의하기 섹션 -->
+        <!-- 상담 신청 및 문의하기 섹션 -->
         <section class="section-inquiry">
             <div class="container inquiry-container">
                 <div class="inquiry-header">
@@ -1565,6 +1586,33 @@
                             </button>
                         </div>
                     </form>
+                </div>
+            </div>
+        </section>
+
+        <!-- 매장현황 바로가기 섹션 (창업안내에서 매장 위치 확인 유도) -->
+        <section class="section-store-shortcut">
+            <div class="shortcut-bg-overlay"></div>
+            <div class="container shortcut-container">
+                <div class="shortcut-content">
+                    <span class="shortcut-subtitle">PISCES NATIONWIDE</span>
+                    <h2 class="shortcut-title">
+                        우리 동네에서 만나는<br>
+                        <span>물고기자리 매장현황</span>
+                    </h2>
+                    <p class="shortcut-desc">
+                        현재 전국 각지에서 성업 중인 물고기자리 매장을 확인하실 수 있습니다.<br>
+                        압도적인 매출과 고객 평점으로 증명된 프리미엄 숙성회의 현장을 직접 방문해 보세요.
+                    </p>
+                    <div class="shortcut-btn-wrap">
+                        <a href="/stores" class="btn-store-shortcut" id="btnStoreShortcut">
+                            <span>전국 매장 현황 확인하기</span>
+                            <svg class="shortcut-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                                <line x1="5" y1="12" x2="19" y2="12"></line>
+                                <polyline points="12 5 19 12 12 19"></polyline>
+                            </svg>
+                        </a>
+                    </div>
                 </div>
             </div>
         </section>

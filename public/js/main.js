@@ -165,31 +165,72 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // 5. 두 번째 섹션 (.section-quality) GSAP ScrollTrigger 진입 모션
+    // 5. 두 번째 섹션 (.section-quality) GSAP ScrollTrigger 진입 모션 (사방 교차 입체 리빌 모션 튜닝)
     const sectionQuality = document.querySelector('.section-quality');
     const qualityLeft = document.querySelector('.quality-left');
     const qualityRight = document.querySelector('.quality-right');
 
     if (sectionQuality && qualityLeft && qualityRight) {
-        gsap.timeline({
+        const qualityTitle = qualityLeft.querySelector('.quality-title');
+        const qualitySubtitle = qualityLeft.querySelector('.quality-subtitle');
+
+        // 타이틀을 <br> 기준으로 분리하여 좌/우 교차 진입 준비
+        if (qualityTitle) {
+            const rawHTML = qualityTitle.innerHTML.trim();
+            const lines = rawHTML.split(/<br\s*\/?>/i);
+            if (lines.length >= 2) {
+                qualityTitle.innerHTML = `
+                    <span class="title-line line-left" style="display:inline-block; transform:translateX(-60px); opacity:0; will-change:transform,opacity;">${lines[0].trim()}</span><br>
+                    <span class="title-line line-right" style="display:inline-block; transform:translateX(60px); opacity:0; will-change:transform,opacity;">${lines[1].trim()}</span>
+                `;
+            }
+        }
+
+        // 초기 위치 및 페이드 상태 설정
+        gsap.set(qualitySubtitle, { opacity: 0, y: -45 }); // 위 ➡️ 아래 초기 상태
+        gsap.set(qualityRight, { opacity: 0, y: 70 });       // 아래 ➡️ 위 초기 상태
+        gsap.set(qualityLeft, { opacity: 1, y: 0 });          // 부모 래퍼 노출
+
+        const qualityTimeline = gsap.timeline({
             scrollTrigger: {
                 trigger: sectionQuality,
-                start: 'top 80%', // 섹션 상단이 뷰포트 80%에 도달할 때
+                start: 'top 75%',
                 toggleActions: 'play none none none',
             }
-        })
-            .to(qualityLeft, {
-                opacity: 1,
+        });
+
+        const lineLeft = qualityTitle.querySelector('.line-left');
+        const lineRight = qualityTitle.querySelector('.line-right');
+
+        qualityTimeline
+            // 1) 소제목: 위 ➡️ 아래로 페이드인
+            .to(qualitySubtitle, {
+                opacity: 0.9,
                 y: 0,
-                duration: 1.0,
+                duration: 0.8,
                 ease: 'power3.out'
             })
+            // 2) 타이틀 1열: 왼쪽 ➡️ 오른쪽으로 슬라이드인
+            .to(lineLeft, {
+                opacity: 1,
+                x: 0,
+                duration: 0.9,
+                ease: 'power3.out'
+            }, '-=0.5')
+            // 3) 타이틀 2열: 오른쪽 ➡️ 왼쪽으로 슬라이드인 (교차 교차)
+            .to(lineRight, {
+                opacity: 1,
+                x: 0,
+                duration: 0.9,
+                ease: 'power3.out'
+            }, '-=0.7')
+            // 4) 우측 이미지 카드: 아래 ➡️ 위로 솟구치며 안착
             .to(qualityRight, {
                 opacity: 1,
                 y: 0,
-                duration: 1.0,
+                duration: 1.1,
                 ease: 'power3.out'
-            }, '-=0.7');
+            }, '-=0.6');
     }
 
     // 6. 퀄리티 섹션 우측 이미지 슬라이더 동작 제어
@@ -756,6 +797,12 @@ document.addEventListener('DOMContentLoaded', () => {
             const data = rankingData[month];
             if (!data) return;
 
+            // 모바일 디스플레이 월 텍스트 동기화
+            const activeMonthDisplay = document.getElementById('activeMonthDisplay');
+            if (activeMonthDisplay) {
+                activeMonthDisplay.innerText = `${month}월`;
+            }
+
             // 탭 활성화 상태 동기화
             monthTabs.forEach(tab => {
                 if (parseInt(tab.getAttribute('data-month')) === month) {
@@ -782,7 +829,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     // 2) 신규 데이터 HTML 바인딩
                     rankingRowsContainer.innerHTML = data.map((item, idx) => {
                         const rankNum = idx + 1;
-                        const rankClass = rankNum === 1 ? 'rank-1st' : '';
+                        const rankClass = rankNum === 1 ? 'rank-1st' : rankNum === 2 ? 'rank-2nd' : rankNum === 3 ? 'rank-3rd' : '';
                         return `
                             <div class="ranking-row ${rankClass}">
                                 <div class="col-rank">${rankNum}위</div>
@@ -827,13 +874,28 @@ document.addEventListener('DOMContentLoaded', () => {
             startAutoRolling();
         };
 
-        // 탭 클릭 수동 리스너 바인딩
         monthTabs.forEach(tab => {
             tab.addEventListener('click', () => {
                 const month = parseInt(tab.getAttribute('data-month'));
                 updateRankBoard(month, true);
             });
         });
+
+        // 모바일 전용 단일 월 이전/다음 화살표 클릭 이벤트 바인딩
+        const prevMonthBtn = document.getElementById('prevMonthBtn');
+        const nextMonthBtn = document.getElementById('nextMonthBtn');
+        if (prevMonthBtn && nextMonthBtn) {
+            prevMonthBtn.addEventListener('click', () => {
+                let prevMonth = currentActiveMonth - 1;
+                if (prevMonth < 1) prevMonth = 12;
+                updateRankBoard(prevMonth, true);
+            });
+            nextMonthBtn.addEventListener('click', () => {
+                let nextMonth = currentActiveMonth + 1;
+                if (nextMonth > 12) nextMonth = 1;
+                updateRankBoard(nextMonth, true);
+            });
+        }
 
         // 년도 드롭다운 변경 리스너 바인딩
         const yearSelect = document.getElementById('yearSelect');
@@ -988,7 +1050,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const starDecor = document.querySelector('.star-decor');
 
     if (sectionFactory && factoryHeader && cardOther && cardPisces) {
-        const isMobile = window.innerWidth <= 768;
+        const isMobile = window.innerWidth <= 1024;
         const factoryTimeline = gsap.timeline({
             scrollTrigger: {
                 trigger: sectionFactory,
@@ -1328,6 +1390,27 @@ document.addEventListener('DOMContentLoaded', () => {
             stagger: 0.2,
             ease: 'power2.out'
         }, '-=0.8');
+    // 매장현황 바로가기 섹션 (.section-store-shortcut) GSAP ScrollTrigger 진입 모션
+    const sectionStoreShortcut = document.querySelector('.section-store-shortcut');
+    const shortcutContent = document.querySelector('.shortcut-content');
+
+    if (sectionStoreShortcut && shortcutContent) {
+        gsap.fromTo(shortcutContent,
+            { opacity: 0, y: 50 },
+            {
+                opacity: 1,
+                y: 0,
+                duration: 1.2,
+                ease: 'power3.out',
+                scrollTrigger: {
+                    trigger: sectionStoreShortcut,
+                    start: 'top 80%',
+                    toggleActions: 'play none none none'
+                }
+            }
+        );
+    }
+
     // 5. 창업 상담 신청 문의하기 (Inquiry Form) 핸들링
 
     // 이메일 도메인 자동 선택/직접입력 토글 로직
