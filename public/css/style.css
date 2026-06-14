@@ -488,24 +488,24 @@ main {
     transition: transform 0.45s cubic-bezier(0.165, 0.84, 0.44, 1);
 }
 
-/* 호버 시 입체 모션 및 컬러 인터랙션 */
-.feature-item:hover {
+/* 호버 및 액티브 활성화 시 입체 모션 및 컬러 인터랙션 */
+.feature-item:hover, .feature-item.active {
     transform: translateX(8px); /* 우측으로 시프트 */
 }
 
-.feature-item:hover .feature-title {
+.feature-item:hover .feature-title, .feature-item.active .feature-title {
     color: #ffb703; /* 제목 골드 강조 */
 }
 
-.feature-item:hover .feature-info {
-    /* 호버 시 우측으로 스무스하게 슬라이드인되며 전개 */
+.feature-item:hover .feature-info, .feature-item.active .feature-info {
+    /* 호버 및 액티브 시 우측으로 스무스하게 슬라이드인되며 전개 */
     opacity: 1;
     max-width: 300px; /* 상세 설명이 나타날 충분한 가로 길이 확보 */
     transform: translateX(0);
     color: rgba(255, 255, 255, 0.7);
 }
 
-.feature-item:hover .underline-line {
+.feature-item:hover .underline-line, .feature-item.active .underline-line {
     transform: scaleX(1); /* 언더라인 노출 */
 }
 

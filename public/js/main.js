@@ -1512,5 +1512,62 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+    // 7. 메인 히어로 3대 강점 리스트 자동 호버 순환 롤링 (Auto Hover Loop)
+    const featureItems = document.querySelectorAll('.feature-item');
+    if (featureItems.length > 0) {
+        let currentLoopIndex = 0;
+        let featureLoopInterval = null;
+        const autoIntervalTime = 3200; // 3.2초 주기
+
+        // 특정 인덱스의 항목 활성화 함수
+        const activateFeatureIndex = (index) => {
+            featureItems.forEach((item, idx) => {
+                if (idx === index) {
+                    item.classList.add('active');
+                } else {
+                    item.classList.remove('active');
+                }
+            });
+        };
+
+        // 다음 리스트 항목으로 순환
+        const rollNextFeature = () => {
+            currentLoopIndex = (currentLoopIndex + 1) % featureItems.length;
+            activateFeatureIndex(currentLoopIndex);
+        };
+
+        // 자동 순환 타이머 시작
+        const startFeatureLoop = () => {
+            if (featureLoopInterval) clearInterval(featureLoopInterval);
+            featureLoopInterval = setInterval(rollNextFeature, autoIntervalTime);
+        };
+
+        // 자동 순환 타이머 중단
+        const stopFeatureLoop = () => {
+            if (featureLoopInterval) {
+                clearInterval(featureLoopInterval);
+                featureLoopInterval = null;
+            }
+        };
+
+        // 페이지 로드 시 첫 번째 리스트 자동 활성화 및 롤링 루프 기동
+        activateFeatureIndex(0);
+        startFeatureLoop();
+
+        // 마우스 호버/리브 시 일시 정지 및 포커스 동기화 인터랙션 연동
+        featureItems.forEach((item, index) => {
+            // 마우스 호버 시 자동 롤링 정지 및 해당 아이템 활성화
+            item.addEventListener('mouseenter', () => {
+                stopFeatureLoop();
+                currentLoopIndex = index;
+                activateFeatureIndex(currentLoopIndex);
+            });
+
+            // 마우스가 리스트를 떠나면 호버했던 인덱스부터 자동 롤링 재시작
+            item.addEventListener('mouseleave', () => {
+                startFeatureLoop();
+            });
+        });
+    }
 
 });
