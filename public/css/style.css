@@ -401,11 +401,11 @@ main {
     word-break: keep-all;
 }
 
-/* Hero Features - 핵심 강점 3대 프리미엄 보더리스 세로 리스트 */
+/* Hero Features - 핵심 강점 3대 프리미엄 보더리스 세로 리스트 (순수 텍스트 형태) */
 .hero-features {
     display: flex;
-    flex-direction: column; /* 세로 정렬로 변경 */
-    gap: 22px; /* 세로 간격 조율 */
+    flex-direction: column; /* 세로 정렬 */
+    gap: 24px; /* 줄 간격 */
     margin-top: 45px;
     width: 100%;
 }
@@ -413,8 +413,7 @@ main {
 .feature-item {
     position: relative;
     display: flex;
-    align-items: center;
-    gap: 18px; /* 아이콘과 텍스트의 간격 확장 */
+    align-items: flex-start;
     background: none !important;
     border: none !important;
     box-shadow: none !important;
@@ -422,30 +421,7 @@ main {
     border-radius: 0;
     transition: transform 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
     cursor: pointer;
-    width: fit-content; /* 리스트 전체가 아닌 콘텐츠 크기만큼만 영역 잡히도록 설정 */
-}
-
-.feature-icon-wrap {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 48px; /* 크기 확대 */
-    height: 48px; /* 크기 확대 */
-    border-radius: 50%;
-    background: rgba(0, 168, 204, 0.08);
-    border: 1px solid rgba(0, 168, 204, 0.25);
-    transition: transform 0.6s cubic-bezier(0.165, 0.84, 0.44, 1), 
-                background-color 0.4s ease, 
-                border-color 0.4s ease, 
-                box-shadow 0.4s ease;
-    perspective: 1000px;
-}
-
-.feat-svg {
-    width: 22px; /* 크기 확대 */
-    height: 22px; /* 크기 확대 */
-    color: #00a8cc;
-    transition: color 0.4s ease;
+    width: fit-content; /* 리스트 콘텐츠 영역 최소화 */
 }
 
 .feature-text {
@@ -456,7 +432,7 @@ main {
 
 .feature-title {
     font-family: 'Pretendard', -apple-system, sans-serif;
-    font-size: 19px; /* 기존 14px에서 19px로 대폭 확대 */
+    font-size: 20px; /* 아이콘이 빠진 대신 텍스트 존재감을 키우기 위해 20px로 확장 */
     font-weight: 700;
     color: #ffffff;
     letter-spacing: -0.5px;
@@ -465,9 +441,9 @@ main {
 
 .feature-info {
     font-family: 'Pretendard', -apple-system, sans-serif;
-    font-size: 14px; /* 기존 11px에서 14px로 확대 */
+    font-size: 14px;
     color: rgba(255, 255, 255, 0.45);
-    margin-top: 3px;
+    margin-top: 4px;
     font-weight: 400;
     transition: color 0.4s ease;
 }
@@ -481,27 +457,16 @@ main {
     transform: scaleX(0);
     transform-origin: left;
     transition: transform 0.45s cubic-bezier(0.165, 0.84, 0.44, 1);
-    margin-top: 5px;
+    margin-top: 6px;
 }
 
-/* 호버 시 입체 모션 및 컬러 인터랙션 */
+/* 호버 시 우측 시프트 및 골드 컬러 체인지 */
 .feature-item:hover {
-    transform: translateX(8px); /* 세로 리스트 호버 시 우측 시프트 확장 */
-}
-
-.feature-item:hover .feature-icon-wrap {
-    transform: rotateY(360deg);
-    background: rgba(255, 183, 3, 0.15);
-    border-color: rgba(255, 183, 3, 0.7);
-    box-shadow: 0 0 15px rgba(255, 183, 3, 0.35);
-}
-
-.feature-item:hover .feat-svg {
-    color: #ffb703;
+    transform: translateX(8px); /* 우측으로 시프트 */
 }
 
 .feature-item:hover .feature-title {
-    color: #ffb703;
+    color: #ffb703; /* 제목 골드 강조 */
 }
 
 .feature-item:hover .feature-info {
@@ -509,24 +474,19 @@ main {
 }
 
 .feature-item:hover .underline-line {
-    transform: scaleX(1);
+    transform: scaleX(1); /* 언더라인 노출 */
 }
 
 /* 반응형 조율 */
 @media (max-width: 1200px) {
     .feature-title {
-        font-size: 17px;
+        font-size: 18px;
     }
     .feature-info {
         font-size: 13px;
     }
-    .feature-icon-wrap {
-        width: 44px;
-        height: 44px;
-    }
-    .feat-svg {
-        width: 20px;
-        height: 20px;
+    .hero-features {
+        gap: 20px;
     }
 }
 
@@ -543,14 +503,6 @@ main {
     }
     .feature-info {
         font-size: 12px;
-    }
-    .feature-icon-wrap {
-        width: 40px;
-        height: 40px;
-    }
-    .feat-svg {
-        width: 18px;
-        height: 18px;
     }
 }
 
