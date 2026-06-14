@@ -1512,6 +1512,58 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+    // 6-1. 모바일 햄버거 토글 메뉴 및 서브메뉴 아코디언 제어
+    const mobileNavToggle = document.getElementById('mobileNavToggle');
+    const mobileNavDrawer = document.getElementById('mobileNavDrawer');
+    const submenuTitles = document.querySelectorAll('.mobile-menu-links .submenu-title');
+    const mobileLinks = document.querySelectorAll('.mobile-nav-drawer a');
+
+    if (mobileNavToggle && mobileNavDrawer) {
+        mobileNavToggle.addEventListener('click', () => {
+            const isOpen = mobileNavToggle.classList.toggle('open');
+            mobileNavDrawer.classList.toggle('active');
+
+            if (isOpen) {
+                document.body.style.overflow = 'hidden'; // 뒤쪽 배경 스크롤 방지
+            } else {
+                document.body.style.overflow = '';
+            }
+        });
+
+        // 모바일 서브메뉴 아코디언 드롭다운 토글
+        submenuTitles.forEach(title => {
+            title.addEventListener('click', () => {
+                const parentLi = title.parentElement;
+                const submenu = parentLi.querySelector('.mobile-submenu');
+                
+                // 기존 활성화된 서브메뉴가 있다면 닫아주기 (선택 사항)
+                const alreadyOpenSubmenu = document.querySelector('.mobile-menu-links .has-submenu.open');
+                if (alreadyOpenSubmenu && alreadyOpenSubmenu !== parentLi) {
+                    alreadyOpenSubmenu.classList.remove('open');
+                    const activeSub = alreadyOpenSubmenu.querySelector('.mobile-submenu');
+                    if (activeSub) activeSub.style.maxHeight = null;
+                }
+
+                const isOpen = parentLi.classList.toggle('open');
+                if (isOpen && submenu) {
+                    // 자연스러운 높이 트랜지션을 위해 scrollHeight 대입
+                    submenu.style.maxHeight = submenu.scrollHeight + 'px';
+                } else if (submenu) {
+                    submenu.style.maxHeight = null;
+                }
+            });
+        });
+
+        // 링크 클릭 시 드로어 닫기 (앵커 네비게이션용)
+        mobileLinks.forEach(link => {
+            link.addEventListener('click', () => {
+                mobileNavToggle.classList.remove('open');
+                mobileNavDrawer.classList.remove('active');
+                document.body.style.overflow = '';
+            });
+        });
+    }
+
     // 7. 메인 히어로 3대 강점 리스트 자동 호버 순환 롤링 (Auto Hover Loop)
     const featureItems = document.querySelectorAll('.feature-item');
     if (featureItems.length > 0) {

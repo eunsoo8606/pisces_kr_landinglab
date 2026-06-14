@@ -247,6 +247,162 @@ header:hover .mega-menu {
     transform: translateY(0);
 }
 
+/* Mobile Navigation Hamburger Menu & Drawer Styles */
+.mobile-nav-toggle {
+    display: none; /* PC에서는 기본 숨김 */
+    flex-direction: column;
+    justify-content: space-between;
+    width: 24px;
+    height: 18px;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    z-index: 1001; /* 헤더 요소들보다 위에 배치 */
+}
+
+.hamburger-line {
+    width: 100%;
+    height: 2px;
+    background-color: #ffffff;
+    border-radius: 2px;
+    transition: all 0.3s cubic-bezier(0.165, 0.84, 0.44, 1);
+}
+
+/* 햄버거 -> X자 변환 애니메이션 */
+.mobile-nav-toggle.open .line-top {
+    transform: translateY(8px) rotate(45deg);
+}
+
+.mobile-nav-toggle.open .line-middle {
+    opacity: 0;
+    transform: translateX(-10px);
+}
+
+.mobile-nav-toggle.open .line-bottom {
+    transform: translateY(-8px) rotate(-45deg);
+}
+
+.mobile-nav-drawer {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    background: rgba(5, 11, 20, 0.98); /* 럭셔리 다크 블루/블랙 배경 */
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
+    z-index: 1000;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-20px);
+    transition: all 0.45s cubic-bezier(0.165, 0.84, 0.44, 1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 110px 40px 40px; /* 상단 헤더 높이 확보 */
+}
+
+.mobile-nav-drawer.active {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+}
+
+.mobile-nav-container {
+    width: 100%;
+    max-width: 480px;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    overflow-y: auto;
+    padding-bottom: 30px;
+}
+
+.mobile-menu-links {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+    margin-bottom: 35px;
+}
+
+.mobile-menu-links > li {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    padding-bottom: 15px;
+}
+
+.mobile-menu-links > li > a,
+.submenu-title {
+    font-family: 'Noto Serif KR', serif;
+    font-size: 20px;
+    font-weight: 700;
+    color: #ffffff;
+    text-decoration: none;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.submenu-title::after {
+    content: '+';
+    font-family: 'Outfit', sans-serif;
+    font-size: 18px;
+    color: #00a8cc;
+    transition: transform 0.3s ease;
+}
+
+.has-submenu.open .submenu-title::after {
+    content: '-';
+    transform: rotate(180deg);
+}
+
+/* 아코디언 드롭다운 서브메뉴 */
+.mobile-submenu {
+    list-style: none;
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+    padding-left: 15px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-top: 0;
+}
+
+.has-submenu.open .mobile-submenu {
+    margin-top: 15px;
+}
+
+.mobile-submenu li a {
+    font-size: 14px;
+    color: rgba(255, 255, 255, 0.6);
+    text-decoration: none;
+    transition: color 0.3s ease;
+    display: block;
+    padding: 4px 0;
+}
+
+.mobile-submenu li a:hover {
+    color: #ffb703;
+}
+
+.mobile-nav-drawer .mobile-cta {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+}
+
+.mobile-nav-drawer .cta-button {
+    width: 100%;
+    text-align: center;
+    font-size: 15px;
+    padding: 12px 0;
+    box-shadow: 0 4px 15px rgba(0, 86, 179, 0.3);
+}
+
 /* Main Content Area */
 main {
     min-height: 100vh;
@@ -3367,6 +3523,14 @@ footer {
         background: rgba(0, 0, 0, 0.9);
     }
 
+    header .header-cta {
+        display: none; /* 모바일에서는 헤더 CTA 숨김 (메뉴 드로어 내부에 포함) */
+    }
+
+    .mobile-nav-toggle {
+        display: flex; /* 모바일 삼선 햄버거 토글 노출 */
+    }
+
     .section-revenue {
         padding: 80px 0;
     }
@@ -3695,10 +3859,13 @@ footer {
     .cost-table-wrap {
         padding: 3px;
         border-radius: 14px;
+        overflow-x: auto !important; /* 모바일 가로 스크롤 허용 */
+        -webkit-overflow-scrolling: touch; /* iOS 터치 가속도 보정 */
     }
 
     .cost-table {
-        table-layout: auto;
+        table-layout: auto !important;
+        min-width: 650px; /* 테이블 텍스트가 찌그러지지 않도록 최소 너비 고정 */
     }
 
     .cost-table thead th {
@@ -5896,5 +6063,64 @@ footer {
     .btn-scroll-top svg {
         width: 20px;
         height: 20px;
+    }
+}
+
+/* ==========================================================================
+   480px 초소형 모바일 기기 전용 미세 폰트 및 패딩 조율
+   ========================================================================== */
+@media (max-width: 480px) {
+    .logo img {
+        height: 36px !important; /* 모바일 로고 크기 축소 */
+    }
+    
+    .brand-prefix {
+        font-size: 20px !important; /* 히어로 소제목 크기 축소 */
+    }
+    
+    .brand-name {
+        font-size: 38px !important; /* 히어로 타이틀 크기 축소 */
+    }
+    
+    .sub-phrase {
+        font-size: 15px !important;
+    }
+    
+    .hero-desc {
+        font-size: 13px !important;
+        line-height: 1.5 !important;
+    }
+    
+    .revenue-number {
+        font-size: 38px !important; /* 매출액 텍스트 줄바꿈 방지용 슬림화 */
+    }
+    
+    .revenue-unit {
+        font-size: 18px !important;
+    }
+    
+    .badge-premium, .accent-title {
+        font-size: 18px !important;
+    }
+    
+    .container {
+        padding: 0 20px !important; /* 모바일 기기 최소 여백 */
+    }
+    
+    .mobile-nav-drawer {
+        padding: 90px 25px 25px;
+    }
+    
+    .mobile-menu-links > li > a, .submenu-title {
+        font-size: 18px;
+    }
+    
+    .mobile-submenu li a {
+        font-size: 13px;
+    }
+    
+    .mobile-cta .cta-button {
+        font-size: 14px;
+        padding: 10px 0;
     }
 }
