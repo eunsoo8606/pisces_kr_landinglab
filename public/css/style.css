@@ -401,10 +401,11 @@ main {
     word-break: keep-all;
 }
 
-/* Hero Features - 핵심 강점 3대 프리미엄 보더리스 리스트 */
+/* Hero Features - 핵심 강점 3대 프리미엄 보더리스 세로 리스트 */
 .hero-features {
     display: flex;
-    gap: 32px;
+    flex-direction: column; /* 세로 정렬로 변경 */
+    gap: 22px; /* 세로 간격 조율 */
     margin-top: 45px;
     width: 100%;
 }
@@ -413,22 +414,23 @@ main {
     position: relative;
     display: flex;
     align-items: center;
-    gap: 14px;
+    gap: 18px; /* 아이콘과 텍스트의 간격 확장 */
     background: none !important;
     border: none !important;
     box-shadow: none !important;
-    padding: 8px 0;
+    padding: 6px 0;
     border-radius: 0;
     transition: transform 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
     cursor: pointer;
+    width: fit-content; /* 리스트 전체가 아닌 콘텐츠 크기만큼만 영역 잡히도록 설정 */
 }
 
 .feature-icon-wrap {
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 40px;
-    height: 40px;
+    width: 48px; /* 크기 확대 */
+    height: 48px; /* 크기 확대 */
     border-radius: 50%;
     background: rgba(0, 168, 204, 0.08);
     border: 1px solid rgba(0, 168, 204, 0.25);
@@ -436,12 +438,12 @@ main {
                 background-color 0.4s ease, 
                 border-color 0.4s ease, 
                 box-shadow 0.4s ease;
-    perspective: 1000px; /* 3D 효과 부여 */
+    perspective: 1000px;
 }
 
 .feat-svg {
-    width: 18px;
-    height: 18px;
+    width: 22px; /* 크기 확대 */
+    height: 22px; /* 크기 확대 */
     color: #00a8cc;
     transition: color 0.4s ease;
 }
@@ -454,18 +456,18 @@ main {
 
 .feature-title {
     font-family: 'Pretendard', -apple-system, sans-serif;
-    font-size: 14px;
+    font-size: 19px; /* 기존 14px에서 19px로 대폭 확대 */
     font-weight: 700;
     color: #ffffff;
-    letter-spacing: -0.3px;
+    letter-spacing: -0.5px;
     transition: color 0.4s ease;
 }
 
 .feature-info {
     font-family: 'Pretendard', -apple-system, sans-serif;
-    font-size: 11px;
+    font-size: 14px; /* 기존 11px에서 14px로 확대 */
     color: rgba(255, 255, 255, 0.45);
-    margin-top: 2px;
+    margin-top: 3px;
     font-weight: 400;
     transition: color 0.4s ease;
 }
@@ -484,22 +486,22 @@ main {
 
 /* 호버 시 입체 모션 및 컬러 인터랙션 */
 .feature-item:hover {
-    transform: translateX(6px); /* 오른쪽으로 부드럽게 시프트 */
+    transform: translateX(8px); /* 세로 리스트 호버 시 우측 시프트 확장 */
 }
 
 .feature-item:hover .feature-icon-wrap {
-    transform: rotateY(360deg); /* 3D Y축 플립 회전 */
+    transform: rotateY(360deg);
     background: rgba(255, 183, 3, 0.15);
     border-color: rgba(255, 183, 3, 0.7);
     box-shadow: 0 0 15px rgba(255, 183, 3, 0.35);
 }
 
 .feature-item:hover .feat-svg {
-    color: #ffb703; /* 아이콘 색상 골드로 번뜩임 */
+    color: #ffb703;
 }
 
 .feature-item:hover .feature-title {
-    color: #ffb703; /* 제목 골드 강조 */
+    color: #ffb703;
 }
 
 .feature-item:hover .feature-info {
@@ -507,28 +509,48 @@ main {
 }
 
 .feature-item:hover .underline-line {
-    transform: scaleX(1); /* 언더라인 드로우 */
+    transform: scaleX(1);
 }
 
 /* 반응형 조율 */
 @media (max-width: 1200px) {
-    .hero-features {
-        gap: 20px;
-    }
     .feature-title {
+        font-size: 17px;
+    }
+    .feature-info {
         font-size: 13px;
+    }
+    .feature-icon-wrap {
+        width: 44px;
+        height: 44px;
+    }
+    .feat-svg {
+        width: 20px;
+        height: 20px;
     }
 }
 
 @media (max-width: 768px) {
     .hero-features {
-        flex-direction: column;
-        gap: 12px;
+        gap: 16px;
         margin-top: 25px;
     }
     .feature-item {
-        padding: 6px 0;
-        width: fit-content;
+        padding: 4px 0;
+    }
+    .feature-title {
+        font-size: 16px; /* 모바일 전용 폰트 스케일 조율 */
+    }
+    .feature-info {
+        font-size: 12px;
+    }
+    .feature-icon-wrap {
+        width: 40px;
+        height: 40px;
+    }
+    .feat-svg {
+        width: 18px;
+        height: 18px;
     }
 }
 
