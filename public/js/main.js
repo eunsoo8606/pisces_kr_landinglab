@@ -1487,5 +1487,30 @@ document.addEventListener('DOMContentLoaded', () => {
         if (privacyModalOverlay) privacyModalOverlay.addEventListener('click', closePrivacyModal);
     }
 
+    // 6. 맨 위로 스크롤 버튼 (Scroll to Top) 제어
+    const btnScrollTop = document.getElementById('btnScrollTop');
+
+    if (btnScrollTop) {
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 300) {
+                btnScrollTop.classList.add('visible');
+            } else {
+                btnScrollTop.classList.remove('visible');
+            }
+        });
+
+        // 탑 버튼 클릭 시 Lenis의 스무스 스크롤 효과를 통해 맨 위로 부드럽게 스크롤
+        btnScrollTop.addEventListener('click', () => {
+            if (typeof lenis !== 'undefined') {
+                lenis.scrollTo(0);
+            } else {
+                window.scrollTo({
+                    top: 0,
+                    behavior: 'smooth'
+                });
+            }
+        });
+    }
+
 
 });
