@@ -4990,6 +4990,7 @@ footer {
 }
 
 .right-wing .sub-slogan {
+    font-family: 'Outfit', sans-serif; /* 영문 프리미엄 서체 통일 */
     color: #c5a059;
     /* 골드 계열 포인트 컬러 */
     font-weight: 700;
@@ -5000,6 +5001,7 @@ footer {
 }
 
 .right-wing .main-slogan {
+    font-family: 'Noto Serif KR', serif; /* 메인 히어로 명조 서체 통일 */
     font-size: 44px;
     font-weight: 800;
     line-height: 1.3;
