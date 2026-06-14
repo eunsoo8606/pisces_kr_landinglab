@@ -126,7 +126,7 @@ nav {
 }
 
 .logo img {
-    height: 40px;
+    height: 50px;
     /* 로고가 지나치게 헤더 영역을 침범하지 않도록 적당히 제어 */
     width: auto;
     object-fit: contain;
