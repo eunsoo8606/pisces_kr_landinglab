@@ -8342,6 +8342,8 @@ footer {
     opacity: 0;
     pointer-events: none;
     transition: opacity 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+    overflow-y: auto; /* 세로 화면 좁을 때 스크롤 지원 */
+    box-sizing: border-box;
 }
 
 .comm-modal-wrap.active {
@@ -8421,12 +8423,74 @@ footer {
         padding: 10px 20px;
         font-size: 13.5px;
     }
+    .comm-modal-wrap {
+        align-items: flex-start; /* 모바일 세로 좁을 때 위에서부터 배열하여 스크롤 흐름 제공 */
+        padding: 20px 0;
+    }
     .comm-modal-content {
-        padding: 40px 24px 30px;
-        width: 92%;
+        padding: 30px 20px 24px;
+        width: 94%;
+        margin-top: 10px; /* 상단 마진 */
+        transform: translateY(20px) scale(0.95);
+        transition: transform 0.4s cubic-bezier(0.165, 0.84, 0.44, 1), opacity 0.4s;
+    }
+    .comm-modal-wrap.active .comm-modal-content {
+        transform: translateY(0) scale(1);
     }
     .comm-modal-close {
         top: 15px;
         right: 15px;
+    }
+    /* 팝업 헤더 영역 축소 */
+    .comm-modal-content .inquiry-intro {
+        margin-bottom: 20px;
+        text-align: left;
+        padding-right: 25px; /* 닫기 버튼 충돌 방지 */
+    }
+    .comm-modal-content .inquiry-intro .box-title {
+        font-size: 20px;
+        margin-bottom: 6px;
+    }
+    .comm-modal-content .inquiry-intro .box-desc {
+        font-size: 12.5px;
+        line-height: 1.55;
+        margin-top: 6px;
+    }
+    /* 모바일 팝업 폼 요소 축소 */
+    .comm-inquiry-form {
+        gap: 14px;
+    }
+    .comm-inquiry-form .form-control {
+        height: 42px;
+        font-size: 13.5px;
+        padding: 0 12px;
+    }
+    .comm-inquiry-form .text-area {
+        height: 110px !important; /* 모바일 입력창 높이 다이어트 */
+        padding: 12px !important;
+    }
+    .form-label {
+        font-size: 13px;
+        margin-bottom: 6px;
+    }
+    .form-agreement-wrap {
+        margin: 0;
+    }
+    .agreement-text {
+        font-size: 12.5px;
+    }
+    .checkbox-box {
+        width: 16px;
+        height: 16px;
+    }
+    .agreement-label input[type="checkbox"]:checked + .checkbox-box::after {
+        top: 1px;
+        left: 5px;
+        width: 3px;
+        height: 7px;
+    }
+    .btn-comm-submit {
+        height: 45px;
+        font-size: 14.5px;
     }
 }
