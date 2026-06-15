@@ -8,16 +8,29 @@
         <%= title %>
     </title>
 
-    <!-- Favicon 설정 -->
-    <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
-    <link rel="icon" href="/favicon.png" type="image/png">
+    <!-- Favicon 설정 (브라우저 캐시 방지 적용) -->
+    <link rel="shortcut icon" href="/favicon.ico?v=2" type="image/x-icon">
+    <link rel="icon" href="/favicon.png?v=2" type="image/png">
 
-    <!-- Open Graph (카카오톡, SNS 공유용 메타 태그) -->
+    <!-- 기본 SEO 메타 태그 -->
+    <meta name="description" content="<%= locals.metaDescription || '칼 없는 주방, 주방장 없는 횟집. 물고기자리에서 성공적인 프리미엄 숙성회 프랜차이즈 창업을 시작하세요.' %>">
+    <meta name="keywords" content="<%= locals.metaKeywords || '물고기자리, 숙성회, 무한리필, 활어회, 프랜차이즈, 창업, 맛집, 횟집' %>">
+    <meta name="author" content="물고기자리">
+    <meta name="robots" content="index, follow">
+
+    <!-- Open Graph (카카오톡, 네이버 블로그 등 SNS 공유용) -->
     <meta property="og:type" content="website">
-    <meta property="og:title" content="물고기자리 | 프리미엄 숙성회">
-    <meta property="og:description" content="칼 없는 주방, 주방장 없는 횟집. 물고기자리에서 성공적인 프랜차이즈 창업을 시작하세요.">
+    <meta property="og:title" content="<%= title %>">
+    <meta property="og:description" content="<%= locals.metaDescription || '칼 없는 주방, 주방장 없는 횟집. 물고기자리에서 성공적인 프리미엄 숙성회 프랜차이즈 창업을 시작하세요.' %>">
     <meta property="og:image" content="<%= baseUrl %>/images/logo/meta-logo.png">
     <meta property="og:url" content="<%= baseUrl %>">
+    <meta property="og:site_name" content="물고기자리">
+
+    <!-- Twitter Card (X/트위터 공유용) -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="<%= title %>">
+    <meta name="twitter:description" content="<%= locals.metaDescription || '칼 없는 주방, 주방장 없는 횟집. 물고기자리에서 성공적인 프리미엄 숙성회 프랜차이즈 창업을 시작하세요.' %>">
+    <meta name="twitter:image" content="<%= baseUrl %>/images/logo/meta-logo.png">
 
     <link rel="stylesheet" href="/css/style.css?v=5.1">
     <!-- GSAP for animations -->
