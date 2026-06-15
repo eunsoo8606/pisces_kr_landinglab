@@ -1,0 +1,129 @@
+<%- include('../layout/base', { title: '브랜드스토리 | 물고기자리 - 프리미엄 숙성회', branding: 'PISCES since 2002' }) %>
+
+    <!-- 시네마틱 스토리텔링 메인 컨테이너 -->
+    <div class="brand-storytelling-wrap">
+        
+        <!-- 오버랩될 백그라운드 이미지 레이어들 (GSAP에서 opacity 제어) -->
+        <div class="story-bg-container">
+            <!-- 프롤로그 / 오프닝 배경 -->
+            <div class="story-bg active" style="background-image: linear-gradient(rgba(0,0,0,0.85), rgba(0,0,0,0.75)), url('/images/artisan_hands.png');"></div>
+            <!-- 제1막 배경: 숙성회 2 -->
+            <div class="story-bg" style="background-image: linear-gradient(rgba(0,0,0,0.9), rgba(0,0,0,0.8)), url('/images/foods/물고기자리 연출컷-2.jpg');"></div>
+            <!-- 제2막 배경: 숙성회 4 -->
+            <div class="story-bg" style="background-image: linear-gradient(rgba(0,0,0,0.9), rgba(0,0,0,0.8)), url('/images/foods/물고기자리 연출컷-4.jpg');"></div>
+            <!-- 3막 배경: 세트 12 -->
+            <div class="story-bg" style="background-image: linear-gradient(rgba(0,0,0,0.85), rgba(0,0,0,0.8)), url('/images/foods/물고기자리 연출컷-12.jpg');"></div>
+            <!-- 에필로그 배경: 연출컷 1 -->
+            <div class="story-bg" style="background-image: linear-gradient(rgba(0,0,0,0.9), rgba(0,0,0,0.85)), url('/images/foods/물고기자리 연출컷-1.jpg');"></div>
+        </div>
+
+        <!-- 스크롤되며 전개될 텍스트 스토리 트랙들 -->
+        <div class="story-content-wrap">
+            
+            <!-- 프롤로그: 서막 -->
+            <section class="story-track" data-index="0">
+                <div class="container story-container flex-center">
+                    <div class="story-intro-block">
+                        <span class="story-tag font-fade">PISCES STORY</span>
+                        <h1 class="story-main-title font-fade">
+                            23년을 지켜온 웨이팅,<br>
+                            그 깊이에 대하여
+                        </h1>
+                        <p class="story-intro-desc font-fade">
+                            유행은 빠르게 흐르고, 화려한 겉포장은 쉽게 잊힙니다.<br>
+                            물고기자리는 2002년부터 단 하나의 가치, <span class="highlight-blue">'맛의 본질'</span>에만 집중해 왔습니다.
+                        </p>
+                        <div class="scroll-indicator font-fade">
+                            <span class="indicator-text">스크롤하여 여정 시작하기</span>
+                            <div class="indicator-mouse">
+                                <div class="indicator-wheel"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 제1막: 새벽의 집념 (Origin) -->
+            <section class="story-track" data-index="1">
+                <div class="container story-container flex-left">
+                    <div class="story-text-block">
+                        <span class="story-chapter">CHAPTER 01</span>
+                        <h2 class="story-title">새벽 안개를 뚫고<br>연안부두로 향하는 발걸음</h2>
+                        <div class="story-line"></div>
+                        <p class="story-desc">
+                            물고기자리의 아침은 누구보다 먼저 시작됩니다. 맛의 타협 없는 고집은 엄선된 원어로부터 나오기 때문입니다.
+                            <br><br>
+                            우리는 유통 단계를 걷어내고 <span class="highlight-blue">인천 연안부두에서 최상의 최상급 원어</span>를 직접 가공 및 유통합니다. 신선함을 확보하는 동시에 가맹점주님의 안정적인 마진을 구축하기 위한 물고기자리의 굳건한 첫 단추입니다.
+                        </p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 제2막: 24시간의 인내 (Patience) -->
+            <section class="story-track" data-index="2">
+                <div class="container story-container flex-right">
+                    <div class="story-text-block">
+                        <span class="story-chapter">CHAPTER 02</span>
+                        <h2 class="story-title">24시간의 침묵,<br>감칠맛이 깨어나는 시간</h2>
+                        <div class="story-line"></div>
+                        <p class="story-desc">
+                            활어가 싱싱함의 상징이라면, 숙성회는 미식의 극치입니다. 
+                            <br><br>
+                            물고기자리만의 독자적인 <span class="highlight-blue">24시간 저온 숙성 비법</span>은 생선 단백질을 이노신산으로 치환하여 활어에서는 결코 느낄 수 없는 쫄깃하고 깊은 감칠맛을 깨웁니다. 한 점의 감동을 위해 24시간의 침묵을 견뎌냅니다.
+                        </p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 제3막: 상생을 위한 배려 (Care) -->
+            <section class="story-track" data-index="3">
+                <div class="container story-container flex-left">
+                    <div class="story-text-block">
+                        <span class="story-chapter">CHAPTER 03</span>
+                        <h2 class="story-title">칼을 내려놓고<br>더불어 살아가는 삶을 위해</h2>
+                        <div class="story-line"></div>
+                        <p class="story-desc">
+                            일식 조리사의 구인난과 높은 인건비 부담은 횟집 창업의 가장 큰 장벽이었습니다. 
+                            <br><br>
+                            우리는 <span class="highlight-blue">칼 없는 혁신적 주방 시스템</span>을 도입했습니다. 주방 실장이 필요 없는 완벽한 원팩 가공 유통을 통해 초보 점주님도 10분 만에 명품 숙성회를 내어놓습니다. 고단한 노동은 덜고 가치를 채웁니다.
+                        </p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 에필로그: 동행 -->
+            <section class="story-track" data-index="4">
+                <div class="container story-container flex-center">
+                    <div class="story-outro-block">
+                        <span class="story-chapter">EPILOGUE</span>
+                        <h2 class="story-title">본질은 영원히 빛납니다</h2>
+                        <p class="story-desc">
+                            매장 문을 열기 전부터 이어지는 대기열, 그리고 매장에서 터져나오는 손님들의 미소와 온기. 
+                            <br><br>
+                            23년 동안 흔들리지 않고 지켜온 물고기자리의 가치는 가맹점의 견고한 일상이 되었습니다. 우리는 앞으로도 점주님과 함께 깊이 있는 미식의 미래로 나아갑니다.
+                        </p>
+                        <div class="outro-btn-wrap">
+                            <a href="/#franchise" class="btn-story-cta">
+                                <span>성공 여정에 함께하기</span>
+                                <svg class="arrow-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                                    <line x1="5" y1="12" x2="19" y2="12"></line>
+                                    <polyline points="12 5 19 12 12 19"></polyline>
+                                </svg>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+        </div>
+
+    </div>
+
+    <!-- Scroll to Top Button -->
+    <button type="button" id="btnScrollTop" class="btn-scroll-top" aria-label="맨 위로 스크롤">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="18 15 12 9 6 15"></polyline>
+        </svg>
+    </button>
+
+<%- include('../layout/footer') %>

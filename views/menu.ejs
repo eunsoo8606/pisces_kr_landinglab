@@ -1,0 +1,290 @@
+<%- include('layout/base', { title: '메뉴소개 | 물고기자리 - 프리미엄 숙성회', branding: 'PISCES since 2002' }) %>
+
+    <!-- 메뉴 페이지 히어로 영역 (프리미엄 비디오 배경) -->
+    <section class="menu-page-hero">
+        <div class="menu-hero-video-bg">
+            <video autoplay loop muted playsinline>
+                <source src="/video/main.mp4" type="video/mp4">
+            </video>
+            <div class="menu-hero-overlay"></div>
+        </div>
+        <div class="container menu-hero-container">
+            <span class="menu-hero-tag">PISCES MENU</span>
+            <h1 class="menu-hero-title">미식을 완성하는 물고기자리 메뉴</h1>
+            <p class="menu-hero-desc">23년 동안 사랑받아온 명품 숙성회와 각 분야 셰프들이 엄선하여 선보이는 일품 요리들을 소개합니다.</p>
+        </div>
+    </section>
+
+    <!-- 메뉴 쇼케이스 섹션 -->
+    <section class="section-menu menu-page-content">
+        <div class="menu-inner">
+
+            <!-- 상단 헤더 영역 -->
+            <div class="menu-header-wrap">
+                <div class="menu-editorial-title">
+                    <div class="menu-editorial-top">
+                        <span class="menu-tag">MENU BOARD</span>
+                        <div class="menu-deco-line"></div>
+                    </div>
+                    <h2 class="menu-headline">
+                        <span class="menu-headline-sm">명품 숙성회를 더욱 찬란하게</span>
+                        미식을 완성하는 일품 요리
+                    </h2>
+                    <p class="menu-sub">물고기자리가 선사하는 저녁은 단순히 회를 먹는 시간을 넘어, 입안 가득 펼쳐지는 화려하고 푸짐한 미식의 축제입니다.</p>
+                </div>
+
+                <!-- 가로형 탭 네비게이션 (EJS 변수 activeTab 연동) -->
+                <nav class="menu-tabs" id="menuTabs">
+                    <button class="menu-tab-btn <%= activeTab === 'recommended' ? 'active' : '' %>" data-tab="recommended">추천메뉴</button>
+                    <button class="menu-tab-btn <%= activeTab === 'sashimi' ? 'active' : '' %>" data-tab="sashimi">숙성회</button>
+                    <button class="menu-tab-btn <%= activeTab === 'special' ? 'active' : '' %>" data-tab="special">특선메뉴</button>
+                    <button class="menu-tab-btn <%= activeTab === 'side' ? 'active' : '' %>" data-tab="side">사이드</button>
+                    <button class="menu-tab-btn <%= activeTab === 'lunch' ? 'active' : '' %>" data-tab="lunch">점심특선</button>
+                    <button class="menu-tab-btn <%= activeTab === 'set' ? 'active' : '' %>" data-tab="set">세트메뉴</button>
+                </nav>
+            </div>
+
+            <!-- 음식 이미지 쇼케이스 -->
+            <div class="menu-showcase">
+
+                <!-- 추천메뉴 -->
+                <div class="menu-panel <%= activeTab === 'recommended' ? 'active' : '' %>" data-panel="recommended">
+                    <div class="menu-grid">
+                        <div class="menu-card main-card">
+                            <img src="/images/foods/물고기자리 연출컷-1.jpg" alt="추천메뉴 대표">
+                            <div class="menu-card-info">
+                                <span class="card-category">SIGNATURE</span>
+                                <h3 class="card-name">모둠 숙성회</h3>
+                                <span class="card-price">시가</span>
+                            </div>
+                        </div>
+                        <div class="menu-card">
+                            <img src="/images/foods/초밥.jpg" alt="초밥">
+                            <div class="menu-card-info">
+                                <span class="card-category">POPULAR</span>
+                                <h3 class="card-name">모둠 초밥</h3>
+                                <span class="card-price">28,000원</span>
+                            </div>
+                        </div>
+                        <div class="menu-card">
+                            <img src="/images/foods/매운탕.jpg" alt="매운탕">
+                            <div class="menu-card-info">
+                                <span class="card-category">BEST</span>
+                                <h3 class="card-name">생선 매운탕</h3>
+                                <span class="card-price">18,000원</span>
+                            </div>
+                        </div>
+                        <div class="menu-card">
+                            <img src="/images/foods/물고기자리 연출컷-4.jpg" alt="연출컷">
+                            <div class="menu-card-info">
+                                <span class="card-category">NEW</span>
+                                <h3 class="card-name">셰프 특선 회</h3>
+                                <span class="card-price">시가</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 숙성회 -->
+                <div class="menu-panel <%= activeTab === 'sashimi' ? 'active' : '' %>" data-panel="sashimi">
+                    <div class="menu-grid">
+                        <div class="menu-card main-card">
+                            <img src="/images/foods/물고기자리 연출컷-2.jpg" alt="숙성회">
+                            <div class="menu-card-info">
+                                <span class="card-category">PREMIUM</span>
+                                <h3 class="card-name">광어 숙성회</h3>
+                                <span class="card-price">시가</span>
+                            </div>
+                        </div>
+                        <div class="menu-card">
+                            <img src="/images/foods/멍게.jpg" alt="멍게">
+                            <div class="menu-card-info">
+                                <span class="card-category">SEASON</span>
+                                <h3 class="card-name">멍게</h3>
+                                <span class="card-price">15,000원</span>
+                            </div>
+                        </div>
+                        <div class="menu-card">
+                            <img src="/images/foods/물고기자리 연출컷-5.jpg" alt="숙성회2">
+                            <div class="menu-card-info">
+                                <span class="card-category">FRESH</span>
+                                <h3 class="card-name">참돔 숙성회</h3>
+                                <span class="card-price">시가</span>
+                            </div>
+                        </div>
+                        <div class="menu-card">
+                            <img src="/images/foods/산낙지.jpg" alt="산낙지">
+                            <div class="menu-card-info">
+                                <span class="card-category">LIVE</span>
+                                <h3 class="card-name">산낙지</h3>
+                                <span class="card-price">25,000원</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 특선메뉴 -->
+                <div class="menu-panel <%= activeTab === 'special' ? 'active' : '' %>" data-panel="special">
+                    <div class="menu-grid">
+                        <div class="menu-card main-card">
+                            <img src="/images/foods/도미머리구이.jpg" alt="도미머리구이">
+                            <div class="menu-card-info">
+                                <span class="card-category">CHEF'S PICK</span>
+                                <h3 class="card-name">도미 머리구이</h3>
+                                <span class="card-price">35,000원</span>
+                            </div>
+                        </div>
+                        <div class="menu-card">
+                            <img src="/images/foods/마끼.jpg" alt="마끼">
+                            <div class="menu-card-info">
+                                <span class="card-category">SPECIAL</span>
+                                <h3 class="card-name">모둠 마끼</h3>
+                                <span class="card-price">22,000원</span>
+                            </div>
+                        </div>
+                        <div class="menu-card">
+                            <img src="/images/foods/마늘버섯구이.jpg" alt="마늘버섯구이">
+                            <div class="menu-card-info">
+                                <span class="card-category">GRILLED</span>
+                                <h3 class="card-name">마늘버섯구이</h3>
+                                <span class="card-price">16,000원</span>
+                            </div>
+                        </div>
+                        <div class="menu-card">
+                            <img src="/images/foods/물고기자리 연출컷-7.jpg" alt="연출컷7">
+                            <div class="menu-card-info">
+                                <span class="card-category">LIMITED</span>
+                                <h3 class="card-name">특선 코스</h3>
+                                <span class="card-price">시가</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 사이드 -->
+                <div class="menu-panel <%= activeTab === 'side' ? 'active' : '' %>" data-panel="side">
+                    <div class="menu-grid">
+                        <div class="menu-card main-card">
+                            <img src="/images/foods/모듬튀김.jpg" alt="모듬튀김">
+                            <div class="menu-card-info">
+                                <span class="card-category">SIDE</span>
+                                <h3 class="card-name">모둠 튀김</h3>
+                                <span class="card-price">18,000원</span>
+                            </div>
+                        </div>
+                        <div class="menu-card">
+                            <img src="/images/foods/닭강정.jpg" alt="닭강정">
+                            <div class="menu-card-info">
+                                <span class="card-category">HOT</span>
+                                <h3 class="card-name">닭강정</h3>
+                                <span class="card-price">16,000원</span>
+                            </div>
+                        </div>
+                        <div class="menu-card">
+                            <img src="/images/foods/새우가스.jpg" alt="새우가스">
+                            <div class="menu-card-info">
+                                <span class="card-category">KIDS</span>
+                                <h3 class="card-name">새우 가스</h3>
+                                <span class="card-price">14,000원</span>
+                            </div>
+                        </div>
+                        <div class="menu-card">
+                            <img src="/images/foods/볶음우동.jpg" alt="볶음우동">
+                            <div class="menu-card-info">
+                                <span class="card-category">NOODLE</span>
+                                <h3 class="card-name">볶음 우동</h3>
+                                <span class="card-price">12,000원</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 점심특선 -->
+                <div class="menu-panel <%= activeTab === 'lunch' ? 'active' : '' %>" data-panel="lunch">
+                    <div class="menu-grid">
+                        <div class="menu-card main-card">
+                            <img src="/images/foods/물고기자리 연출컷-10.jpg" alt="점심특선">
+                            <div class="menu-card-info">
+                                <span class="card-category">LUNCH</span>
+                                <h3 class="card-name">점심 특선 A코스</h3>
+                                <span class="card-price">30,000원</span>
+                            </div>
+                        </div>
+                        <div class="menu-card">
+                            <img src="/images/foods/라면.jpg" alt="라면">
+                            <div class="menu-card-info">
+                                <span class="card-category">SIMPLE</span>
+                                <h3 class="card-name">점심 라면 세트</h3>
+                                <span class="card-price">10,000원</span>
+                            </div>
+                        </div>
+                        <div class="menu-card">
+                            <img src="/images/foods/돈가스.jpg" alt="돈가스">
+                            <div class="menu-card-info">
+                                <span class="card-category">LUNCH</span>
+                                <h3 class="card-name">점심 돈가스</h3>
+                                <span class="card-price">13,000원</span>
+                            </div>
+                        </div>
+                        <div class="menu-card">
+                            <img src="/images/foods/물고기자리 연출컷-11.jpg" alt="점심2">
+                            <div class="menu-card-info">
+                                <span class="card-category">LUNCH</span>
+                                <h3 class="card-name">점심 특선 B코스</h3>
+                                <span class="card-price">38,000원</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 세트메뉴 -->
+                <div class="menu-panel <%= activeTab === 'set' ? 'active' : '' %>" data-panel="set">
+                    <div class="menu-grid">
+                        <div class="menu-card main-card">
+                            <img src="/images/foods/물고기자리 연출컷-12.jpg" alt="세트">
+                            <div class="menu-card-info">
+                                <span class="card-category">SET A</span>
+                                <h3 class="card-name">2인 프리미엄 세트</h3>
+                                <span class="card-price">98,000원</span>
+                            </div>
+                        </div>
+                        <div class="menu-card">
+                            <img src="/images/foods/물고기자리 연출컷-3.jpg" alt="세트2">
+                            <div class="menu-card-info">
+                                <span class="card-category">SET B</span>
+                                <h3 class="card-name">4인 가족 세트</h3>
+                                <span class="card-price">178,000원</span>
+                            </div>
+                        </div>
+                        <div class="menu-card">
+                            <img src="/images/foods/물고기자리 연출컷-6.jpg" alt="세트3">
+                            <div class="menu-card-info">
+                                <span class="card-category">SET C</span>
+                                <h3 class="card-name">비즈니스 세트</h3>
+                                <span class="card-price">협의</span>
+                            </div>
+                        </div>
+                        <div class="menu-card">
+                            <img src="/images/foods/물고기자리 연출컷-9.jpg" alt="세트4">
+                            <div class="menu-card-info">
+                                <span class="card-category">SET D</span>
+                                <h3 class="card-name">파티 풀코스</h3>
+                                <span class="card-price">협의</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </section>
+
+    <!-- Scroll to Top Button -->
+    <button type="button" id="btnScrollTop" class="btn-scroll-top" aria-label="맨 위로 스크롤">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="18 15 12 9 6 15"></polyline>
+        </svg>
+    </button>
+
+<%- include('layout/footer') %>

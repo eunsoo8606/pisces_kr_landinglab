@@ -29,6 +29,55 @@ document.addEventListener('DOMContentLoaded', () => {
 
     gsap.ticker.lagSmoothing(0);
 
+    // 시간 표시 롤러(Ticker) DOM 동적 변환 (예외 처리 및 안전 필터링)
+    try {
+        const stepTimes = document.querySelectorAll('.step-time');
+        if (stepTimes && stepTimes.length > 0) {
+            stepTimes.forEach(el => {
+                const timeStr = el.dataset.time || el.innerText || "";
+                if (!timeStr.trim()) return; // 비어 있는 텍스트는 무시
+                
+                el.innerHTML = ''; // 기존 텍스트 제거
+                
+                const wrapper = document.createElement('div');
+                wrapper.className = 'ticker-wrapper';
+                
+                [...timeStr].forEach(char => {
+                    if (/[0-9]/.test(char)) {
+                        const box = document.createElement('div');
+                        box.className = 'ticker-number-box';
+                        
+                        const list = document.createElement('div');
+                        list.className = 'ticker-number-list';
+                        list.dataset.target = char;
+                        
+                        // 0~9 숫자 리스트 2세트 구성 (회전 연출 극대화)
+                        const digits = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
+                        digits.forEach(d => {
+                            const span = document.createElement('span');
+                            span.innerText = d;
+                            list.appendChild(span);
+                        });
+                        
+                        box.appendChild(list);
+                        wrapper.appendChild(box);
+                        
+                        // Y축 초기 위치
+                        gsap.set(list, { y: 0 });
+                    } else {
+                        const charSpan = document.createElement('span');
+                        charSpan.className = 'ticker-char';
+                        charSpan.innerText = char;
+                        wrapper.appendChild(charSpan);
+                    }
+                });
+                el.appendChild(wrapper);
+            });
+        }
+    } catch (err) {
+        console.error("Time ticker DOM initialization failed:", err);
+    }
+
     // 2. 스크롤 시 헤더 상태 토글 (Scrolled)
     const headerElement = document.querySelector('header');
     if (headerElement) {
@@ -462,19 +511,24 @@ document.addEventListener('DOMContentLoaded', () => {
                         gsap.set(hoursCardsWrap, { opacity: 1, y: 0 });
                     },
                     onComplete: () => {
-                        // 등장 완료 후 앰비언트 부유(Floating) 루프 비활성화
-                        /*
-                        floatWraps.forEach((wrap, index) => {
-                            gsap.to(wrap, {
-                                y: '+=10',
-                                duration: 2.2 + index * 0.4,
-                                repeat: -1,
-                                yoyo: true,
-                                ease: 'sine.inOut',
-                                delay: index * 0.2
+                        // 카드 안착 완료 후 각 카드의 숫자 롤러 회전 시작
+                        document.querySelectorAll('.hours-card').forEach((card) => {
+                            const lists = card.querySelectorAll('.ticker-number-list');
+                            lists.forEach((list, idx) => {
+                                const targetDigit = parseInt(list.dataset.target, 10);
+                                // 0~9 한 세트를 넘어서 두 번째 세트의 타겟 숫자 위치로 롤링 (Y축 위쪽 방향으로 당김)
+                                const targetY = -(10 + targetDigit) * 38;
+                                
+                                gsap.fromTo(list, 
+                                    { y: 0 }, 
+                                    { 
+                                        y: targetY, 
+                                        duration: 2.2 + (idx * 0.15), // 자릿수별 미세한 속도차로 슬롯머신 릴 동작 재현
+                                        ease: "power4.out"
+                                    }
+                                );
                             });
                         });
-                        */
                     }
                 },
                 '-=0.5'
@@ -1238,6 +1292,20 @@ document.addEventListener('DOMContentLoaded', () => {
                     { opacity: 1, y: 0, scale: 1, duration: 0.65, stagger: 0.08, ease: 'back.out(1.3)' }
                 );
             }
+
+            // 현재 페이지가 독립 메뉴 소개 페이지(/menu)인 경우 브라우저 URL 동기화 (history.pushState)
+            if (window.location.pathname.startsWith('/menu')) {
+                const categoryMap = {
+                    'recommended': 'recommend',
+                    'sashimi': 'sashimi',
+                    'special': 'special',
+                    'side': 'side',
+                    'lunch': 'lunch',
+                    'set': 'set'
+                };
+                const pathParam = categoryMap[targetTab] || 'recommend';
+                window.history.pushState(null, '', `/menu/${pathParam}`);
+            }
         };
 
         menuTabBtns.forEach(btn => {
@@ -1705,4 +1773,262 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+    // 하단 고정 퀵 문의바 스크롤 감지 및 닫기 제어
+    const stickyQuickBar = document.getElementById('stickyQuickBar');
+    const btnQuickClose = document.getElementById('btnQuickClose');
+    const quickBarForm = document.getElementById('quickBarForm');
+    let isQuickBarClosed = false;
+
+    if (stickyQuickBar) {
+        // 300px 이상 스크롤 시 아래에서 솟아오름
+        const handleQuickBarScroll = () => {
+            if (isQuickBarClosed) return;
+            if (window.scrollY > 300) {
+                stickyQuickBar.classList.remove('is-hidden');
+            } else {
+                stickyQuickBar.classList.add('is-hidden');
+            }
+        };
+
+        window.addEventListener('scroll', handleQuickBarScroll);
+        handleQuickBarScroll(); // 초기 로딩 상태 체크
+
+        // 닫기 버튼 클릭 시 숨김 및 복원 비활성화
+        if (btnQuickClose) {
+            btnQuickClose.addEventListener('click', () => {
+                isQuickBarClosed = true;
+                stickyQuickBar.classList.add('is-hidden');
+            });
+        }
+        
+        // 폼 유효성 체크
+        if (quickBarForm) {
+            quickBarForm.addEventListener('submit', (e) => {
+                const name = document.getElementById('quickName').value.trim();
+                const phone = document.getElementById('quickPhone').value.trim();
+                
+                if (!name || !phone) {
+                    e.preventDefault();
+                    alert('성함과 연락처를 모두 입력해 주세요.');
+                    return;
+                }
+                
+                // 한국 전화번호 길이 체크
+                const cleanPhone = phone.replace(/[^0-9]/g, '');
+                if (cleanPhone.length < 9 || cleanPhone.length > 11) {
+                    e.preventDefault();
+                    alert('올바른 연락처 형식이 아닙니다. 다시 확인해 주세요.');
+                    return;
+                }
+            });
+        }
+    }
+
+    // ==========================================================================
+    // 시네마틱 브랜드 스토리텔링 전용 애니메이션 (Cinematic Brand Storytelling)
+    // ==========================================================================
+    const storyTracks = document.querySelectorAll('.story-track');
+    const storyBgs = document.querySelectorAll('.story-bg');
+    
+    if (storyTracks.length > 0 && storyBgs.length > 0) {
+        storyTracks.forEach((track, idx) => {
+            // 1. 스크롤 휠 진행에 맞춰 배경 이미지 교차 디졸브 (Fade Cross)
+            ScrollTrigger.create({
+                trigger: track,
+                start: 'top 50%',
+                end: 'bottom 50%',
+                onToggle: self => {
+                    if (self.isActive) {
+                        storyBgs.forEach(bg => bg.classList.remove('active'));
+                        if (storyBgs[idx]) {
+                            storyBgs[idx].classList.add('active');
+                        }
+                    }
+                }
+            });
+            
+            // 2. 각 트랙 텍스트 단락들의 순차적 페이드인 (stagger 패럴랙스 모션)
+            const fadeElements = track.querySelectorAll('.font-fade, .story-chapter, .story-title, .story-line, .story-desc, .outro-btn-wrap');
+            if (fadeElements.length > 0) {
+                gsap.fromTo(fadeElements,
+                    { opacity: 0, y: 40 },
+                    {
+                        opacity: 1, 
+                        y: 0, 
+                        duration: 1.1, 
+                        stagger: 0.14, 
+                        ease: 'power3.out',
+                        scrollTrigger: {
+                            trigger: track,
+                            start: 'top 70%',
+                            toggleActions: 'play none none reverse'
+                        }
+                    }
+                );
+            }
+        });
+    }
+
+    // ==========================================================================
+    // 통합 커뮤니티 페이지 전용 애니메이션 & 인터랙션 (Community Page)
+    // ==========================================================================
+    const commSection = document.querySelector('.section-comm');
+    const commTabBtns = document.querySelectorAll('.comm-tab-btn');
+    const commPanels = document.querySelectorAll('.comm-panel');
+
+    if (commSection && commTabBtns.length > 0) {
+        
+        // 1. 탭 전환 기능 (동적 URL 동기화 및 GSAP 등장 모션 연계)
+        const switchCommTab = (targetTab) => {
+            commTabBtns.forEach(btn => btn.classList.remove('active'));
+            commPanels.forEach(panel => {
+                panel.classList.remove('active');
+                gsap.killTweensOf(panel);
+            });
+
+            const activeBtn = document.querySelector(`.comm-tab-btn[data-tab="${targetTab}"]`);
+            const activePanel = document.querySelector(`.comm-panel[data-panel="${targetTab}"]`);
+
+            if (activeBtn) activeBtn.classList.add('active');
+            if (activePanel) {
+                activePanel.classList.add('active');
+                
+                // 패널 페이드인 등장 애니메이션
+                gsap.fromTo(activePanel,
+                    { opacity: 0, y: 15 },
+                    { opacity: 1, y: 0, duration: 0.4, ease: 'power2.out' }
+                );
+            }
+
+            // 브라우저 주소창 URL 동기화 (history.pushState)
+            if (window.location.pathname.startsWith('/community')) {
+                window.history.pushState(null, '', `/community/${targetTab}`);
+            }
+        };
+
+        commTabBtns.forEach(btn => {
+            btn.addEventListener('click', () => switchCommTab(btn.dataset.tab));
+        });
+
+        // 2. FAQ 아코디언 토글 기능 (순수 JS Slide)
+        const faqQuestions = document.querySelectorAll('.faq-question');
+        faqQuestions.forEach(q => {
+            q.addEventListener('click', () => {
+                const item = q.parentElement;
+                const answer = item.querySelector('.faq-answer');
+                const isActive = item.classList.contains('active');
+
+                // 이미 활성화된 아코디언을 누르면 닫기
+                if (isActive) {
+                    item.classList.remove('active');
+                    answer.style.maxHeight = '0px';
+                } else {
+                    // 다른 아코디언 항목 전부 닫기
+                    document.querySelectorAll('.faq-item').forEach(otherItem => {
+                        otherItem.classList.remove('active');
+                        otherItem.querySelector('.faq-answer').style.maxHeight = '0px';
+                    });
+
+                    // 현재 아코디언 열기
+                    item.classList.add('active');
+                    answer.style.maxHeight = answer.scrollHeight + 'px';
+                }
+            });
+        });
+        
+        // 초기 로드 시 활성화된 FAQ가 있다면 높이 설정 보장
+        const activeFaq = document.querySelector('.faq-item.active');
+        if (activeFaq) {
+            const activeAnswer = activeFaq.querySelector('.faq-answer');
+            activeAnswer.style.maxHeight = activeAnswer.scrollHeight + 'px';
+        }
+
+        // 3. 고객의 소리 접수 모달 및 폼 제출 제어
+        const btnOpenVoiceModal = document.getElementById('btnOpenVoiceModal');
+        const btnCloseVoiceModal = document.getElementById('btnCloseVoiceModal');
+        const commVoiceModal = document.getElementById('commVoiceModal');
+        const commVoiceModalOverlay = document.getElementById('commVoiceModalOverlay');
+        const commVoiceForm = document.getElementById('commVoiceForm');
+
+        const closeVoiceModal = () => {
+            if (commVoiceModal) {
+                commVoiceModal.classList.remove('active');
+                document.body.style.overflow = '';
+            }
+        };
+
+        if (btnOpenVoiceModal && commVoiceModal) {
+            btnOpenVoiceModal.addEventListener('click', () => {
+                commVoiceModal.classList.add('active');
+                document.body.style.overflow = 'hidden';
+            });
+        }
+
+        if (btnCloseVoiceModal) btnCloseVoiceModal.addEventListener('click', closeVoiceModal);
+        if (commVoiceModalOverlay) commVoiceModalOverlay.addEventListener('click', closeVoiceModal);
+
+        if (commVoiceForm) {
+            commVoiceForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                const submitBtn = this.querySelector('.btn-comm-submit');
+                const origBtnHtml = submitBtn.innerHTML;
+                
+                submitBtn.disabled = true;
+                submitBtn.innerHTML = `<span>접수 중입니다...</span>`;
+                
+                setTimeout(() => {
+                    alert('불편/불만 사항이 비밀글로 안전하게 접수되었습니다.');
+                    commVoiceForm.reset();
+                    submitBtn.disabled = false;
+                    submitBtn.innerHTML = origBtnHtml;
+                    closeVoiceModal(); // 접수 성공 시 모달 닫기
+                }, 1500);
+            });
+        }
+
+        // 4. 가맹 및 제휴 문의 접수 모달 및 폼 제출 제어
+        const btnOpenInquiryModal = document.getElementById('btnOpenInquiryModal');
+        const btnCloseInquiryModal = document.getElementById('btnCloseInquiryModal');
+        const commInquiryModal = document.getElementById('commInquiryModal');
+        const commInquiryModalOverlay = document.getElementById('commInquiryModalOverlay');
+        const commInquiryForm = document.getElementById('commInquiryForm');
+
+        const closeInquiryModal = () => {
+            if (commInquiryModal) {
+                commInquiryModal.classList.remove('active');
+                document.body.style.overflow = '';
+            }
+        };
+
+        if (btnOpenInquiryModal && commInquiryModal) {
+            btnOpenInquiryModal.addEventListener('click', () => {
+                commInquiryModal.classList.add('active');
+                document.body.style.overflow = 'hidden';
+            });
+        }
+
+        if (btnCloseInquiryModal) btnCloseInquiryModal.addEventListener('click', closeInquiryModal);
+        if (commInquiryModalOverlay) commInquiryModalOverlay.addEventListener('click', closeInquiryModal);
+
+        if (commInquiryForm) {
+            commInquiryForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                const submitBtn = this.querySelector('.btn-comm-submit');
+                const origBtnHtml = submitBtn.innerHTML;
+                
+                submitBtn.disabled = true;
+                submitBtn.innerHTML = `<span>접수 중입니다...</span>`;
+                
+                setTimeout(() => {
+                    alert('가맹/제휴 문의사항이 비밀글로 안전하게 접수되었습니다.');
+                    commInquiryForm.reset();
+                    submitBtn.disabled = false;
+                    submitBtn.innerHTML = origBtnHtml;
+                    closeInquiryModal(); // 접수 성공 시 모달 닫기
+                }, 1500);
+            });
+        }
+    }
+
 });
+
