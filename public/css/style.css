@@ -7644,6 +7644,7 @@ footer {
     padding: 6px;
     border-radius: 50px;
     backdrop-filter: blur(10px);
+    height: auto;
 }
 
 .comm-tab-btn {
@@ -8147,16 +8148,25 @@ footer {
         padding: 60px 0 80px;
     }
     .comm-tabs {
-        flex-direction: column;
-        border-radius: 12px;
+        flex-direction: row;
+        border-radius: 30px;
         width: 100%;
-        padding: 8px;
+        padding: 4px;
+        overflow-x: auto;
+        white-space: nowrap;
+        height: auto !important;
+        scrollbar-width: none; /* 파이어폭스 */
+        -webkit-overflow-scrolling: touch;
+    }
+    .comm-tabs::-webkit-scrollbar {
+        display: none; /* 크롬/사파리 */
     }
     .comm-tab-btn {
-        width: 100%;
-        padding: 12px;
-        font-size: 14px;
-        border-radius: 8px;
+        width: auto;
+        flex-shrink: 0;
+        padding: 10px 18px;
+        font-size: 13px;
+        border-radius: 20px;
     }
     .form-row {
         flex-direction: column;
@@ -8167,6 +8177,18 @@ footer {
     }
     .inquiry-intro .box-title {
         font-size: 22px;
+    }
+    /* 테이블 모바일 가로 스크롤 및 글씨 깨짐 방지 최적화 */
+    .board-table {
+        min-width: 680px;
+    }
+    .board-table th,
+    .board-table td {
+        padding: 14px 12px;
+        font-size: 13.5px;
+    }
+    .col-subject {
+        word-break: keep-all;
     }
 }
 
