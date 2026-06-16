@@ -4,5 +4,4 @@ node_modules/
 .gemini/
 agent/
 .vercel/
-db/
 .env
