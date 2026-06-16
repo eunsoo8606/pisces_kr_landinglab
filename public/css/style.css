@@ -8494,3 +8494,10 @@ footer {
         font-size: 14.5px;
     }
 }
+
+/* ==========================================================================
+   Noto Sans KR / Noto Sans 폰트 일괄 적용 (기존 다양한 한글/영문 폰트 통합)
+   ========================================================================== */
+*, *::before, *::after {
+    font-family: 'Noto Sans KR', 'Noto Sans', -apple-system, BlinkMacSystemFont, system-ui, Roboto, 'Helvetica Neue', 'Segoe UI', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif !important;
+}
