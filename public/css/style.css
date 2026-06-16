@@ -386,7 +386,7 @@ header:hover .mega-menu {
 }
 
 .mobile-submenu li a:hover {
-    color: #ffb703;
+    color: #00f2fe;
 }
 
 .mobile-nav-drawer .mobile-cta {
@@ -529,9 +529,9 @@ main {
     margin-bottom: 15px;
 }
 
-.sub-phrase .highlight-yellow {
-    color: #ffb703;
-    /* 빛나는 선택 텍스트 노란색 적용 */
+.sub-phrase .highlight-aqua {
+    color: #00f2fe;
+    /* 빛나는 선택 텍스트 네온 아쿠아 적용 */
     font-weight: 800;
 }
 
@@ -638,7 +638,7 @@ main {
     display: block;
     width: 100%;
     height: 1.5px;
-    background: linear-gradient(90deg, #ffb703 0%, transparent 100%);
+    background: linear-gradient(90deg, #00f2fe 0%, transparent 100%);
     transform: scaleX(0);
     transform-origin: left;
     transition: transform 0.45s cubic-bezier(0.165, 0.84, 0.44, 1);
@@ -650,7 +650,7 @@ main {
 }
 
 .feature-item:hover .feature-title, .feature-item.active .feature-title {
-    color: #ffb703; /* 제목 골드 강조 */
+    color: #00f2fe; /* 제목 골드 강조 */
 }
 
 .feature-item:hover .feature-info, .feature-item.active .feature-info {
@@ -850,7 +850,7 @@ main {
 }
 
 .marquee-icon.sparkle {
-    color: #ffb703;
+    color: #00f2fe;
     /* 골드 스타 */
     filter: drop-shadow(0 0 6px rgba(255, 183, 3, 0.6));
 }
@@ -1270,7 +1270,7 @@ main {
 .summary-value {
     font-size: 110px;
     font-weight: 900;
-    color: #ff9f1c;
+    color: #00a8cc;
     /* 시안 속 노란색/주황색 대형 수치 */
     line-height: 1.0;
     margin-top: 10px;
@@ -1282,9 +1282,9 @@ main {
 
 .summary-value.glow-active {
     text-shadow:
-        0 0 15px #ff9f1c,
+        0 0 15px #00a8cc,
         0 0 30px #ffffff,
-        0 0 45px #ff9f1c;
+        0 0 45px #00a8cc;
 }
 
 .summary-value .unit {
@@ -1624,7 +1624,7 @@ main {
 
 .cost-subtitle {
     font-size: 18px;
-    color: #ffb703;
+    color: #00f2fe;
     letter-spacing: -0.5px;
     display: block;
     margin-bottom: 12px;
@@ -1669,7 +1669,7 @@ main {
 /* 테이블 헤더 */
 .cost-table thead th {
     background: rgba(255, 183, 3, 0.1);
-    color: #ffb703;
+    color: #00f2fe;
     font-size: 14px;
     font-weight: 700;
     text-transform: uppercase;
@@ -1728,7 +1728,7 @@ main {
 }
 
 .cost-amount.accent {
-    color: #ffb703 !important;
+    color: #00f2fe !important;
     font-size: 20px !important;
 }
 
@@ -1779,7 +1779,7 @@ main {
 .total-value {
     font-size: 32px;
     font-weight: 900;
-    color: #ffb703;
+    color: #00f2fe;
     letter-spacing: -1px;
 }
 
@@ -2112,7 +2112,7 @@ footer {
 }
 
 .growth-title .highlight {
-    color: #ffb703;
+    color: #00f2fe;
     /* 시안 속 노란색/주황색 하이라이팅 */
 }
 
@@ -2161,7 +2161,7 @@ footer {
 
     .timeline-line-progress-svg {
         fill: none;
-        stroke: #ffb703;
+        stroke: #00f2fe;
         stroke-width: 2.5px;
         vector-effect: non-scaling-stroke;
         filter: drop-shadow(0 0 6px rgba(255, 183, 3, 0.85));
@@ -2173,7 +2173,7 @@ footer {
     .timeline-glow-particle-svg {
         offset-path: path("M 0,396 C 400,396 700,250 1000,16");
         offset-rotate: auto;
-        filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.95)) drop-shadow(0 0 15px #ffb703);
+        filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.95)) drop-shadow(0 0 15px #00f2fe);
     }
 }
 
@@ -2193,7 +2193,7 @@ footer {
     width: 0;
     /* JS에서 GSAP으로 scaleX/width 애니메이션 수행 */
     height: 100%;
-    background: #ffb703;
+    background: #00f2fe;
     transform-origin: left center;
 }
 
@@ -2203,7 +2203,7 @@ footer {
     left: 0;
     width: 80px;
     height: 6px;
-    background: linear-gradient(to right, transparent, #ffb703, #ffffff, #ffb703, transparent);
+    background: linear-gradient(to right, transparent, #00f2fe, #ffffff, #00f2fe, transparent);
     border-radius: 3px;
     transform: translateY(-50%);
     z-index: 2;
@@ -2345,7 +2345,7 @@ footer {
 .node-dot {
     width: 12px;
     height: 12px;
-    background-color: #ffb703;
+    background-color: #00f2fe;
     border-radius: 50%;
     box-shadow: 0 0 10px rgba(255, 183, 3, 0.6);
     transition: transform 0.3s ease;
@@ -2407,7 +2407,7 @@ footer {
 .node-val {
     font-size: 38px;
     font-weight: 900;
-    color: #ffb703;
+    color: #00f2fe;
     line-height: 1.1;
     letter-spacing: -1.5px;
 }
@@ -2428,7 +2428,7 @@ footer {
 /* 금빛 수치 텍스트 반짝임 효과 (Shimmer Gold) */
 .shimmer-gold {
     position: relative;
-    background: linear-gradient(to right, #ffb703 20%, #ffffff 40%, #ffb703 60%, #ffb703 80%);
+    background: linear-gradient(to right, #00f2fe 20%, #ffffff 40%, #00f2fe 60%, #00f2fe 80%);
     background-size: 200% auto;
     color: transparent;
     -webkit-background-clip: text;
@@ -2719,7 +2719,7 @@ footer {
 }
 
 .ranking-row.rank-1st {
-    color: #ff9f1c;
+    color: #00a8cc;
     /* 1위 골드 */
 }
 
@@ -2925,7 +2925,7 @@ footer {
 }
 
 .fillet-card .fillet-card-content .accent {
-    color: #ffb703;
+    color: #00f2fe;
     font-weight: 700;
 }
 
@@ -3275,7 +3275,7 @@ footer {
 }
 
 .process-title .highlight {
-    color: #ffb703;
+    color: #00f2fe;
     /* 시안 속 돋보이는 노란색/금빛 강조 라인 */
     display: block;
     margin-top: 6px;
@@ -3429,7 +3429,7 @@ footer {
     }
 
     .month-arrow-btn:active {
-        color: #ffb703 !important; /* 액티브 반응형 피드백 */
+        color: #00f2fe !important; /* 액티브 반응형 피드백 */
     }
 
     .active-month-text {
@@ -4001,7 +4001,7 @@ footer {
         left: 50%;
         width: 6px;
         height: 80px;
-        background: linear-gradient(to bottom, transparent, #ffb703, #ffffff, #ffb703, transparent);
+        background: linear-gradient(to bottom, transparent, #00f2fe, #ffffff, #00f2fe, transparent);
         transform: translateX(-50%);
         animation: flowLightVertical 4.5s infinite linear;
     }
@@ -4108,7 +4108,7 @@ footer {
 
     /* 랭킹보드 1~3위 순위별 광채 테두리 및 배지 포인트 튜닝 */
     .ranking-row.rank-1st {
-        color: #ff9f1c !important;
+        color: #00a8cc !important;
         background: rgba(255, 159, 28, 0.08) !important;
         border-radius: 8px !important;
         padding-left: 8px !important;
@@ -4288,7 +4288,7 @@ footer {
         font-family: 'Outfit', sans-serif !important;
         font-size: 24px !important;
         font-weight: 800 !important;
-        color: #ffb703 !important;
+        color: #00f2fe !important;
         margin-bottom: 10px !important;
     }
 
@@ -4564,7 +4564,7 @@ footer {
     font-size: 12px;
     font-weight: 700;
     letter-spacing: 0.35em;
-    color: #c8a96e;
+    color: #00b4d8;
     /* 골드 계열 */
     text-transform: uppercase;
     margin-bottom: 20px;
@@ -4579,7 +4579,7 @@ footer {
     top: 50%;
     width: 40px;
     height: 1px;
-    background: #c8a96e;
+    background: #00b4d8;
     opacity: 0.6;
 }
 
@@ -4602,7 +4602,7 @@ footer {
 }
 
 .comp-highlight {
-    color: #c8a96e;
+    color: #00b4d8;
 }
 
 .comp-desc {
@@ -4677,7 +4677,7 @@ footer {
     font-size: 11px;
     font-weight: 700;
     letter-spacing: 0.1em;
-    color: #c8a96e;
+    color: #00b4d8;
 }
 
 .tab-label {
@@ -4768,7 +4768,7 @@ footer {
 .item-tags li {
     font-family: 'Pretendard', sans-serif;
     font-size: 13px;
-    color: #c8a96e;
+    color: #00b4d8;
     padding-left: 16px;
     position: relative;
     letter-spacing: 0.03em;
@@ -4778,7 +4778,7 @@ footer {
     content: '—';
     position: absolute;
     left: 0;
-    color: #c8a96e;
+    color: #00b4d8;
     opacity: 0.6;
     font-size: 11px;
     top: 1px;
@@ -4823,7 +4823,7 @@ footer {
     top: 20%;
     width: 3px;
     height: 60%;
-    background: #c8a96e;
+    background: #00b4d8;
     opacity: 0;
     transition: opacity 0.4s ease;
     z-index: 3;
@@ -5034,7 +5034,7 @@ footer {
     font-size: 11px;
     font-weight: 700;
     letter-spacing: 0.4em;
-    color: #c8a96e;
+    color: #00b4d8;
     text-transform: uppercase;
 }
 
@@ -5106,7 +5106,7 @@ footer {
     /* border-bottom 선과 정확하게 오버랩 */
     width: 100%;
     height: 2px;
-    background: #c8a96e;
+    background: #00b4d8;
     transform: scaleX(0);
     transition: transform 0.3s cubic-bezier(0.25, 1, 0.5, 1);
     transform-origin: left;
@@ -5114,7 +5114,7 @@ footer {
 }
 
 .menu-tab-btn.active {
-    color: #c8a96e;
+    color: #00b4d8;
     font-weight: 700;
 }
 
@@ -5223,7 +5223,7 @@ footer {
     font-size: 9px;
     font-weight: 700;
     letter-spacing: 0.25em;
-    color: #c8a96e;
+    color: #00b4d8;
     margin-bottom: 5px;
     text-transform: uppercase;
 }
@@ -5269,7 +5269,7 @@ footer {
     font-family: 'Pretendard', sans-serif;
     font-size: 15px;
     font-weight: 600;
-    color: #c8a96e;
+    color: #00b4d8;
     text-decoration: none;
     cursor: pointer;
     position: relative;
@@ -5287,7 +5287,7 @@ footer {
     width: 120%;
     height: 0;
     padding-bottom: 120%;
-    background: #c8a96e;
+    background: #00b4d8;
     border-radius: 50%;
     transform: translate(-50%, -50%) scale(0);
     transition: transform 0.5s cubic-bezier(0.25, 1, 0.5, 1);
@@ -5303,13 +5303,13 @@ footer {
 
 .btn-menu-more svg {
     transition: transform 0.3s ease;
-    stroke: #c8a96e;
+    stroke: #00b4d8;
 }
 
 /* 호버 이벤트 */
 .btn-menu-more:hover {
     color: #0d0d0d;
-    border-color: #c8a96e;
+    border-color: #00b4d8;
     box-shadow: 0 8px 25px rgba(200, 169, 110, 0.25);
     transform: translateY(-2px);
 }
@@ -5895,7 +5895,7 @@ footer {
 }
 
 .shortcut-title span {
-    color: #ffb703;
+    color: #00f2fe;
     text-shadow: 0 0 15px rgba(255, 183, 3, 0.35);
 }
 
@@ -5912,7 +5912,7 @@ footer {
     display: inline-flex;
     align-items: center;
     gap: 12px;
-    background: linear-gradient(90deg, #ffb703 0%, #ff9f1c 100%);
+    background: linear-gradient(90deg, #00f2fe 0%, #00a8cc 100%);
     color: #00182e;
     font-size: 16px;
     font-weight: 800;
@@ -6103,7 +6103,7 @@ footer {
     width: 6px;
     height: 6px;
     border-radius: 50%;
-    background-color: #ffb703;
+    background-color: #00f2fe;
     margin-right: 8px;
     box-shadow: 0 0 10px rgba(255, 183, 3, 0.8);
     position: relative;
@@ -6203,7 +6203,7 @@ footer {
     transform: translate(-50%, -50%) scale(0);
     width: 10px;
     height: 10px;
-    background-color: #ffb703;
+    background-color: #00f2fe;
     border-radius: 50%;
     transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     box-shadow: 0 0 8px rgba(255, 183, 3, 0.8);
@@ -6279,7 +6279,7 @@ footer {
     left: 7px;
     width: 5px;
     height: 10px;
-    border: solid #ffb703;
+    border: solid #00f2fe;
     border-width: 0 2px 2px 0;
     transform: rotate(45deg) scale(0);
     transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
@@ -6310,7 +6310,7 @@ footer {
 }
 
 .btn-privacy-view:hover {
-    color: #ffb703;
+    color: #00f2fe;
 }
 
 /* 개인정보 보호정책 모달 팝업 */
@@ -6408,7 +6408,7 @@ footer {
 .privacy-modal-body h5 {
     font-size: 15px;
     font-weight: 700;
-    color: #ffb703;
+    color: #00f2fe;
     margin: 20px 0 10px;
 }
 
@@ -8261,7 +8261,7 @@ footer {
 /* 접수완료/답변대기 (앰버 골드 테마) */
 .status-pending {
     background: rgba(255, 183, 3, 0.1);
-    color: #ffb703;
+    color: #00f2fe;
     border: 1px solid rgba(255, 183, 3, 0.25);
 }
 
