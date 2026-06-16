@@ -888,8 +888,8 @@ main {
 
 .marquee-icon.sparkle {
     color: #00f2fe;
-    /* 골드 스타 */
-    filter: drop-shadow(0 0 6px rgba(255, 183, 3, 0.6));
+    /* 아쿠아 스타 */
+    filter: drop-shadow(0 0 6px rgba(0, 242, 254, 0.65));
 }
 
 .marquee-icon.fish {
@@ -1706,7 +1706,7 @@ main {
 
 /* 테이블 헤더 */
 .cost-table thead th {
-    background: rgba(255, 183, 3, 0.1);
+    background: rgba(0, 242, 254, 0.06);
     color: #00f2fe;
     font-size: 14px;
     font-weight: 700;
@@ -1714,7 +1714,7 @@ main {
     letter-spacing: 1px;
     padding: 18px 24px;
     text-align: center;
-    border-bottom: 1px solid rgba(255, 183, 3, 0.15);
+    border-bottom: 1px solid rgba(0, 242, 254, 0.15);
 }
 
 .cost-table thead th:first-child {
@@ -1787,20 +1787,20 @@ main {
 
 /* 별도 항목 행 */
 .row-etc td {
-    border-bottom: 1px solid rgba(255, 183, 3, 0.08);
+    border-bottom: 1px solid rgba(0, 242, 254, 0.08);
     font-style: italic;
     color: rgba(255, 255, 255, 0.5) !important;
 }
 
 /* 로열티 행 */
 .row-royalty td {
-    border-bottom: 2px solid rgba(255, 183, 3, 0.15);
+    border-bottom: 2px solid rgba(0, 242, 254, 0.15);
 }
 
 /* 합계 행 */
 .cost-table tfoot .row-total td {
     padding: 24px;
-    background: rgba(255, 183, 3, 0.08);
+    background: rgba(0, 242, 254, 0.06);
     border-top: none;
 }
 
@@ -1824,7 +1824,7 @@ main {
 .total-unit {
     font-size: 18px;
     font-weight: 600;
-    color: rgba(255, 183, 3, 0.7);
+    color: rgba(0, 242, 254, 0.75);
     margin-left: 4px;
 }
 
@@ -2202,7 +2202,7 @@ footer {
         stroke: #00f2fe;
         stroke-width: 2.5px;
         vector-effect: non-scaling-stroke;
-        filter: drop-shadow(0 0 6px rgba(255, 183, 3, 0.85));
+        filter: drop-shadow(0 0 6px rgba(0, 242, 254, 0.85));
         stroke-dasharray: 3000;
         stroke-dashoffset: 3000;
         /* 선 드로잉 대기 상태 */
@@ -2245,7 +2245,7 @@ footer {
     border-radius: 3px;
     transform: translateY(-50%);
     z-index: 2;
-    filter: drop-shadow(0 0 10px rgba(255, 183, 3, 0.85));
+    filter: drop-shadow(0 0 10px rgba(0, 242, 254, 0.85));
     animation: flowLight 4.5s infinite linear;
 }
 
@@ -2385,7 +2385,7 @@ footer {
     height: 12px;
     background-color: #00f2fe;
     border-radius: 50%;
-    box-shadow: 0 0 10px rgba(255, 183, 3, 0.6);
+    box-shadow: 0 0 10px rgba(0, 242, 254, 0.65);
     transition: transform 0.3s ease;
 }
 
@@ -2763,8 +2763,8 @@ footer {
 
 .ranking-row.rank-1st .col-rank,
 .ranking-row.rank-1st .col-sales {
-    text-shadow: 0 0 12px rgba(255, 159, 28, 0.6);
-    animation: goldNeonPulse 2.0s infinite alternate ease-in-out;
+    text-shadow: 0 0 12px rgba(0, 242, 254, 0.65);
+    animation: neonTextPulse 2.0s infinite alternate ease-in-out;
 }
 
 /* ==========================================================================
@@ -4154,11 +4154,11 @@ footer {
     /* 랭킹보드 1~3위 순위별 광채 테두리 및 배지 포인트 튜닝 */
     .ranking-row.rank-1st {
         color: #00a8cc !important;
-        background: rgba(255, 159, 28, 0.08) !important;
+        background: rgba(0, 242, 254, 0.08) !important;
         border-radius: 8px !important;
         padding-left: 8px !important;
         padding-right: 8px !important;
-        border-bottom: 1px solid rgba(255, 159, 28, 0.15) !important;
+        border-bottom: 1px solid rgba(0, 242, 254, 0.15) !important;
     }
 
     .ranking-row.rank-2nd {
@@ -4304,7 +4304,7 @@ footer {
     }
 
     .cost-table tbody tr:hover {
-        border-color: rgba(255, 183, 3, 0.3) !important;
+        border-color: rgba(0, 242, 254, 0.3) !important;
         background: rgba(255, 255, 255, 0.04) !important;
         transform: translateY(-2px) !important;
     }
@@ -5943,7 +5943,7 @@ footer {
 
 .shortcut-title span {
     color: #00f2fe;
-    text-shadow: 0 0 15px rgba(255, 183, 3, 0.35);
+    text-shadow: 0 0 15px rgba(0, 242, 254, 0.45);
 }
 
 .shortcut-desc {
@@ -5966,13 +5966,13 @@ footer {
     padding: 18px 38px;
     border-radius: 50px;
     text-decoration: none;
-    box-shadow: 0 15px 30px rgba(255, 159, 28, 0.3);
+    box-shadow: 0 15px 30px rgba(0, 242, 254, 0.25);
     transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
 }
 
 .btn-store-shortcut:hover {
     transform: translateY(-4px);
-    box-shadow: 0 20px 45px rgba(255, 159, 28, 0.55);
+    box-shadow: 0 20px 45px rgba(0, 242, 254, 0.45);
 }
 
 .shortcut-arrow {
@@ -6152,7 +6152,7 @@ footer {
     border-radius: 50%;
     background-color: #00f2fe;
     margin-right: 8px;
-    box-shadow: 0 0 10px rgba(255, 183, 3, 0.8);
+    box-shadow: 0 0 10px rgba(0, 242, 254, 0.85);
     position: relative;
     vertical-align: middle;
 }
@@ -6163,15 +6163,15 @@ footer {
 
 @keyframes pulseGlow {
     0% {
-        box-shadow: 0 0 4px rgba(255, 183, 3, 0.6);
+        box-shadow: 0 0 4px rgba(0, 242, 254, 0.6);
         transform: scale(0.9);
     }
     50% {
-        box-shadow: 0 0 15px rgba(255, 183, 3, 1);
+        box-shadow: 0 0 15px rgba(0, 242, 254, 1);
         transform: scale(1.1);
     }
     100% {
-        box-shadow: 0 0 4px rgba(255, 183, 3, 0.6);
+        box-shadow: 0 0 4px rgba(0, 242, 254, 0.6);
         transform: scale(0.9);
     }
 }
@@ -6253,7 +6253,7 @@ footer {
     background-color: #00f2fe;
     border-radius: 50%;
     transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-    box-shadow: 0 0 8px rgba(255, 183, 3, 0.8);
+    box-shadow: 0 0 8px rgba(0, 242, 254, 0.8);
 }
 
 .custom-radio input[type="radio"]:checked + .radio-mark::after {
@@ -8307,9 +8307,9 @@ footer {
 
 /* 접수완료/답변대기 (앰버 골드 테마) */
 .status-pending {
-    background: rgba(255, 183, 3, 0.1);
+    background: rgba(0, 242, 254, 0.06);
     color: #00f2fe;
-    border: 1px solid rgba(255, 183, 3, 0.25);
+    border: 1px solid rgba(0, 242, 254, 0.2);
 }
 
 /* 고객의 소리 접수 박스 상단 마진 조율 */
