@@ -56,10 +56,10 @@ app.use('/franchise', (req, res) => {
     res.redirect('/#franchise');
 });
 
-// 회사소개 라우트
+// 브랜드소개 라우트
 app.get('/brand/about', (req, res) => {
     res.render('brand/about', {
-        title: '브랜드스토리 | 물고기자리 - 프리미엄 숙성회',
+        title: '브랜드소개 | 물고기자리 - 프리미엄 숙성회',
         branding: 'PISCES since 2002',
         metaDescription: 'since 2002 물고기자리의 철학과 역사. 왜 물고기자리 숙성회인가? 최고의 맛을 향한 타협 없는 고집과 가치를 지켜나가는 브랜드 스토리입니다.',
         metaKeywords: '물고기자리 스토리, 숙성회 철학, 횟집 역사, 브랜드스토리, 물고기자리 브랜드'
