@@ -1,0 +1,848 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= title %></title>
+    <link rel="shortcut icon" href="/favicon.ico?v=2" type="image/x-icon">
+    <link rel="icon" href="/favicon.png?v=2" type="image/png">
+    <style>
+        body {
+            background-color: #030812;
+            color: #f1f5f9;
+            font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+            min-height: 100vh;
+            margin: 0;
+            overflow-x: hidden;
+        }
+
+        /* 대시보드 전체 레이아웃 (플렉스 구조) */
+        .dashboard-layout {
+            display: flex;
+            min-height: 100vh;
+            width: 100%;
+        }
+
+        /* 1. 좌측 고정 사이드바 */
+        .console-sidebar {
+            width: 270px;
+            background: rgba(8, 19, 36, 0.6);
+            backdrop-filter: blur(25px);
+            -webkit-backdrop-filter: blur(25px);
+            border-right: 1.5px solid rgba(0, 242, 254, 0.08);
+            display: flex;
+            flex-direction: column;
+            position: fixed;
+            height: 100vh;
+            left: 0;
+            top: 0;
+            z-index: 100;
+            box-sizing: border-box;
+            box-shadow: 10px 0 30px rgba(0, 0, 0, 0.4);
+        }
+
+        /* 사이드바 상단 로고 */
+        .sidebar-logo {
+            padding: 30px 24px;
+            border-bottom: 1.5px solid rgba(255, 255, 255, 0.03);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .sidebar-logo h1 {
+            font-size: 20px;
+            margin: 0;
+            color: #ffffff;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+        }
+
+        .sidebar-logo h1 span {
+            color: #00f2fe;
+            text-shadow: 0 0 10px rgba(0, 242, 254, 0.3);
+            font-size: 11px;
+            margin-left: 6px;
+            font-weight: 700;
+            text-transform: uppercase;
+            border: 1px solid rgba(0, 242, 254, 0.3);
+            padding: 1px 6px;
+            border-radius: 4px;
+        }
+
+        /* 사이드바 메뉴 리스트 */
+        .sidebar-menu {
+            flex: 1;
+            padding: 30px 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            overflow-y: auto;
+        }
+
+        .menu-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 14px 20px;
+            color: rgba(255, 255, 255, 0.6);
+            text-decoration: none;
+            border-radius: 12px;
+            font-size: 14px;
+            font-weight: 700;
+            transition: all 0.3s cubic-bezier(0.165, 0.84, 0.44, 1);
+            cursor: pointer;
+            border: 1px solid transparent;
+            box-sizing: border-box;
+        }
+
+        .menu-item svg {
+            width: 18px;
+            height: 18px;
+            flex-shrink: 0;
+            transition: transform 0.3s ease;
+        }
+
+        .menu-item:hover {
+            color: #00f2fe;
+            background: rgba(0, 242, 254, 0.04);
+            border-color: rgba(0, 242, 254, 0.1);
+        }
+
+        .menu-item:hover svg {
+            transform: translateX(2px);
+        }
+
+        .menu-item.active {
+            color: #00182e;
+            background: linear-gradient(90deg, #00f2fe 0%, #00a8cc 100%);
+            box-shadow: 0 5px 15px rgba(0, 242, 254, 0.2);
+            font-weight: 800;
+        }
+
+        /* 2. 우측 메인 콘텐츠 영역 */
+        .console-main {
+            margin-left: 270px;
+            flex: 1;
+            padding: 40px 50px;
+            box-sizing: border-box;
+            min-width: 0;
+        }
+
+        /* 상단 요약 바 */
+        .main-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 40px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+            padding-bottom: 20px;
+        }
+
+        .main-header-title h2 {
+            font-size: 26px;
+            font-weight: 800;
+            margin: 0;
+            letter-spacing: -0.5px;
+        }
+
+        .main-header-title p {
+            font-size: 13px;
+            color: rgba(255, 255, 255, 0.4);
+            margin: 6px 0 0 0;
+        }
+
+        .live-indicator {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 12px;
+            color: #38ef7d;
+            background: rgba(56, 239, 125, 0.08);
+            border: 1px solid rgba(56, 239, 125, 0.2);
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-weight: 700;
+        }
+
+        .live-dot {
+            width: 8px;
+            height: 8px;
+            background: #38ef7d;
+            border-radius: 50%;
+            box-shadow: 0 0 10px #38ef7d;
+            animation: pulse 1.5s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(0.9); opacity: 0.6; }
+            50% { transform: scale(1.2); opacity: 1; }
+            100% { transform: scale(0.9); opacity: 0.6; }
+        }
+
+        /* 헤더 어드민 프로필 영역 */
+        .header-profile-wrap {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            background: rgba(11, 26, 48, 0.25);
+            border: 1px solid rgba(0, 242, 254, 0.15);
+            padding: 8px 16px;
+            border-radius: 12px;
+        }
+
+        .header-profile-wrap .user-profile {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+
+        .header-profile-wrap .user-name {
+            font-size: 13px;
+            font-weight: 800;
+            color: #ffffff;
+            margin: 0;
+        }
+
+        .header-profile-wrap .user-role {
+            font-size: 10px;
+            color: rgba(255, 255, 255, 0.4);
+            margin: 0;
+        }
+
+        .btn-logout {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            padding: 6px 12px;
+            background: rgba(255, 51, 68, 0.06);
+            border: 1px solid rgba(255, 51, 68, 0.2);
+            color: #ff3344;
+            font-size: 12px;
+            font-weight: 700;
+            border-radius: 8px;
+            text-decoration: none;
+            box-sizing: border-box;
+            transition: all 0.3s ease;
+        }
+
+        .btn-logout svg {
+            width: 14px;
+            height: 14px;
+            flex-shrink: 0;
+        }
+
+        .btn-logout:hover {
+            background: #ff3344;
+            color: #ffffff;
+            box-shadow: 0 4px 12px rgba(255, 51, 68, 0.25);
+        }
+
+        /* 지표 카드 그리드 */
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 24px;
+            margin-bottom: 40px;
+        }
+
+        .metric-card {
+            background: rgba(11, 26, 48, 0.2);
+            border: 1.5px solid rgba(255, 255, 255, 0.04);
+            border-radius: 20px;
+            padding: 24px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+            transition: all 0.3s cubic-bezier(0.165, 0.84, 0.44, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .metric-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: transparent;
+        }
+
+        .metric-card.blue::before { background: linear-gradient(90deg, #00f2fe, #00a8cc); }
+        .metric-card.cyan::before { background: linear-gradient(90deg, #38ef7d, #11998e); }
+        .metric-card.orange::before { background: linear-gradient(90deg, #ff9966, #ff5e62); }
+        .metric-card.purple::before { background: linear-gradient(90deg, #a18cd1, #fbc2eb); }
+
+        .metric-card:hover {
+            transform: translateY(-5px);
+            border-color: rgba(0, 242, 254, 0.12);
+            box-shadow: 0 15px 35px rgba(0, 242, 254, 0.04);
+        }
+
+        .metric-label {
+            font-size: 13px;
+            color: rgba(255, 255, 255, 0.4);
+            font-weight: 700;
+            margin-bottom: 12px;
+            letter-spacing: 0.5px;
+        }
+
+        .metric-value {
+            font-size: 32px;
+            font-weight: 900;
+            color: #ffffff;
+            display: flex;
+            align-items: baseline;
+            gap: 6px;
+        }
+
+        .metric-value span {
+            font-size: 15px;
+            font-weight: 500;
+            color: rgba(255, 255, 255, 0.4);
+        }
+
+        /* 통계 섹션 그리드 구조 */
+        .analytics-row-1 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+
+        .analytics-row-2 {
+            display: grid;
+            grid-template-columns: 1fr 1.2fr 1.2fr;
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+
+        @media (max-width: 1024px) {
+            .analytics-row-1, .analytics-row-2 {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .chart-card {
+            background: rgba(11, 26, 48, 0.15);
+            border: 1.5px solid rgba(0, 242, 254, 0.06);
+            border-radius: 24px;
+            padding: 28px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+            box-sizing: border-box;
+            position: relative;
+        }
+
+        .chart-title {
+            margin-top: 0;
+            margin-bottom: 24px;
+            font-size: 16px;
+            font-weight: 800;
+            color: #ffffff;
+            border-left: 4px solid #00f2fe;
+            padding-left: 12px;
+        }
+
+        .chart-wrapper {
+            position: relative;
+            width: 100%;
+            height: 240px;
+        }
+
+        /* 유입경로 프로그레스바 스타일 */
+        .referer-list {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .referer-item {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .referer-meta {
+            display: flex;
+            justify-content: space-between;
+            font-size: 12px;
+            font-weight: 700;
+        }
+
+        .referer-url {
+            color: rgba(255, 255, 255, 0.85);
+            max-width: 250px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .referer-count {
+            color: #00f2fe;
+        }
+
+        .referer-bar-bg {
+            width: 100%;
+            height: 8px;
+            background: rgba(255, 255, 255, 0.04);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .referer-bar-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #00f2fe 0%, #00a8cc 100%);
+            border-radius: 10px;
+            transition: width 1s ease-out;
+        }
+
+        /* 실시간 로그 섹션 */
+        .full-width-card {
+            background: rgba(11, 26, 48, 0.15);
+            border: 1.5px solid rgba(0, 242, 254, 0.06);
+            border-radius: 24px;
+            padding: 28px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+            margin-bottom: 30px;
+        }
+
+        .table-container {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 14px;
+        }
+
+        th {
+            padding: 14px 16px;
+            color: rgba(255, 255, 255, 0.4);
+            font-weight: 700;
+            border-bottom: 1.5px solid rgba(255, 255, 255, 0.05);
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            text-align: left;
+        }
+
+        td {
+            padding: 16px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.02);
+            color: rgba(255, 255, 255, 0.85);
+            vertical-align: middle;
+            text-align: left;
+        }
+
+        tr:hover td {
+            background: rgba(255, 255, 255, 0.01);
+        }
+
+        /* 스크롤바 커스텀 */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #020713;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: rgba(0, 242, 254, 0.1);
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(0, 242, 254, 0.2);
+        }
+    </style>
+    <!-- Chart.js 로딩 -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <div class="dashboard-layout">
+        <!-- 좌측 고정 사이드바 -->
+        <div class="console-sidebar">
+            <div class="sidebar-logo" style="padding: 28px 24px; display: flex; align-items: center; justify-content: flex-start; gap: 10px;">
+                <img src="/images/logo.png" alt="물고기자리 로고" style="height: 38px; width: auto; filter: brightness(0) invert(1);">
+                <span style="color: #00f2fe; text-shadow: 0 0 10px rgba(0, 242, 254, 0.3); font-size: 11px; font-weight: 700; text-transform: uppercase; border: 1px solid rgba(0, 242, 254, 0.3); padding: 2px 6px; border-radius: 4px; letter-spacing: 0.5px;">console</span>
+            </div>
+            
+            <div class="sidebar-menu">
+                <!-- 1. 대쉬보드 -->
+                <a class="menu-item active">
+                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <rect x="3" y="3" width="7" height="9"></rect>
+                        <rect x="14" y="3" width="7" height="5"></rect>
+                        <rect x="14" y="12" width="7" height="9"></rect>
+                        <rect x="3" y="16" width="7" height="5"></rect>
+                    </svg>
+                    <span>대쉬보드</span>
+                </a>
+
+                <!-- 3. 게시판 관리 -->
+                <a class="menu-item" onclick="showUpcomingAlert('게시판 관리')">
+                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                        <polyline points="14 2 14 8 20 8"></polyline>
+                        <line x1="16" y1="13" x2="8" y2="13"></line>
+                        <line x1="16" y1="17" x2="8" y2="17"></line>
+                    </svg>
+                    <span>게시판 관리</span>
+                </a>
+
+                <!-- 4. 메뉴(음식) 관리 -->
+                <a class="menu-item" onclick="showUpcomingAlert('메뉴(음식) 관리')">
+                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
+                        <path d="M2 12h20"></path>
+                    </svg>
+                    <span>메뉴(음식) 관리</span>
+                </a>
+
+                <!-- 5. 팝업관리 -->
+                <a class="menu-item" onclick="showUpcomingAlert('팝업관리')">
+                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                        <line x1="9" y1="3" x2="9" y2="21"></line>
+                        <line x1="17" y1="9" x2="21" y2="9"></line>
+                        <line x1="17" y1="15" x2="21" y2="15"></line>
+                    </svg>
+                    <span>팝업관리</span>
+                </a>
+            </div>
+        </div>
+
+        <!-- 우측 메인 콘텐츠 영역 -->
+        <div class="console-main">
+            <!-- 메인 헤더 요약 정보 -->
+            <div class="main-header">
+                <div class="main-header-title">
+                    <h2>물고기자리 통합 관리 콘솔</h2>
+                    <p>실시간 방문 분석 정보 및 통계 데이터 대시보드입니다.</p>
+                </div>
+                
+                <div style="display: flex; align-items: center; gap: 20px;">
+                    <div class="live-indicator">
+                        <div class="live-dot"></div>
+                        <span>시스템 실시간 모니터링 중</span>
+                    </div>
+
+                    <!-- 어드민 사용자 프로필 및 로그아웃 버튼 (메인 콘텐츠 상단 우측) -->
+                    <div class="header-profile-wrap">
+                        <div class="user-profile">
+                            <span class="user-name"><%= adminUser.name %> 님</span>
+                            <span class="user-role">최고관리자 (ID: <%= adminUser.username %>)</span>
+                        </div>
+                        <a href="/console/logout" class="btn-logout">
+                            <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+                                <polyline points="16 17 21 12 16 7"></polyline>
+                                <line x1="21" y1="12" x2="9" y2="12"></line>
+                            </svg>
+                            <span>로그아웃</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 지표 카드 (Metrics) -->
+            <div class="metrics-grid">
+                <div class="metric-card orange">
+                    <div class="metric-label">당일 접수 건수</div>
+                    <div class="metric-value"><%= stats.todayInquiries %> <span>건</span></div>
+                </div>
+                <div class="metric-card purple">
+                    <div class="metric-label">누적 상담 신청</div>
+                    <div class="metric-value"><%= stats.totalInquiries %> <span>건</span></div>
+                </div>
+                <div class="metric-card blue">
+                    <div class="metric-label">오늘 방문자 수</div>
+                    <div class="metric-value"><%= stats.todayVisitors %> <span>명</span></div>
+                </div>
+                <div class="metric-card cyan">
+                    <div class="metric-label">누적 총 방문자</div>
+                    <div class="metric-value"><%= stats.totalVisitors %> <span>명</span></div>
+                </div>
+            </div>
+
+            <!-- 통계 섹션 행 1: 일일 / 월별 방문 추이 -->
+            <div class="analytics-row-1">
+                <div class="chart-card">
+                    <h3 class="chart-title">일일 방문 추이 (최근 7일)</h3>
+                    <div class="chart-wrapper">
+                        <canvas id="dailyChart"></canvas>
+                    </div>
+                </div>
+                <div class="chart-card">
+                    <h3 class="chart-title">월별 방문 추이 (최근 6개월)</h3>
+                    <div class="chart-wrapper">
+                        <canvas id="monthlyChart"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 통계 섹션 행 2: 디바이스 점유율 / 시간대별 분포 / 주요 유입경로 -->
+            <div class="analytics-row-2">
+                <div class="chart-card">
+                    <h3 class="chart-title">기기별 접근 비율 (Mobile / PC)</h3>
+                    <div class="chart-wrapper" style="height: 200px;">
+                        <canvas id="deviceChart"></canvas>
+                    </div>
+                </div>
+                <div class="chart-card">
+                    <h3 class="chart-title">시간대별 접근 분출 (24시간)</h3>
+                    <div class="chart-wrapper" style="height: 200px;">
+                        <canvas id="hourlyChart"></canvas>
+                    </div>
+                </div>
+                <!-- 유입 경로 프로그레스 바 목록 -->
+                <div class="chart-card">
+                    <h3 class="chart-title">주요 유입경로 (Referer)</h3>
+                    <div class="referer-list" style="margin-top: 10px;">
+                        <% if (analytics.referer && analytics.referer.length > 0) { %>
+                            <% 
+                               // 최대 카운트 추출하여 백분율 프로그레스 설정
+                               const maxCount = Math.max(...analytics.referer.map(r => r.count)) || 1;
+                            %>
+                            <% analytics.referer.forEach(ref => { %>
+                                <div class="referer-item">
+                                    <div class="referer-meta">
+                                        <span class="referer-url" title="<%= ref.label %>"><%= ref.label %></span>
+                                        <span class="referer-count"><%= ref.count %> 회</span>
+                                    </div>
+                                    <div class="referer-bar-bg">
+                                        <div class="referer-bar-fill" style="width: <%= (ref.count / maxCount) * 100 %>%;"></div>
+                                    </div>
+                                </div>
+                            <% }) %>
+                        <% } else { %>
+                            <div style="text-align: center; padding-top: 50px; color: rgba(255, 255, 255, 0.4); font-size: 13px;">
+                                수집된 유입 경로 정보가 없습니다.
+                            </div>
+                        <% } %>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 실시간 방문자 로그 (최신 5건) -->
+            <div class="full-width-card" id="logsSection">
+                <h3 class="chart-title">실시간 방문자 로그 (최신 5건)</h3>
+                <div class="table-container">
+                    <% if (visitorLogs && visitorLogs.length > 0) { %>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>IP / 국가</th>
+                                    <th>기기 / 환경</th>
+                                    <th>접속 경로 (URL)</th>
+                                    <th>유입 경로 (Referer)</th>
+                                    <th>시간</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <% visitorLogs.forEach(log => { %>
+                                    <tr>
+                                        <td>
+                                            <strong><%= log.ip_address %></strong>
+                                            <div style="font-size: 11px; color: rgba(255, 255, 255, 0.4); margin-top: 2px;">
+                                                <%= log.country %> (<%= log.country_code %>)
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div style="font-size: 12px; font-weight: bold; color: #38ef7d;">
+                                                <%= log.device_type %> / <%= log.os_name %>
+                                            </div>
+                                            <div style="font-size: 11px; color: rgba(255, 255, 255, 0.4); margin-top: 2px;">
+                                                <%= log.browser_name %>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <span style="font-size: 12px; font-family: monospace; color: #00f2fe;" title="<%= log.requested_url %>">
+                                                <%= log.requested_url %>
+                                            </span>
+                                        </td>
+                                        <td>
+                                            <span style="font-size: 11px; color: rgba(255, 255, 255, 0.4); max-width: 250px; display: inline-block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;" title="<%= log.referer %>">
+                                                <%= log.referer || '-' %>
+                                            </span>
+                                        </td>
+                                        <td style="font-size: 12px; color: rgba(255, 255, 255, 0.5);">
+                                            <%= new Date(log.created_at).toLocaleDateString('ko-KR', { month: '2-digit', day: '2-digit' }) %> 
+                                            <%= new Date(log.created_at).toLocaleTimeString('ko-KR', { hour: '2-digit', minute: '2-digit', second: '2-digit' }) %>
+                                        </td>
+                                    </tr>
+                                <% }) %>
+                            </tbody>
+                        </table>
+                    <% } else { %>
+                        <div style="text-align: center; padding: 40px; color: rgba(255, 255, 255, 0.4);">
+                            수집된 접속 로그 데이터가 존재하지 않습니다.
+                        </div>
+                    <% } %>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 메뉴 미개발 알림창
+        function showUpcomingAlert(menuName) {
+            alert(menuName + ' 기능은 현재 준비 중입니다.');
+        }
+
+        // Chart.js 전역 기본 폰트 색상 하얗게 설정 (다크모드 대응)
+        Chart.defaults.color = 'rgba(255, 255, 255, 0.5)';
+        Chart.defaults.borderColor = 'rgba(255, 255, 255, 0.05)';
+
+        // 1. 일일 통계 차트 (Line Chart)
+        const dailyRaw = <%- JSON.stringify(analytics.daily) %>;
+        const dailyLabels = dailyRaw.map(d => d.label);
+        const dailyCounts = dailyRaw.map(d => d.count);
+
+        new Chart(document.getElementById('dailyChart'), {
+            type: 'line',
+            data: {
+                labels: dailyLabels,
+                datasets: [{
+                    label: '방문 횟수',
+                    data: dailyCounts,
+                    borderColor: '#00f2fe',
+                    backgroundColor: 'rgba(0, 242, 254, 0.1)',
+                    fill: true,
+                    tension: 0.35,
+                    borderWidth: 2.5,
+                    pointBackgroundColor: '#00f2fe',
+                    pointHoverRadius: 6
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { display: false }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: { stepSize: 1 }
+                    }
+                }
+            }
+        });
+
+        // 2. 월별 통계 차트 (Bar Chart)
+        const monthlyRaw = <%- JSON.stringify(analytics.monthly) %>;
+        const monthlyLabels = monthlyRaw.map(m => m.label);
+        const monthlyCounts = monthlyRaw.map(m => m.count);
+
+        new Chart(document.getElementById('monthlyChart'), {
+            type: 'bar',
+            data: {
+                labels: monthlyLabels,
+                datasets: [{
+                    label: '방문 횟수',
+                    data: monthlyCounts,
+                    backgroundColor: 'rgba(161, 140, 209, 0.65)',
+                    borderColor: '#a18cd1',
+                    borderWidth: 1.5,
+                    borderRadius: 6
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { display: false }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: { stepSize: 1 }
+                    }
+                }
+            }
+        });
+
+        // 3. 기기별 점유 차트 (Doughnut Chart)
+        const deviceRaw = <%- JSON.stringify(analytics.device) %>;
+        const deviceLabels = deviceRaw.map(d => d.label);
+        const deviceCounts = deviceRaw.map(d => d.count);
+
+        new Chart(document.getElementById('deviceChart'), {
+            type: 'doughnut',
+            data: {
+                labels: deviceLabels,
+                datasets: [{
+                    data: deviceCounts,
+                    backgroundColor: ['#00f2fe', '#38ef7d', '#ff9966', '#a18cd1'],
+                    borderWidth: 0
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'right',
+                        labels: {
+                            boxWidth: 12,
+                            padding: 12,
+                            font: { size: 11 }
+                        }
+                    }
+                }
+            }
+        });
+
+        // 4. 시간대별 접근 분포 차트 (Area Chart)
+        const hourlyRaw = <%- JSON.stringify(analytics.hourly) %>;
+        // 0시 ~ 23시 기본 배열 생성
+        const hourlyMap = Array(24).fill(0);
+        hourlyRaw.forEach(h => {
+            const hr = parseInt(h.label);
+            if (hr >= 0 && hr < 24) {
+                hourlyMap[hr] = h.count;
+            }
+        });
+        const hourlyLabels = Array.from({length: 24}, (_, i) => `${i}시`);
+
+        new Chart(document.getElementById('hourlyChart'), {
+            type: 'line',
+            data: {
+                labels: hourlyLabels,
+                datasets: [{
+                    label: '방문 수',
+                    data: hourlyMap,
+                    borderColor: '#38ef7d',
+                    backgroundColor: 'rgba(56, 239, 125, 0.05)',
+                    fill: true,
+                    tension: 0.4,
+                    borderWidth: 2,
+                    pointRadius: 1,
+                    pointHoverRadius: 5
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { display: false }
+                },
+                scales: {
+                    x: {
+                        grid: { display: false }
+                    },
+                    y: {
+                        beginAtZero: true,
+                        ticks: { stepSize: 1 }
+                    }
+                }
+            }
+        });
+    </script>
+</body>
+</html>
