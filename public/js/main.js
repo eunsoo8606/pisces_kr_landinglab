@@ -1594,23 +1594,58 @@ document.addEventListener('DOMContentLoaded', () => {
                 return;
             }
 
-            // 제출 진행 연출 (제출 완료 애니메이션)
+            // 제출 진행 연출 (실제 서버 전송)
             if (submitBtn) {
                 const origBtnHtml = submitBtn.innerHTML;
                 submitBtn.disabled = true;
                 submitBtn.innerHTML = `<span>상담 신청을 전송 중입니다...</span>`;
                 submitBtn.style.opacity = '0.8';
 
-                setTimeout(() => {
-                    alert('성공적으로 창업 상담 신청이 접수되었습니다.\n담당자가 빠른 시일 내에 기재해주신 연락처로 연락드리겠습니다.');
-                    // 폼 초기화
-                    inquiryForm.reset();
-                    if (emailDomainInput) emailDomainInput.readOnly = false;
-                    
+                // 라디오 및 입력 데이터 수집
+                const visitPath = document.querySelector('input[name="visitPath"]:checked')?.value || '';
+                const experience = document.querySelector('input[name="experience"]:checked')?.value || '';
+                const budget = document.querySelector('input[name="budget"]:checked')?.value || '';
+                const path = document.querySelector('input[name="path"]:checked')?.value || '';
+                const message = document.getElementById('inquirerMessage')?.value || '';
+
+                const formData = {
+                    visitPath,
+                    experience,
+                    budget,
+                    path,
+                    name: nameInput.value.trim(),
+                    phone: phoneVal,
+                    email: `${emailIdInput.value.trim()}@${emailDomainInput.value.trim()}`,
+                    region: addressInput.value.trim(),
+                    message
+                };
+
+                fetch('/inquire', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(formData)
+                })
+                .then(res => res.json())
+                .then(data => {
+                    if (data.success) {
+                        alert('성공적으로 창업 상담 신청이 접수되었습니다.\n담당자가 빠른 시일 내에 기재해주신 연락처로 연락드리겠습니다.');
+                        inquiryForm.reset();
+                        if (emailDomainInput) emailDomainInput.readOnly = false;
+                    } else {
+                        alert(data.message || '상담 신청 접수 중 오류가 발생했습니다.');
+                    }
+                })
+                .catch(err => {
+                    console.error('Submit Error:', err);
+                    alert('서버 전송 중 오류가 발생했습니다. 다시 시도해 주세요.');
+                })
+                .finally(() => {
                     submitBtn.disabled = false;
                     submitBtn.innerHTML = origBtnHtml;
                     submitBtn.style.opacity = '1';
-                }, 2000);
+                });
             }
         });
     }
