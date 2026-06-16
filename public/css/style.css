@@ -4794,6 +4794,7 @@ footer {
     /* 이미지를 하단에 배치 */
     justify-content: flex-end;
     overflow: hidden;
+    margin-bottom: -50px; /* 부모 하단 패딩 공간을 이겨내고 바닥선에 완전 밀착 */
 }
 
 .item-image img {
@@ -4802,10 +4803,11 @@ footer {
     /* 자연 비율 유지 - 컨테이너보다 작아지면 flex-end로 하단 정렬됨 */
     display: block;
     transition: transform 0.7s ease;
+    transform: translateY(20px); /* 이미지 시각적 포지션을 하단으로 하강 */
 }
 
 .accordion-item.active .item-image img:hover {
-    transform: scale(1.04);
+    transform: translateY(20px) scale(1.04);
 }
 
 /* 모든 아이템 배경 흰색 통일 - 개별 그라디언트 제거 */
