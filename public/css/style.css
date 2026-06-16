@@ -5574,7 +5574,7 @@ footer {
 .right-wing {
     flex: 1;
     position: relative;
-    background-image: url('/images/dregon.png');
+    background-image: url('/images/fish.png');
     /* 필요에 맞춰 배경 이미지 지정 */
     background-size: cover;
     background-position: center;
