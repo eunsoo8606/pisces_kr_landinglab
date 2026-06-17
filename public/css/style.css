@@ -687,36 +687,76 @@ main {
 }
 
 @media (max-width: 768px) {
+    .hero-dark {
+        height: auto !important;
+        min-height: 100vh !important;
+        padding: 120px 0 60px 0 !important;
+        overflow: visible !important;
+    }
+    .hero-video-bg {
+        width: 100% !important;
+    }
+    .hero-dark-container {
+        flex-direction: column !important;
+        justify-content: flex-start !important;
+        align-items: stretch !important;
+        gap: 40px !important;
+        padding-top: 30px !important;
+        padding-left: 20px !important;
+        padding-right: 20px !important;
+        height: auto !important;
+    }
+    .hero-left {
+        width: 100% !important;
+        flex: none !important;
+    }
+    .hero-title {
+        margin-bottom: 20px !important;
+    }
+    .sub-phrase {
+        font-size: 19px !important;
+        margin-bottom: 8px !important;
+    }
+    .brand-prefix {
+        font-size: 26px !important;
+    }
+    .brand-name {
+        font-size: 52px !important;
+    }
+    .hero-desc {
+        font-size: 15px !important;
+        margin-top: 15px !important;
+        line-height: 1.5 !important;
+    }
     .hero-features {
-        display: grid;
-        grid-template-columns: 1fr; /* 1열 그리드 카드 형태로 가독성 대폭 향상 */
-        gap: 14px;
-        width: 100%;
-        max-width: 440px; /* 모바일 화면폭 제한하여 균형감 유지 */
-        margin: 35px auto 0;
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: center !important;
+        gap: 12px !important;
+        width: 100% !important;
+        max-width: 100% !important;
+        margin: 25px 0 0 0 !important;
     }
     .feature-item {
-        background: rgba(255, 255, 255, 0.04) !important;
-        border: 1.5px solid rgba(255, 255, 255, 0.08) !important;
-        border-radius: 12px;
-        padding: 16px 20px !important;
-        width: 100% !important;
+        background: none !important;
+        border: none !important;
+        border-radius: 0 !important;
+        padding: 4px 0 !important;
+        width: auto !important;
         margin: 0 auto !important;
-        box-sizing: border-box;
-        backdrop-filter: blur(8px);
-        -webkit-backdrop-filter: blur(8px);
-        box-shadow: 0 8px 30px rgba(0, 0, 0, 0.4);
-        transition: transform 0.3s ease, border-color 0.3s ease;
+        box-shadow: none !important;
+        backdrop-filter: none !important;
+        -webkit-backdrop-filter: none !important;
+        transition: none !important;
     }
     .feature-item:active {
-        transform: scale(0.98);
-        border-color: #00f2fe !important;
+        transform: none !important;
     }
     .feature-text {
         flex-direction: column !important; /* 항상 세로 정렬 */
-        align-items: flex-start !important; /* 좌측 정렬로 텍스트 가독성 극대화 */
-        text-align: left !important;
-        gap: 6px !important;
+        align-items: center !important;
+        text-align: center !important;
+        gap: 4px !important;
     }
     .feature-title {
         font-size: 17px !important;
@@ -724,6 +764,7 @@ main {
         color: #ffffff !important;
         display: flex;
         align-items: center;
+        justify-content: center;
         gap: 8px;
     }
     .feature-title::before {
@@ -735,24 +776,55 @@ main {
         border-radius: 50%;
     }
     .feature-info {
-        font-size: 13px !important;
-        color: rgba(255, 255, 255, 0.6) !important;
+        font-size: 13.5px !important;
+        color: rgba(255, 255, 255, 0.65) !important;
         font-weight: 400 !important;
         opacity: 1 !important;
         max-width: 100% !important;
         transform: translateX(0) !important;
         overflow: visible !important;
         white-space: normal !important;
-        margin-left: 13px; /* 포인트 닷 오프셋 정렬 */
+        margin-left: 0 !important;
     }
     .underline-line {
-        display: none; /* 모바일 비활성화 */
+        display: none !important; /* 모바일 비활성화 */
     }
-    .brand-prefix {
-        font-size: 26px !important;
+    .hero-right {
+        min-width: auto !important;
+        width: 100% !important;
+        align-items: center !important;
+        text-align: center !important;
+        margin-top: 25px !important;
+        opacity: 1 !important;
+        transform: none !important;
     }
-    .brand-name {
-        font-size: 52px !important;
+    .badge-premium {
+        font-size: 20px !important;
+        margin-bottom: 8px !important;
+        align-self: center !important;
+    }
+    .accent-title {
+        font-size: 20px !important;
+        margin-bottom: 12px !important;
+        align-self: center !important;
+    }
+    .revenue-box {
+        min-width: auto !important;
+        width: 100% !important;
+        justify-content: center !important;
+    }
+    .revenue-number {
+        font-size: 54px !important;
+    }
+    .revenue-unit {
+        font-size: 24px !important;
+    }
+    .hero-sashimi-img {
+        width: 65% !important;
+        max-width: 280px !important;
+        opacity: 0.25 !important;
+        bottom: 0 !important;
+        right: 0 !important;
     }
 }
 
@@ -943,7 +1015,7 @@ main {
     padding: 140px 0;
     background-color: #0b1a30;
     /* 이미지 배경이 로드되기 전의 폴백 컬러 */
-    background-image: url('/images/section2.png');
+    background-image: url('/images/section2.webp');
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
@@ -1070,7 +1142,7 @@ main {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    background-image: url('/images/sec_2_fish.png');
+    background-image: url('/images/sec_2_fish.webp');
     background-size: contain;
     background-repeat: no-repeat;
     background-position: center;
@@ -1229,7 +1301,7 @@ main {
     align-items: center;
     background-color: #0b1a30;
     /* 이미지 배경 로드 전 폴백 컬러 */
-    background-image: url('/images/sec_4.png');
+    background-image: url('/images/sec_4.webp');
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
@@ -1374,7 +1446,7 @@ main {
     justify-content: center;
     background-color: #f7f9fc;
     /* 밝은 배경 폴백 */
-    background-image: url('/images/sec_5.png');
+    background-image: url('/images/sec_5.webp');
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
@@ -1642,7 +1714,7 @@ main {
 
 /* ===== 개설비용 섹션 ===== */
 .section-cost {
-    background: url('/images/sec7.png') center center / cover no-repeat;
+    background: url('/images/sec7.webp') center center / cover no-repeat;
     padding: 120px 0;
     position: relative;
     overflow: hidden;
@@ -2504,7 +2576,7 @@ footer {
     justify-content: center;
     background-color: #020c1b;
     /* 다크 네이비 폴백 */
-    background-image: url('/images/sec8.png');
+    background-image: url('/images/sec8.webp');
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
@@ -2974,7 +3046,7 @@ footer {
     position: relative;
     width: 100%;
     /* 연안부두 항구 실루엣 배경 적용 */
-    background-image: url('/images/factory_bg.png');
+    background-image: url('/images/factory_bg.webp');
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
@@ -4574,7 +4646,7 @@ footer {
     position: relative;
     width: 100%;
     background-color: #0a0a0a;
-    background-image: url('/images/sec12_back.png');
+    background-image: url('/images/sec12_back.webp');
     background-size: cover;
     background-position: center;
     background-attachment: fixed;
@@ -5621,7 +5693,7 @@ footer {
 .right-wing {
     flex: 1;
     position: relative;
-    background-image: url('/images/fish.png');
+    background-image: url('/images/fish.webp');
     /* 필요에 맞춰 배경 이미지 지정 */
     background-size: cover;
     background-position: center;
@@ -6022,7 +6094,7 @@ footer {
 .section-inquiry {
     position: relative;
     width: 100%;
-    background: url('/images/sec_4.png') center top / cover no-repeat;
+    background: url('/images/sec_4.webp') center top / cover no-repeat;
     background-attachment: fixed;
     padding: 90px 0;
     overflow: hidden;
@@ -8546,5 +8618,5 @@ footer {
    Pretendard 폰트 일괄 적용 (기존 다양한 한글/영문 폰트 통합)
    ========================================================================== */
 *, *::before, *::after {
-    font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, Roboto, 'Helvetica Neue', 'Segoe UI', 'Apple SD Gothic Neo', 'Noto Sans KR', 'Malgun Gothic', sans-serif !important;
+    font-family: 'Noto Sans KR', -apple-system, BlinkMacSystemFont, system-ui, Roboto, 'Helvetica Neue', 'Segoe UI', 'Apple SD Gothic Neo', 'Pretendard', 'Malgun Gothic', sans-serif !important;
 }

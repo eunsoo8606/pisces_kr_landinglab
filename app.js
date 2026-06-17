@@ -94,8 +94,15 @@ async function fetchCountryInfo(ip) {
 // 전역 방문자 퍼스널 로그(visitor_logs) 수집 미들웨어
 app.use((req, res, next) => {
     // 정적 자원 요청(css, js, 이미지 등)은 로그 대상에서 필터링
+    // 관리자 대시보드(콘솔) 접속 기록이나 API 호출 기록은 일반 사용자 방문 통계에 영향을 미치므로 수집하지 않습니다.
     const pathName = req.path;
-    if (pathName.includes('.') || pathName.startsWith('/video') || pathName.startsWith('/images') || pathName.startsWith('/css') || pathName.startsWith('/js')) {
+    if (pathName.includes('.') || 
+        pathName.startsWith('/video') || 
+        pathName.startsWith('/images') || 
+        pathName.startsWith('/css') || 
+        pathName.startsWith('/js') ||
+        pathName.startsWith('/console') ||
+        pathName.startsWith('/api')) {
         return next();
     }
 
