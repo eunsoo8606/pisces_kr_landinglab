@@ -12,12 +12,6 @@ document.addEventListener('DOMContentLoaded', () => {
         infinite: false,
     });
 
-    function raf(time) {
-        lenis.raf(time);
-        requestAnimationFrame(raf);
-    }
-    requestAnimationFrame(raf);
-
     // GSAP ScrollTrigger 연동
     gsap.registerPlugin(ScrollTrigger);
 
@@ -134,27 +128,62 @@ document.addEventListener('DOMContentLoaded', () => {
     if (heroLeft && heroRight) {
         const heroTimeline = gsap.timeline();
 
-        // 1) 우측 하단 숙성회 이미지가 대각선 구석(x:50, y:50)에서 중심으로 웅장하게 페이드인하며 안착
+        // 1) 우측 하단 숙성회 이미지가 웅장하게 페이드인하며 안착 (움직임 효과 제거)
         if (heroSashimiImg) {
             heroTimeline.fromTo(heroSashimiImg,
-                { opacity: 0, x: 50, y: 50 },
+                { opacity: 0 },
                 {
                     opacity: 1,
-                    x: 0,
-                    y: 0,
                     duration: 2.0,
                     ease: 'power3.out'
                 }
             );
         }
 
-        // 2) 좌측 텍스트 정보 등장 (이미지 노출 중반부부터 겹쳐서 진행)
+
+
+        // 2) 좌측 텍스트 정보 및 타이틀 사선 컷 리빌 등장 애니메이션
+        // 개별 요소의 초기 상태 설정
+        gsap.set(['.brand-prefix', '.brand-name', '.hero-desc'], {
+            opacity: 0,
+            x: -45,
+            skewX: -10,
+            clipPath: 'polygon(0 0, 0% 0, 0% 100%, 0 100%)'
+        });
+
         heroTimeline.to(heroLeft, {
             opacity: 1,
             y: 0,
+            duration: 0.6,
+            ease: 'power2.out'
+        }, '-=1.4');
+
+        heroTimeline.to('.brand-prefix', {
+            opacity: 1,
+            x: 0,
+            skewX: 0,
+            clipPath: 'polygon(0 0, 100% 0, 100% 100%, 0 100%)',
+            duration: 1.3,
+            ease: 'power4.out'
+        }, '-=1.2');
+
+        heroTimeline.to('.brand-name', {
+            opacity: 1,
+            x: 0,
+            skewX: 0,
+            clipPath: 'polygon(0 0, 100% 0, 100% 100%, 0 100%)',
+            duration: 1.4,
+            ease: 'power4.out'
+        }, '-=1.1');
+
+        heroTimeline.to('.hero-desc', {
+            opacity: 1,
+            x: 0,
+            skewX: 0,
+            clipPath: 'polygon(0 0, 100% 0, 100% 100%, 0 100%)',
             duration: 1.2,
             ease: 'power3.out'
-        }, '-=1.4');
+        }, '-=1.0');
 
         // 3) 우측 매출 정보 오버레이 등장
         heroTimeline.to(heroRight, {
@@ -164,15 +193,15 @@ document.addEventListener('DOMContentLoaded', () => {
             ease: 'power3.out'
         }, '-=0.9');
 
-        // 4) 매출액 카운트업 롤링 애니메이션 연동
+        // 4) 매출액 카운트업 롤링 애니메이션 연동 및 1초 간격 실시간 롤링 루프
         if (revenueNumEl) {
-            const countObj = { val: 0 };
+            const countObj = { val: 60000000 };
             const targetVal = 98450000;
 
             heroTimeline.to(countObj, {
                 val: targetVal,
-                duration: 2.2,
-                ease: 'power4.out',
+                duration: 2.5,
+                ease: 'power3.out',
                 onUpdate: () => {
                     revenueNumEl.innerText = Math.floor(countObj.val).toLocaleString();
                 },
@@ -181,36 +210,35 @@ document.addEventListener('DOMContentLoaded', () => {
                     revenueNumEl.classList.add('glow-active');
                     setTimeout(() => {
                         revenueNumEl.classList.remove('glow-active');
+                        
+                        // 최초 완료 1초 후 실시간 갱신 루프 활성화 (9천만원대 유지)
+                        let currentVal = targetVal;
+                        setInterval(() => {
+                            // 9천만 원 ~ 9천 9백 9십만 원 사이 만원 단위 난수
+                            const nextVal = 90000000 + Math.floor(Math.random() * 990) * 10000;
+                            const rollObj = { val: currentVal };
+                            
+                            gsap.to(rollObj, {
+                                val: nextVal,
+                                duration: 0.35,
+                                ease: 'power2.out',
+                                onUpdate: () => {
+                                    revenueNumEl.innerText = Math.floor(rollObj.val).toLocaleString();
+                                },
+                                onComplete: () => {
+                                    currentVal = nextVal;
+                                    // 갱신 시 미세 글로우 플래시 효과 트리거
+                                    revenueNumEl.classList.add('glow-mini');
+                                    setTimeout(() => {
+                                        revenueNumEl.classList.remove('glow-mini');
+                                    }, 250);
+                                }
+                            });
+                        }, 1350); // 약 1.35초 주기 (0.35초 롤링 + 1초 멈춤)
+                        
                     }, 1200);
                 }
             }, '-=0.6');
-        }
-
-        // 5) 숙성회 이미지 마우스 인터랙티브 3D 패러랙스 (Mouse Parallax) 연동
-        if (heroDarkSection && heroSashimiImg) {
-            heroDarkSection.addEventListener('mousemove', (e) => {
-                const { clientX, clientY } = e;
-                // 마우스 위치에 따른 입체감 계산 (-20px ~ +20px 범위)
-                const xPos = (clientX / window.innerWidth - 0.5) * 40;
-                const yPos = (clientY / window.innerHeight - 0.5) * 40;
-
-                gsap.to(heroSashimiImg, {
-                    x: xPos,
-                    y: yPos,
-                    duration: 1.0,
-                    ease: 'power2.out'
-                });
-            });
-
-            heroDarkSection.addEventListener('mouseleave', () => {
-                // 마우스가 화면을 떠나면 원위치로 부드럽게 복원
-                gsap.to(heroSashimiImg, {
-                    x: 0,
-                    y: 0,
-                    duration: 1.2,
-                    ease: 'power3.out'
-                });
-            });
         }
     }
 
@@ -1200,21 +1228,96 @@ document.addEventListener('DOMContentLoaded', () => {
             targetItem.classList.add('active');
         };
 
+        let autoRotationInterval = null;
+        let resumeTimeout = null;
+        let isSectionVisible = false;
+
+        // 현재 활성화된 아코디언 아이템의 인덱스를 반환하는 함수
+        // 왜 필요함: 다음 순서의 아코디언 아이템으로 자연스럽게 넘어가기 위한 인덱스 계산용
+        const getActiveIndex = () => {
+            let activeIdx = 0;
+            accordionItems.forEach((item, idx) => {
+                if (item.classList.contains('active')) {
+                    activeIdx = idx;
+                }
+            });
+            return activeIdx;
+        };
+
+        // 다음 탭을 자동으로 활성화하는 함수
+        // 왜 필요함: 주기적으로(Interval) 다음 순서의 탭을 노출시키기 위함
+        const playNextTab = () => {
+            const activeIdx = getActiveIndex();
+            const nextIdx = (activeIdx + 1) % accordionItems.length;
+            activateItem(accordionItems[nextIdx]);
+        };
+
+        // 자동 순환 타이머 시작 함수
+        // 왜 필요함: 섹션 진입 시 또는 사용자가 조작을 멈추고 일정 시간 경과 시 동작을 재개하기 위함
+        const startAutoRotation = () => {
+            if (autoRotationInterval) clearInterval(autoRotationInterval);
+            autoRotationInterval = setInterval(() => {
+                if (isSectionVisible) {
+                    playNextTab();
+                }
+            }, 4000); // 4초마다 다음 탭으로 이동
+        };
+
+        // 자동 순환 타이머 정지 함수
+        // 왜 필요함: 사용자가 수동으로 탭을 조작하거나 화면에서 벗어났을 때 불필요한 슬라이딩을 방지하기 위함
+        const stopAutoRotation = () => {
+            if (autoRotationInterval) {
+                clearInterval(autoRotationInterval);
+                autoRotationInterval = null;
+            }
+        };
+
+        // 사용자가 직접 탭을 조작했을 때의 핸들러
+        // 왜 필요함: 사용자가 수동으로 클릭/호버 중일 때 계속해서 자동으로 넘어가버리면 인터랙션 방해가 되므로, 8초간 타이머를 유예하기 위함
+        const handleManualInteraction = (targetItem) => {
+            activateItem(targetItem);
+            stopAutoRotation();
+            if (resumeTimeout) clearTimeout(resumeTimeout);
+            
+            // 사용자가 조작을 멈추고 8초가 지나면 자동 순환을 다시 시작함
+            resumeTimeout = setTimeout(() => {
+                startAutoRotation();
+            }, 8000);
+        };
+
         accordionItems.forEach(item => {
             // 데스크톱: hover로 아코디언 열기
             item.addEventListener('mouseenter', () => {
                 if (!isMobile()) {
-                    activateItem(item);
+                    handleManualInteraction(item);
                 }
             });
 
-            // 모바일: click으로 토글 (클릭한 아이템이 이미 active면 닫지 않고 유지)
+            // 모바일: click으로 토글
             item.addEventListener('click', () => {
                 if (isMobile()) {
-                    activateItem(item);
+                    handleManualInteraction(item);
                 }
             });
         });
+
+        // IntersectionObserver를 이용해 화면에 해당 섹션이 보일 때만 타이머 가동
+        // 왜 필요함: 보이지 않는 영역에서 자바스크립트 타이머가 작동하여 리소스를 낭비하거나 렌더링 부하를 주는 것을 방지하기 위함
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    isSectionVisible = true;
+                    startAutoRotation();
+                } else {
+                    isSectionVisible = false;
+                    stopAutoRotation();
+                }
+            });
+        }, {
+            threshold: 0.15 // 섹션의 15% 이상이 화면에 들어올 때
+        });
+
+        observer.observe(compSection);
 
         // GSAP ScrollTrigger: 섹션 진입 시 헤더 + 아코디언 페이드인
         const compHeader = compSection.querySelector('.comp-header');
