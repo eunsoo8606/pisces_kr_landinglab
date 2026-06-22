@@ -91,4 +91,60 @@ router.post('/api/inquiry/status', checkAuth, async (req, res) => {
     }
 });
 
+// 3. 사용자 고객의 소리 (Voice) 접수 API
+router.post('/api/community/voice', async (req, res) => {
+    const { name, phone, content } = req.body;
+
+    if (!name || !phone || !content) {
+        return res.status(400).json({ success: false, message: '작성자 성함, 연락처, 불편 사항을 모두 입력해 주세요.' });
+    }
+
+    try {
+        const title = `${name}님의 불편/불만 접수`;
+        
+        await db.query(
+            `INSERT INTO boards (category, title, content, author_name, author_phone, is_private, status)
+             VALUES ('voice', ?, ?, ?, ?, 1, 'pending')`,
+            [title, content, name, phone]
+        );
+
+        res.json({ success: true, message: '고객의 소리가 성공적으로 접수되었습니다.' });
+    } catch (err) {
+        console.error('❌ Error submitting voice:', err);
+        res.status(500).json({ success: false, message: '서버 오류로 인해 접수에 실패했습니다.' });
+    }
+});
+
+// 4. 사용자 가맹 및 제휴 문의 (Inquiry) 접수 API
+router.post('/api/community/inquiry', async (req, res) => {
+    const { name, phone, email, type, content } = req.body;
+
+    if (!name || !phone || !type || !content) {
+        return res.status(400).json({ success: false, message: '작성자 성함, 연락처, 문의 분류 및 내용을 모두 입력해 주세요.' });
+    }
+
+    try {
+        const typeMap = {
+            'franchise': '신규 가맹/창업',
+            'location': '매장 개설/상권 분석',
+            'alliance': '비즈니스 제휴/납품',
+            'other': '기타 문의사항'
+        };
+        const typeName = typeMap[type] || '기타 문의';
+        const title = `${name}님의 가맹/제휴 문의 (${typeName})`;
+
+        await db.query(
+            `INSERT INTO boards (category, title, content, author_name, author_phone, author_email, inquiry_type, is_private, status)
+             VALUES ('inquiry', ?, ?, ?, ?, ?, ?, 1, 'pending')`,
+            [title, content, name, phone, email || null, type]
+        );
+
+        res.json({ success: true, message: '문의 사항이 성공적으로 접수되었습니다.' });
+    } catch (err) {
+        console.error('❌ Error submitting inquiry:', err);
+        res.status(500).json({ success: false, message: '서버 오류로 인해 접수에 실패했습니다.' });
+    }
+});
+
 module.exports = router;
+

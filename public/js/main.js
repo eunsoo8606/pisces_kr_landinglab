@@ -517,13 +517,14 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
 
+        // 1) 서브타이틀 등장
         hoursTimeline.to(hoursSubtitle, {
             opacity: 1,
             y: 0,
             duration: 0.8,
             ease: 'power3.out'
         })
-            // 3개 카드가 차례대로 날아오듯 바운스되며 등장 (Stagger)
+            // 2) 3개 카드가 차례대로 날아오듯 바운스되며 등장 (Stagger)
             .fromTo(floatWraps,
                 { opacity: 0, y: 50, scale: 0.85, rotateX: -15 },
                 {
@@ -537,30 +538,11 @@ document.addEventListener('DOMContentLoaded', () => {
                     clearProps: 'transform', // 3D 틸트 호버와 CSS가 충돌하지 않도록 트랜스폼 클리어
                     onStart: () => {
                         gsap.set(hoursCardsWrap, { opacity: 1, y: 0 });
-                    },
-                    onComplete: () => {
-                        // 카드 안착 완료 후 각 카드의 숫자 롤러 회전 시작
-                        document.querySelectorAll('.hours-card').forEach((card) => {
-                            const lists = card.querySelectorAll('.ticker-number-list');
-                            lists.forEach((list, idx) => {
-                                const targetDigit = parseInt(list.dataset.target, 10);
-                                // 0~9 한 세트를 넘어서 두 번째 세트의 타겟 숫자 위치로 롤링 (Y축 위쪽 방향으로 당김)
-                                const targetY = -(10 + targetDigit) * 38;
-                                
-                                gsap.fromTo(list, 
-                                    { y: 0 }, 
-                                    { 
-                                        y: targetY, 
-                                        duration: 2.2 + (idx * 0.15), // 자릿수별 미세한 속도차로 슬롯머신 릴 동작 재현
-                                        ease: "power4.out"
-                                    }
-                                );
-                            });
-                        });
                     }
                 },
                 '-=0.5'
             )
+            // 3) 하단 타이틀 등장
             .to([hoursTitle, hoursDesc], {
                 opacity: 1,
                 y: 0,
@@ -568,6 +550,28 @@ document.addEventListener('DOMContentLoaded', () => {
                 stagger: 0.2,
                 ease: 'power3.out'
             }, '-=0.6');
+
+        // 3.5) 각 시간 숫자의 롤러 회전만 독자적으로 스크롤에 연동 (충돌방지 분리 설계)
+        hoursCards.forEach((card, cardIdx) => {
+            const lists = card.querySelectorAll('.ticker-number-list');
+            lists.forEach((list, idx) => {
+                const targetDigit = parseInt(list.dataset.target, 10);
+                const targetY = -(10 + targetDigit) * 38;
+                
+                gsap.fromTo(list, 
+                    { y: 0 }, 
+                    { 
+                        y: targetY, 
+                        scrollTrigger: {
+                            trigger: '.section-hours', // 부모 섹션 전체를 트리거로 고정하여 연산 꼬임 방지
+                            start: 'top 85%', // 섹션이 화면 아래 85%에 진입할 때 롤링 시작
+                            end: 'bottom 15%', // 섹션이 화면 위 15%로 나갈 때까지 점진적으로 롤링
+                            scrub: 1.5 // 스크롤에 자연스럽게 동기화되어 회전
+                        }
+                    }
+                );
+            });
+        });
 
         // 개별 카드 자동 3D 홀로그램 루프 비활성화 (기우뚱거리는 3D 틸트 제거)
         /*
@@ -1101,27 +1105,41 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
 
-        // 1) 헤더 등장
-        filletTimeline.to(filletHeader, {
+        // 1) 중앙 이미지 웅장하게 확대 등장 (헤더 모션은 CSS 클래스로 이관)
+        filletTimeline.to(filletImageWrap, {
             opacity: 1,
-            y: 0,
-            duration: 1.0,
-            ease: 'power3.out'
+            scale: 1,
+            duration: 1.2,
+            ease: 'power4.out'
         })
-            // 2) 중앙 이미지 웅장하게 확대 등장
-            .to(filletImageWrap, {
-                opacity: 1,
-                scale: 1,
-                duration: 1.2,
-                ease: 'power4.out'
-            }, '-=0.6')
-            // 3) 하단 카드 대칭형 페이드인 등장 (stagger)
+            // 2) 하단 카드 래퍼 페이드인
             .to(filletCards, {
                 opacity: 1,
-                y: 0,
-                duration: 1.0,
-                ease: 'power3.out'
-            }, '-=0.7');
+                duration: 0.5
+            }, '-=0.6');
+
+        // 3.5) 필렛 섹션 모션 감지용 통합 옵저버 (IntersectionObserver 방식)
+        const filletObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    sectionFillet.classList.add('focused');
+                } else {
+                    sectionFillet.classList.remove('focused');
+                }
+            });
+        }, { threshold: 0.15 });
+        filletObserver.observe(sectionFillet);
+
+        // 4) 필렛 이미지 자동 크로스페이드 슬라이더
+        const filletSlides = document.querySelectorAll('.fillet-slide');
+        if (filletSlides.length > 1) {
+            let currentSlideIdx = 0;
+            setInterval(() => {
+                filletSlides[currentSlideIdx].classList.remove('active');
+                currentSlideIdx = (currentSlideIdx + 1) % filletSlides.length;
+                filletSlides[currentSlideIdx].classList.add('active');
+            }, 3500);
+        }
     }
 
     // 14. 열 번째 섹션 (.section-factory) GSAP ScrollTrigger 진입 모션 & 자석 겹침 애니메이션
@@ -1303,7 +1321,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // IntersectionObserver를 이용해 화면에 해당 섹션이 보일 때만 타이머 가동
         // 왜 필요함: 보이지 않는 영역에서 자바스크립트 타이머가 작동하여 리소스를 낭비하거나 렌더링 부하를 주는 것을 방지하기 위함
-        const observer = new IntersectionObserver((entries) => {
+        const rotationObserver = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
                     isSectionVisible = true;
@@ -1317,7 +1335,7 @@ document.addEventListener('DOMContentLoaded', () => {
             threshold: 0.15 // 섹션의 15% 이상이 화면에 들어올 때
         });
 
-        observer.observe(compSection);
+        rotationObserver.observe(compSection);
 
         // GSAP ScrollTrigger: 섹션 진입 시 헤더 + 아코디언 페이드인
         const compHeader = compSection.querySelector('.comp-header');
@@ -1496,7 +1514,7 @@ document.addEventListener('DOMContentLoaded', () => {
         setInterval(nextStore, 5000);
     }
 
-    // 3. 스크롤 진입 시 좌우 날개(Left/Right Wing) 대칭 슬라이딩 애니메이션
+    // 3. 스크롤 진입 시 좌측 날개(Left Wing) 대칭 슬라이딩 애니메이션 (원래의 안전한 기본 모션 복구)
     gsap.from('.sales-dashboard .left-wing', {
         xPercent: -20,
         opacity: 0,
@@ -1508,16 +1526,26 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    gsap.from('.sales-dashboard .right-wing', {
-        xPercent: 20,
-        opacity: 0,
-        duration: 1.5,
-        ease: 'power3.out',
-        scrollTrigger: {
-            trigger: '.sales-dashboard',
-            start: 'top 80%'
-        }
-    });
+    // ※ ScrollTrigger가 Lenis 가상 스크롤러 및 모바일 스크롤 바운싱과 꼬여 작동하지 않던 현상을 해결하기 위해,
+    // 브라우저 순수 내장 API인 IntersectionObserver를 활용하여 100% 안정적인 양방향 focused 클래스 토글을 구현합니다.
+    const ownerMessageContainer = document.querySelector('.sales-dashboard .dashboard-owner-message');
+    if (ownerMessageContainer && 'IntersectionObserver' in window) {
+        const ownerMsgObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    ownerMessageContainer.classList.add('focused');
+                } else {
+                    ownerMessageContainer.classList.remove('focused');
+                }
+            });
+        }, {
+            root: null, // 뷰포트 기준
+            rootMargin: '-15% 0px -15% 0px', // 화면 상하단 15% 안쪽에 포커스되었을 때 활성화
+            threshold: 0.1 // 10% 이상 요소가 화면에 보일 때
+        });
+        
+        ownerMsgObserver.observe(ownerMessageContainer);
+    }
 
     // 서클 마스크 리빌 & 숏츠 컨텐츠 순차 페이드 타임라인 정의
     const revealTimeline = gsap.timeline({
@@ -1553,14 +1581,25 @@ document.addEventListener('DOMContentLoaded', () => {
             stagger: 0.15,
             ease: 'expo.out'
         }, '-=0.5')
-        // 4. 우측 정보 타이틀과 수치 텍스트가 오른쪽에서 왼쪽으로 솟아나며 등장
-        .to(['.shorts-title', '.shorts-metrics'], {
+        // 4. 우측 정보 타이틀과 텍스트들이 엇박자로 솟아나며 등장 (모션 효과 개선)
+        .to('.shorts-title', {
             opacity: 1,
             x: 0,
-            duration: 1,
-            stagger: 0.2,
+            y: 0,
+            duration: 1.2,
+            ease: 'power3.out'
+        }, '-=0.8')
+        .to('.shorts-metrics', {
+            opacity: 1,
+            x: 0,
+            duration: 0.6,
             ease: 'power2.out'
-        }, '-=0.8');
+        }, '-=0.6')
+        .fromTo('.shorts-desc-item', 
+            { opacity: 0, y: 30 },
+            { opacity: 1, y: 0, duration: 1.0, stagger: 0.25, ease: 'power2.out' },
+            '-=0.5'
+        );
     // 매장현황 바로가기 섹션 (.section-store-shortcut) GSAP ScrollTrigger 진입 모션
     const sectionStoreShortcut = document.querySelector('.section-store-shortcut');
     const shortcutContent = document.querySelector('.shortcut-content');
@@ -2168,5 +2207,10 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
+});
+
+// 모든 리소스(이미지 등) 로드 완료 시 ScrollTrigger 위치를 재계산하여 레이아웃 시프트로 인한 좌표 왜곡 해결
+window.addEventListener('load', () => {
+    ScrollTrigger.refresh();
 });
 

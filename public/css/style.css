@@ -1373,8 +1373,7 @@ main {
     min-height: 780px;
     display: flex;
     align-items: center;
-    background-color: #0b1a30;
-    /* 이미지 배경 로드 전 폴백 컬러 */
+    background-color: #050c17; /* 이미지 배경 로드 전 및 마스크용 딥네이비 폴백 */
     background-image: url('/images/sec_4.webp');
     background-size: cover;
     background-position: center;
@@ -1406,12 +1405,38 @@ main {
     /* 텍스트 세로 배치를 고려한 여백 */
 }
 
+/* 텍스트 메탈릭 쉬머 애니메이션 효과 정의 */
 .price-title {
     font-size: 56px;
     font-weight: 800;
     line-height: 1.35;
     letter-spacing: -2px;
     margin-bottom: 25px;
+    
+    /* 텍스트 내 실버-블루 메탈릭 텍스처 맵핑 */
+    background: linear-gradient(
+        135deg,
+        #ffffff 20%,
+        #a6c1ee 45%,
+        #ffffff 50%,
+        #00a8cc 55%,
+        #ffffff 80%
+    );
+    background-size: 200% auto;
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: textShimmer 5s linear infinite;
+    display: inline-block;
+}
+
+@keyframes textShimmer {
+    0% {
+        background-position: 0% center;
+    }
+    100% {
+        background-position: 200% center;
+    }
 }
 
 .price-desc {
@@ -1580,6 +1605,7 @@ main {
     background: #000;
     cursor: pointer;
     transition: transform 0.3s ease, box-shadow 0.3s ease;
+    will-change: transform, box-shadow;
 }
 
 .hours-card:hover {
@@ -2065,6 +2091,7 @@ footer {
     height: 520px;
     overflow: hidden;
     cursor: pointer;
+    will-change: transform, opacity;
 }
 
 .model-card-bg {
@@ -2973,18 +3000,20 @@ footer {
 .fillet-header {
     text-align: center;
     margin-bottom: 60px;
-    opacity: 0;
-    transform: translateY(40px);
+    opacity: 1; /* GSAP 대신 CSS 클래스 제어로 대체 */
+    transform: none;
 }
 
 .fillet-subtitle {
     font-size: 24px;
     font-weight: 700;
     color: #ffffff;
-    letter-spacing: -0.5px;
+    letter-spacing: 5px; /* 넓은 자간에서 시작 */
     display: block;
     margin-bottom: 12px;
-    opacity: 0.9;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 1.2s ease, transform 1.2s cubic-bezier(0.25, 1, 0.5, 1), letter-spacing 1.5s cubic-bezier(0.25, 1, 0.5, 1);
 }
 
 .fillet-title {
@@ -2995,11 +3024,25 @@ footer {
     line-height: 1.25;
 }
 
+.fillet-title .reveal-text {
+    display: inline-block;
+    overflow: hidden;
+    vertical-align: bottom;
+    opacity: 0;
+    filter: blur(12px); /* 렌즈 포커스 아웃 블러 */
+    transform: translateY(40px) scale(0.97);
+    transition: opacity 1.2s ease, transform 1.2s cubic-bezier(0.25, 1, 0.5, 1), filter 1.2s ease;
+}
+
+.fillet-title .highlight-wrap {
+    display: inline-block;
+}
+
 .fillet-title .highlight {
     color: #00a8cc;
-    /* 청량한 시안 블루 포인트 */
     text-shadow: 0 0 20px rgba(0, 168, 204, 0.4);
     white-space: nowrap;
+    display: inline-block;
 }
 
 .mobile-br {
@@ -3013,6 +3056,56 @@ footer {
     margin-top: 25px;
     font-weight: 400;
     word-break: keep-all;
+    opacity: 0;
+    transform: translateY(25px);
+    transition: opacity 1.2s ease, transform 1.2s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+/* ==========================================
+   뷰포트 진입 시 (.focused) 엇박자 리빌 작동
+   ========================================== */
+
+/* 1. 서브타이틀 자간 좁혀지며 안착 */
+.section-fillet.focused .fillet-subtitle {
+    opacity: 0.9;
+    transform: translateY(0);
+    letter-spacing: -0.5px;
+}
+
+/* 2. 메인 타이틀 줄 단위 블러 포커스 아웃 걷히며 솟아오름 */
+.section-fillet.focused .reveal-text {
+    opacity: 1;
+    filter: blur(0);
+    transform: translateY(0) scale(1);
+}
+
+.section-fillet.focused .reveal-text:nth-of-type(1) {
+    transition-delay: 0.15s;
+}
+
+.section-fillet.focused .reveal-text:nth-of-type(2) {
+    transition-delay: 0.35s;
+}
+
+/* 3. '필렛 시스템' 청량한 시안 블루 네온 펄스 작동 */
+.section-fillet.focused .highlight-wrap .highlight {
+    animation: neonGlowPulse 2.5s infinite alternate ease-in-out 1.5s;
+}
+
+@keyframes neonGlowPulse {
+    from {
+        text-shadow: 0 0 15px rgba(0, 168, 204, 0.4);
+    }
+    to {
+        text-shadow: 0 0 25px rgba(0, 168, 204, 0.9), 0 0 10px rgba(0, 168, 204, 0.4);
+    }
+}
+
+/* 4. 본문 설명글 순차 등장 */
+.section-fillet.focused .fillet-desc {
+    opacity: 0.7;
+    transform: translateY(0);
+    transition-delay: 0.55s;
 }
 
 /* 셰프 이미지 영역 */
@@ -3021,24 +3114,53 @@ footer {
     width: 100%;
     max-width: 800px;
     margin: 0 auto;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    aspect-ratio: 3 / 2; /* 기존 3:2 비율에 완벽히 매칭 */
     opacity: 0;
     transform: scale(0.95);
     z-index: 3;
 }
 
+.fillet-slide {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 1.5s ease-in-out, visibility 1.5s ease-in-out;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.fillet-slide.active {
+    opacity: 1;
+    visibility: visible;
+}
+
 .fillet-chef-img {
     width: 100%;
-    height: auto;
+    height: 100%;
     display: block;
-    object-fit: contain;
+    object-fit: cover; /* 가로세로를 3:2 비율에 완전히 꽉 채워 들쭉날쑥함을 방지 */
     mix-blend-mode: screen;
     filter: drop-shadow(0 15px 40px rgba(0, 0, 0, 0.8));
-    /* 하단 잘린 단면이 비디오/배경에 스며들도록 스무스 페이드아웃 마스크 처리 */
-    -webkit-mask-image: linear-gradient(to bottom, #000000 65%, rgba(0, 0, 0, 0.1) 95%, transparent 100%);
-    mask-image: linear-gradient(to bottom, #000000 65%, rgba(0, 0, 0, 0.1) 95%, transparent 100%);
+    /* 사각형 외곽 테두리를 자연스럽게 페이드아웃하여 사각형 경계 제거 */
+    -webkit-mask-image: radial-gradient(ellipse 90% 85% at 50% 50%, #000000 45%, rgba(0, 0, 0, 0.1) 80%, transparent 100%);
+    mask-image: radial-gradient(ellipse 90% 85% at 50% 50%, #000000 45%, rgba(0, 0, 0, 0.1) 80%, transparent 100%);
+}
+
+.fillet-shadow-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 4; /* 이미지보다 상위에 두어 테두리 경계를 확실히 덮음 */
+    pointer-events: none;
+    /* 안쪽으로 깊은 순수 블랙 그림자를 생성해 사각형 모서리를 그윽하게 감싸 안음 */
+    box-shadow: inset 0 0 100px 40px #000000;
 }
 
 .image-behind-glow {
@@ -3059,8 +3181,13 @@ footer {
     max-width: 1000px;
     margin-top: 50px;
     opacity: 0;
-    transform: translateY(40px);
     z-index: 4;
+    transition: opacity 0.8s ease; /* 래퍼 부드럽게 페이드인 */
+}
+
+/* 뷰포트 포커스 진입 시 카드 래퍼 노출 */
+.section-fillet.focused .fillet-cards {
+    opacity: 1;
 }
 
 .fillet-card {
@@ -3072,13 +3199,45 @@ footer {
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
     box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
-    transition: transform 0.4s cubic-bezier(0.165, 0.84, 0.44, 1), border-color 0.4s ease, box-shadow 0.4s ease;
+    /* 1.2초 동안 가속도 곡선을 타고 부드럽게 나타나도록 transition 설정 */
+    transition: border-color 0.4s ease, box-shadow 0.4s ease, transform 1.2s cubic-bezier(0.25, 1, 0.5, 1), opacity 1.2s cubic-bezier(0.25, 1, 0.5, 1);
+    opacity: 0;
+    will-change: transform, opacity;
 }
 
-.fillet-card:hover {
-    transform: translateY(-8px);
+/* 첫 번째 박스: 우측(120px)에서 출발하여 좌측으로 */
+.fillet-card:nth-child(1) {
+    transform: translateX(120px);
+}
+
+/* 두 번째 박스: 좌측(-120px)에서 출발하여 우측으로 */
+.fillet-card:nth-child(2) {
+    transform: translateX(-120px);
+}
+
+/* 뷰포트 진입 시 (.focused) 상태 적용 */
+.section-fillet.focused .fillet-card {
+    opacity: 1;
+    transform: translateX(0); /* 양방향에서 안쪽으로 모여 제자리 안착 */
+}
+
+/* 첫 번째 카드: 타이틀 리빌 완료 후 지연 등장 */
+.section-fillet.focused .fillet-card:nth-child(1) {
+    transition-delay: 0.85s;
+}
+
+/* 두 번째 카드: 첫 번째 카드 등장 후 연속적으로 엇박자 지연 등장 */
+.section-fillet.focused .fillet-card:nth-child(2) {
+    transition-delay: 1.05s;
+}
+
+/* 안착 완료된 상태에서의 호버 효과 처리 (트랜지션 충돌 우려 해소) */
+.section-fillet.focused .fillet-card:hover {
+    transform: translateY(-8px) translateX(0); /* 호버 시 위로 8px만 안정적으로 이동 */
     border-color: rgba(0, 168, 204, 0.4);
     box-shadow: 0 20px 45px rgba(0, 168, 204, 0.25);
+    /* 호버 시 0.4초의 빠른 트랜지션 반응을 주기 위해 재정의 */
+    transition: border-color 0.4s ease, box-shadow 0.4s ease, transform 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
 }
 
 .fillet-card .card-title {
@@ -3156,26 +3315,56 @@ footer {
 /* 상단 헤더 영역 - 밝은 배경에 대응하기 위해 다크 그레이 컬러 적용 */
 .factory-header {
     text-align: center;
-    margin-bottom: 60px;
+    margin-bottom: 50px;
     color: #1a252f;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
 .factory-subtitle {
-    font-family: 'BookkMyungjo', sans-serif;
-    font-size: 20px;
-    font-weight: 700;
-    color: #34495e;
-    letter-spacing: -0.5px;
-    display: block;
-    margin-bottom: 12px;
+    font-family: 'Outfit', sans-serif;
+    font-size: 13px;
+    font-weight: 800;
+    color: #0084ff;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    display: inline-block;
+    background: rgba(0, 132, 255, 0.08); /* 옅은 파란 캡슐 배지 배경 */
+    border: 1px solid rgba(0, 132, 255, 0.15);
+    padding: 6px 16px;
+    border-radius: 30px;
+    margin-bottom: 24px;
 }
 
 .factory-title {
-    font-size: 54px;
+    font-size: 52px;
     font-weight: 900;
     color: #111111;
-    letter-spacing: -2px;
+    letter-spacing: -1.5px;
     line-height: 1.25;
+}
+
+.factory-title .title-bold {
+    color: #0f172a;
+}
+
+.factory-title .title-highlight {
+    color: #0084ff; /* 물고기자리 블루 포인트 */
+    position: relative;
+    display: inline-block;
+}
+
+/* 텍스트 밑줄 데코레이션으로 임팩트 부여 */
+.factory-title .title-highlight::after {
+    content: '';
+    position: absolute;
+    bottom: 2px;
+    left: 0;
+    width: 100%;
+    height: 8px;
+    background: rgba(0, 132, 255, 0.12);
+    z-index: -1;
 }
 
 .factory-desc {
@@ -3186,6 +3375,54 @@ footer {
     margin-top: 25px;
     max-width: 800px;
     word-break: keep-all;
+}
+
+/* 순수익 시뮬레이션 박스 스타일 (예쁜 정보 박스화) */
+.profit-simulation-box {
+    margin: 35px auto 0;
+    width: 100%;
+    max-width: 650px;
+    background: rgba(0, 132, 255, 0.03); /* 밝은 블루 그레이 톤 */
+    border: 1px dashed rgba(0, 132, 255, 0.25); /* 세련된 점선 테두리 */
+    border-radius: 14px;
+    padding: 22px 30px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.01);
+    transition: all 0.3s ease;
+}
+
+.profit-simulation-box:hover {
+    background: rgba(0, 132, 255, 0.06);
+    border-color: rgba(0, 132, 255, 0.4);
+    transform: translateY(-2px);
+}
+
+.sim-badge {
+    font-family: 'Pretendard', sans-serif;
+    font-size: 11px;
+    font-weight: 800;
+    color: #ffffff;
+    background: #0084ff; /* 고대비 블루 뱃지 */
+    padding: 4px 10px;
+    border-radius: 4px;
+    letter-spacing: -0.2px;
+}
+
+.sim-text {
+    font-family: 'Pretendard', sans-serif;
+    font-size: 16px;
+    color: #2d3748;
+    line-height: 1.6;
+    font-weight: 500;
+    margin: 0;
+}
+
+.sim-text strong {
+    color: #0084ff; /* 중요 숫자는 물고기자리 블루로 세련되게 강조 */
+    font-weight: 800;
 }
 
 /* 비교 카드 그리드 레이아웃 */
@@ -3247,18 +3484,33 @@ footer {
 
 .card-other .price-info .price-label {
     font-family: 'Pretendard', sans-serif;
-    font-size: 15px;
-    color: #4a6cb3;
-    font-weight: 700;
+    font-size: 14px;
+    color: #e53e3e; /* 수치와 일치하는 레드 계열로 변경 */
+    font-weight: 700; /* 더 잘 보이도록 두께 상향 */
     display: block;
     margin-bottom: 6px;
 }
 
 .card-other .price-info .price-value {
     font-family: 'Outfit', sans-serif;
-    font-size: 34px;
-    font-weight: 800;
-    color: #4a6cb3;
+    font-size: 30px; /* 크기 축소 */
+    font-weight: 700;
+    color: #e53e3e; /* 경고를 뜻하는 오렌지 레드 계열 */
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.card-other .price-info .price-value .arrow-up {
+    font-size: 18px;
+    color: #e53e3e;
+    display: inline-block;
+    animation: bounceUp 1.2s infinite alternate ease-in-out;
+}
+
+@keyframes bounceUp {
+    from { transform: translateY(0); }
+    to { transform: translateY(-4px); }
 }
 
 /* 물고기자리 카드 - 스케일이 더 크고 선명한 블루 그라디언트 강조 톤 */
@@ -3294,21 +3546,49 @@ footer {
     margin-bottom: 45px;
 }
 
+
+.profit-highlight-sub {
+    font-size: 13px;
+    font-weight: 700;
+    color: #ffd166; /* 돋보이는 옐로우 계열 포인트 */
+    display: inline-block;
+    margin-top: 6px;
+    opacity: 0.95;
+    line-height: 1.4;
+}
+
 .card-pisces .price-info .price-label {
     font-family: 'Pretendard', sans-serif;
     font-size: 15px;
-    color: rgba(255, 255, 255, 0.9);
-    font-weight: 700;
+    color: #00f2fe; /* 수치와 일치하는 시안 블루 계열로 변경 */
+    opacity: 0.9;
+    font-weight: 800;
     display: block;
     margin-bottom: 6px;
+    letter-spacing: -0.3px;
 }
 
 .card-pisces .price-info .price-value {
     font-family: 'Outfit', sans-serif;
-    font-size: 42px;
+    font-size: 46px; /* 크게 확장 */
     font-weight: 900;
-    color: #ffffff;
-    text-shadow: 0 0 15px rgba(255, 255, 255, 0.4);
+    color: #00f2fe; /* 형광에 가까운 고선명 시안 블루 */
+    text-shadow: 0 0 25px rgba(0, 242, 254, 0.8), 0 0 10px rgba(0, 242, 254, 0.4);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.card-pisces .price-info .price-value .arrow-down {
+    font-size: 24px;
+    color: #00f2fe;
+    display: inline-block;
+    animation: bounceDown 1.2s infinite alternate ease-in-out;
+}
+
+@keyframes bounceDown {
+    from { transform: translateY(0); }
+    to { transform: translateY(4px); }
 }
 
 /* 빨간 별표 데코레이션 및 위글(흔들림) 애니메이션 */
@@ -3574,10 +3854,11 @@ footer {
 
     .year-select-wrap {
         width: 100% !important;
+        position: relative !important;
     }
 
     .year-select {
-        width: 100% !important;
+        width: 100% !important; /* 다시 100% 너비를 차지하도록 수정 */
         background: rgba(255, 255, 255, 0.03) !important;
         border: 1px solid rgba(255, 255, 255, 0.08) !important;
         color: #ffffff !important;
@@ -3588,10 +3869,14 @@ footer {
         height: 50px !important; /* 높이 50px 대칭 */
         box-sizing: border-box !important;
         font-family: 'BookkMyungjo', 'Outfit', sans-serif !important;
+        
+        /* 텍스트 가로 중앙 정렬 유지 */
+        text-align: center !important;
+        text-align-last: center !important;
     }
 
     .select-arrow {
-        right: 20px !important;
+        right: 20px !important; /* 100% 너비에 맞추어 원래대로 우측 끝 정렬 */
     }
 
     .mobile-month-selector {
@@ -4424,10 +4709,6 @@ footer {
         padding: 8px 0 8px 15px !important;
     }
 
-    .dashboard-owner-message .message-item:hover {
-        padding-left: 20px !important;
-    }
-
     .dashboard-owner-message p {
         font-size: 14px !important;
         line-height: 1.5 !important;
@@ -5168,7 +5449,7 @@ footer {
     }
 
     .accordion-item.active .item-body {
-        max-height: 500px;
+        max-height: 750px; /* 본문과 이미지가 잘리지 않도록 넉넉하게 확장 */
     }
 
     .item-body-content {
@@ -5184,7 +5465,17 @@ footer {
 
     .item-image {
         width: 100%;
-        height: 220px;
+        height: 240px;
+        margin-bottom: 0; /* 데스크톱의 마이너스 마진 리셋 */
+        border-radius: 12px;
+        overflow: hidden;
+    }
+
+    .item-image img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover; /* 가로세로 비율에 맞춰 가득 채움 */
+        transform: translateY(0) !important; /* 데스크톱 하강 효과 강제 제거 */
     }
 }
 
@@ -5858,6 +6149,7 @@ footer {
     margin: 30px auto 0;
 }
 
+
 .dashboard-owner-message {
     display: flex;
     flex-direction: column;
@@ -5866,30 +6158,42 @@ footer {
 }
 
 .dashboard-owner-message .message-item {
-    border-left: 2px solid rgba(255, 255, 255, 0.15);
+    border-left: 2px solid #00a8cc; /* 기본 청색 포인트 바 제공 */
     padding: 10px 0 10px 25px;
-    transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
-    background: transparent;
+    background: rgba(255, 255, 255, 0.02); /* 은은한 백그라운드 기본 제공 */
     text-align: left;
+    
+    /* 1. 기본 비활성 상태: 처음에는 투명하게 감추고 15px 아래에 배치 */
+    opacity: 0;
+    transform: translateY(15px);
+    
+    /* 트랜지션 기본 장착 */
+    transition: transform 0.6s cubic-bezier(0.165, 0.84, 0.44, 1), opacity 0.6s ease;
 }
 
-/* 마우스 호버 시 포인트 라인 컬러 및 텍스트 밝기 활성화 */
-.dashboard-owner-message .message-item:hover {
-    border-left-color: #00a8cc;
-    padding-left: 35px;
-    background: rgba(255, 255, 255, 0.03);
+/* 2. 포커스 시 활성 상태: 선명하게 보이고 원래 위치로 복귀하게 명시 */
+.dashboard-owner-message.focused .message-item {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* 등장할 때의 엇박자 딜레이(Stagger) 설정 */
+.dashboard-owner-message.focused .message-item:nth-child(1) {
+    transition-delay: 0s;
+}
+.dashboard-owner-message.focused .message-item:nth-child(2) {
+    transition-delay: 0.25s;
+}
+.dashboard-owner-message.focused .message-item:nth-child(3) {
+    transition-delay: 0.5s;
 }
 
 .dashboard-owner-message p {
     font-size: 16px;
     line-height: 1.6;
-    color: rgba(255, 255, 255, 0.8);
+    color: #ffffff; /* 가독성 높은 순백색 기본값 제공 */
     font-weight: 500;
     margin: 0;
-}
-
-.dashboard-owner-message .message-item:hover p {
-    color: #ffffff;
 }
 
 /* 모바일 태블릿 반응형 레이아웃 처리 */
@@ -6009,6 +6313,40 @@ footer {
     gap: 15px;
     opacity: 0;
     transform: translateX(30px);
+}
+
+.shorts-desc-group {
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+    margin-top: 10px;
+    text-align: left;
+}
+
+.shorts-desc-item {
+    font-size: 15px;
+    color: rgba(255, 255, 255, 0.65);
+    line-height: 1.8;
+    font-weight: 400;
+    word-break: keep-all;
+}
+
+.shorts-desc-item.highlight-desc {
+    font-size: 17px;
+    color: #ffffff;
+    font-weight: 600;
+    position: relative;
+    padding-left: 16px;
+}
+
+.shorts-desc-item.highlight-desc::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 5px;
+    width: 3px;
+    height: 18px;
+    background-color: #00a8cc;
 }
 
 .metric-item {
@@ -7065,23 +7403,29 @@ footer {
     }
 
     .shorts-metrics {
-        flex-direction: row !important;
+        flex-direction: column !important;
         justify-content: center !important;
-        gap: 30px !important;
-        margin-top: 0 !important;
+        gap: 20px !important;
+        margin-top: 10px !important;
     }
 
-    /* 설명글은 모바일 화면(100vh) 영역 한도로 인해 숨김 처리 */
-    .shorts-metrics .metric-item:nth-child(3) {
+    .shorts-desc-group {
+        text-align: center !important;
+        gap: 20px !important;
+    }
+
+    .shorts-desc-item {
+        font-size: 13.5px !important;
+        line-height: 1.6 !important;
+    }
+
+    .shorts-desc-item.highlight-desc {
+        font-size: 15px !important;
+        padding-left: 0 !important;
+    }
+
+    .shorts-desc-item.highlight-desc::before {
         display: none !important;
-    }
-
-    .metric-item {
-        align-items: center !important;
-    }
-
-    .metric-item .count {
-        font-size: 22px !important;
     }
 }
 

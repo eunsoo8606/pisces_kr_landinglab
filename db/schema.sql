@@ -69,3 +69,31 @@ CREATE TABLE IF NOT EXISTS visitor_logs (
 CREATE INDEX idx_visitor_created_at ON visitor_logs(created_at);
 CREATE INDEX idx_visitor_device ON visitor_logs(device_type);
 CREATE INDEX idx_visitor_country ON visitor_logs(country_code);
+
+-- ==========================================================================
+-- 8. 공통 게시판 테이블 (boards)
+-- 공지사항, FAQ, 고객의소리, 문의게시판 데이터를 통합하여 관리하는 테이블
+-- ==========================================================================
+CREATE TABLE IF NOT EXISTS boards (
+    id INT AUTO_INCREMENT PRIMARY KEY COMMENT '고유 번호',
+    category VARCHAR(20) NOT NULL COMMENT '게시판 종류 (notice: 공지사항, faq: 자주묻는질문, voice: 고객의소리, inquiry: 문의게시판)',
+    title VARCHAR(255) NOT NULL COMMENT '글 제목 (FAQ는 질문)',
+    content TEXT NOT NULL COMMENT '글 내용 (FAQ는 답변)',
+    author_name VARCHAR(50) DEFAULT NULL COMMENT '작성자 이름',
+    author_phone VARCHAR(20) DEFAULT NULL COMMENT '작성자 연락처',
+    author_email VARCHAR(100) DEFAULT NULL COMMENT '작성자 이메일',
+    inquiry_type VARCHAR(50) DEFAULT NULL COMMENT '문의 분류 (franchise, location, alliance, other)',
+    is_pinned TINYINT(1) DEFAULT 0 COMMENT '상단 고정 여부 (1: 고정, 0: 일반)',
+    is_private TINYINT(1) DEFAULT 0 COMMENT '비밀글 여부 (1: 비밀글, 0: 공개글)',
+    views INT DEFAULT 0 COMMENT '조회수',
+    status VARCHAR(20) DEFAULT 'pending' COMMENT '처리 상태 (pending: 답변대기/접수완료, complete: 답변완료)',
+    reply_content TEXT DEFAULT NULL COMMENT '관리자 답변 내용',
+    replied_at TIMESTAMP DEFAULT NULL COMMENT '답변 작성 시간',
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP COMMENT '생성 일시',
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '수정 일시'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='공통 게시판 테이블';
+
+-- 조회 최적화 인덱스 추가
+CREATE INDEX idx_boards_category ON boards(category);
+CREATE INDEX idx_boards_created_at ON boards(created_at);
+

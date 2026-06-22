@@ -1,5 +1,6 @@
 const express = require('express');
 const router = express.Router();
+const db = require('../db/database');
 
 // 1. 메인 페이지
 router.get('/', (req, res) => {
@@ -50,8 +51,8 @@ router.get('/brand/about', (req, res) => {
     });
 });
 
-// 5. 커뮤니티 라우트
-router.get(['/community', '/community/:category'], (req, res) => {
+// 5. 커뮤니티 라우트 (DB 연동)
+router.get(['/community', '/community/:category'], async (req, res) => {
     const categoryParam = req.params.category || 'notice';
     
     const categoryMap = {
@@ -63,13 +64,30 @@ router.get(['/community', '/community/:category'], (req, res) => {
     
     const activeTab = categoryMap[categoryParam] || 'notice';
     
-    res.render('community', {
-        title: '커뮤니티 | 물고기자리 - 프리미엄 숙성회',
-        branding: 'PISCES since 2002',
-        activeTab: activeTab,
-        metaDescription: '물고기자리 고객 센터 및 소통 공간. 공지사항, 자주 묻는 질문(FAQ) 안내와 함께 서비스 불편사항 접수(고객의 소리), 가맹 및 비즈니스 제휴 문의를 제공합니다.',
-        metaKeywords: '물고기자리 고객센터, 가맹문의, 제휴문의, 공지사항, FAQ, 고객의소리, 불편접수'
-    });
+    try {
+        let listQuery = 'SELECT * FROM boards WHERE category = ?';
+        if (activeTab === 'notice') {
+            listQuery += ' ORDER BY is_pinned DESC, created_at DESC';
+        } else if (activeTab === 'faq') {
+            listQuery += ' ORDER BY id ASC';
+        } else {
+            listQuery += ' ORDER BY created_at DESC';
+        }
+
+        const [listResult] = await db.query(listQuery, [activeTab]);
+
+        res.render('community', {
+            title: '커뮤니티 | 물고기자리 - 프리미엄 숙성회',
+            branding: 'PISCES since 2002',
+            activeTab: activeTab,
+            list: listResult,
+            metaDescription: '물고기자리 고객 센터 및 소통 공간. 공지사항, 자주 묻는 질문(FAQ) 안내와 함께 서비스 불편사항 접수(고객의 소리), 가맹 및 비즈니스 제휴 문의를 제공합니다.',
+            metaKeywords: '물고기자리 고객센터, 가맹문의, 제휴문의, 공지사항, FAQ, 고객의소리, 불편접수'
+        });
+    } catch (err) {
+        console.error('❌ Failed to fetch community list:', err);
+        res.status(500).send('<h1>커뮤니티 데이터를 가져오는 도중 오류가 발생했습니다.</h1>');
+    }
 });
 
 module.exports = router;

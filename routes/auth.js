@@ -176,6 +176,7 @@ router.get('/console/dashboard', checkAuth, async (req, res) => {
             title: '물고기자리 관리자 콘솔',
             stats,
             visitorLogs: recentLogs,
+            activeMenu: 'dashboard',
             analytics: {
                 daily: dailyStats,
                 monthly: monthlyStats,
