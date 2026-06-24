@@ -97,3 +97,47 @@ CREATE TABLE IF NOT EXISTS boards (
 CREATE INDEX idx_boards_category ON boards(category);
 CREATE INDEX idx_boards_created_at ON boards(created_at);
 
+-- 9. 메뉴 음식 테이블 (menus)
+-- 각 카테고리별 상품 정보 관리 및 메인 노출 여부, 정렬 순서를 관리하는 테이블
+CREATE TABLE IF NOT EXISTS menus (
+    id INT AUTO_INCREMENT PRIMARY KEY COMMENT '고유 번호',
+    category VARCHAR(20) NOT NULL COMMENT '메뉴 종류 (recommended, sashimi, special, side, lunch, set)',
+    badge VARCHAR(50) DEFAULT NULL COMMENT '카드 뱃지/라벨 (SIGNATURE, POPULAR, BEST, NEW 등)',
+    name VARCHAR(100) NOT NULL COMMENT '메뉴 이름',
+    price VARCHAR(50) NOT NULL COMMENT '메뉴 가격 (시가, 28,000원 등)',
+    image_url VARCHAR(255) NOT NULL COMMENT '이미지 경로 (예: /images/foods/초밥.jpg)',
+    is_main TINYINT(1) DEFAULT 0 COMMENT '메인 카드 여부 (1: 메인, 0: 일반)',
+    sort_order INT DEFAULT 0 COMMENT '정렬 순서',
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP COMMENT '생성 일시',
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '수정 일시'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='메뉴 음식 테이블';
+
+-- 정렬 및 조회 최적화를 위한 인덱스 추가
+CREATE INDEX idx_menus_category ON menus(category);
+CREATE INDEX idx_menus_sort_order ON menus(sort_order);
+
+-- 10. 메인 팝업 관리 테이블 (popups)
+-- 랜딩페이지의 공지/이벤트 다중 팝업 출력을 관리하는 테이블
+CREATE TABLE IF NOT EXISTS popups (
+    id INT AUTO_INCREMENT PRIMARY KEY COMMENT '고유 번호',
+    title VARCHAR(255) NOT NULL COMMENT '팝업 제목',
+    image_url VARCHAR(255) NOT NULL COMMENT '이미지 경로',
+    link_url VARCHAR(255) DEFAULT NULL COMMENT '클릭 시 이동할 링크 URL',
+    target VARCHAR(10) DEFAULT '_self' COMMENT '링크 이동 방식 (_self, _blank)',
+    width INT DEFAULT 400 COMMENT '팝업 너비 px',
+    height INT DEFAULT 500 COMMENT '팝업 높이 px',
+    position_top INT DEFAULT 50 COMMENT '상단 위치 px',
+    position_left INT DEFAULT 50 COMMENT '좌측 위치 px',
+    start_date DATETIME NOT NULL COMMENT '노출 시작일시',
+    end_date DATETIME NOT NULL COMMENT '노출 종료일시',
+    is_active TINYINT(1) DEFAULT 1 COMMENT '활성화 여부 (1: 활성, 0: 비활성)',
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP COMMENT '생성 일시',
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '수정 일시'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='메인 팝업 관리 테이블';
+
+-- 조회 및 노출 조건 최적화를 위한 인덱스 추가
+CREATE INDEX idx_popups_active ON popups(is_active);
+CREATE INDEX idx_popups_dates ON popups(start_date, end_date);
+
+
+

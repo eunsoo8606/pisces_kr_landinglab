@@ -3,8 +3,23 @@ const router = express.Router();
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 const db = require('../db/database');
+const rateLimit = require('express-rate-limit');
 
 const JWT_SECRET = process.env.JWT_SECRET || 'pisces_jwt_secret_key_2026_!@#';
+
+// 로그인 시도 무차별 대입(Brute Force) 방지용 Rate Limiter 정의
+const loginLimiter = rateLimit({
+    windowMs: 15 * 60 * 1000, // 15분
+    max: 5, // 동일 IP당 15분간 최대 5회 로그인 시도 제한
+    handler: (req, res) => {
+        console.warn(`⚠️ Login rate limit exceeded for IP: ${req.ip || req.headers['x-forwarded-for']}`);
+        return res.status(429).send(
+            "<script>alert('단시간에 너무 많은 로그인 시도가 발생했습니다. 잠시 후(15분 뒤) 다시 시도해 주세요.'); history.back();</script>"
+        );
+    },
+    standardHeaders: true,
+    legacyHeaders: false,
+});
 
 // JWT 검증 미들웨어 함수
 function checkAuth(req, res, next) {
@@ -59,7 +74,7 @@ router.get('/console/login', (req, res) => {
 });
 
 // 2. 관리자 로그인 인증 처리 (JWT 쿠키 발행)
-router.post('/console/login', async (req, res) => {
+router.post('/console/login', loginLimiter, async (req, res) => {
     const { username, password } = req.body;
 
     if (!username || !password) {

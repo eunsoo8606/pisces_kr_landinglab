@@ -15,6 +15,8 @@ const indexRealRouter = require('./routes/index');
 const { router: authRouter } = require('./routes/auth');
 const apiRouter = require('./routes/api');
 const boardRouter = require('./routes/board');
+const menuRouter = require('./routes/menu');
+const popupRouter = require('./routes/popup');
 
 // EJS 엔진 설정
 app.set('view engine', 'ejs');
@@ -150,6 +152,8 @@ app.use('/', indexRealRouter);
 app.use('/', authRouter);
 app.use('/', apiRouter);
 app.use('/', boardRouter);
+app.use('/', menuRouter);
+app.use('/', popupRouter);
 
 // 로컬 개발 환경에서만 listen (Vercel 서버리스에서는 module.exports로 진입)
 if (process.env.NODE_ENV !== 'production') {

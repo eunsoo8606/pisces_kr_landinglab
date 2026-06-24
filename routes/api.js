@@ -3,9 +3,34 @@ const router = express.Router();
 const db = require('../db/database');
 const { sendConsultationNotification } = require('../utils/email');
 const { checkAuth } = require('./auth');
+const rateLimit = require('express-rate-limit');
 
-// 1. 창업 문의/상담 신청 접수 API
-router.post('/inquire', async (req, res) => {
+// 스팸 방지용 API 속도 제한 미들웨어 정의
+const apiLimiter = rateLimit({
+    windowMs: 15 * 60 * 1000, // 15분
+    max: 5, // 동일 IP당 15분간 최대 5회 제출 제한
+    handler: (req, res) => {
+        const isJson = req.headers['content-type'] && req.headers['content-type'].includes('json');
+        
+        console.warn(`⚠️ Rate limit exceeded for IP: ${req.ip || req.headers['x-forwarded-for']}`);
+
+        if (isJson) {
+            return res.status(429).json({ 
+                success: false, 
+                message: '단시간에 너무 많은 요청이 발생했습니다. 15분 후에 다시 시도해 주세요.' 
+            });
+        } else {
+            return res.status(429).send(
+                "<script>alert('단시간에 너무 많은 상담 신청이 발생했습니다. 잠시 후(15분 뒤) 다시 시도해 주세요.'); history.back();</script>"
+            );
+        }
+    },
+    standardHeaders: true, // RateLimit-* 헤더 반환
+    legacyHeaders: false, // X-RateLimit-* 구버전 헤더 비활성화
+});
+
+// 1. 창업 문의/상담 신청 접수 API (Rate Limiter 적용)
+router.post('/inquire', apiLimiter, async (req, res) => {
     try {
         const isJson = req.headers['content-type'] && req.headers['content-type'].includes('json');
 
@@ -91,8 +116,8 @@ router.post('/api/inquiry/status', checkAuth, async (req, res) => {
     }
 });
 
-// 3. 사용자 고객의 소리 (Voice) 접수 API
-router.post('/api/community/voice', async (req, res) => {
+// 3. 사용자 고객의 소리 (Voice) 접수 API (Rate Limiter 적용)
+router.post('/api/community/voice', apiLimiter, async (req, res) => {
     const { name, phone, content } = req.body;
 
     if (!name || !phone || !content) {
@@ -115,8 +140,8 @@ router.post('/api/community/voice', async (req, res) => {
     }
 });
 
-// 4. 사용자 가맹 및 제휴 문의 (Inquiry) 접수 API
-router.post('/api/community/inquiry', async (req, res) => {
+// 4. 사용자 가맹 및 제휴 문의 (Inquiry) 접수 API (Rate Limiter 적용)
+router.post('/api/community/inquiry', apiLimiter, async (req, res) => {
     const { name, phone, email, type, content } = req.body;
 
     if (!name || !phone || !type || !content) {

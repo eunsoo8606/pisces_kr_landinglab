@@ -59,7 +59,7 @@
                                                 <a href="javascript:void(0);" class="notice-title-link" onclick="toggleNoticeContent('<%= item.id %>')">
                                                     <%= item.title %>
                                                 </a>
-                                                <div class="notice-content-fold" id="notice-content-<%= item.id %>" style="display: none; padding: 20px; background: rgba(255,255,255,0.02); margin-top: 15px; border-radius: 10px; border: 1.5px solid rgba(0, 242, 254, 0.1); color: rgba(255,255,255,0.85); line-height: 1.7; white-space: pre-wrap; text-align: left; font-size: 14px; box-shadow: inset 0 0 15px rgba(0,242,254,0.03);"><%= item.content %></div>
+                                                <div class="notice-content-fold" id="notice-content-<%= item.id %>" style="display: none; padding: 20px; background: rgba(255,255,255,0.02); margin-top: 15px; border-radius: 10px; border: 1.5px solid rgba(0, 242, 254, 0.1); color: rgba(255,255,255,0.85); line-height: 1.7; text-align: left; font-size: 14px; box-shadow: inset 0 0 15px rgba(0,242,254,0.03);"><%- item.content %></div>
                                             </td>
                                             <td class="col-date"><%= new Date(item.created_at).toLocaleDateString('ko-KR') %></td>
                                             <td class="col-views"><%= item.views %></td>
@@ -87,7 +87,7 @@
                                         <span class="faq-arrow-icon">&plus;</span>
                                     </button>
                                     <div class="faq-answer">
-                                        <div class="faq-answer-inner" style="white-space: pre-wrap;"><%= item.content %></div>
+                                        <div class="faq-answer-inner"><%- item.content %></div>
                                     </div>
                                 </div>
                             <% }) %>

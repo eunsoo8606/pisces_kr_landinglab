@@ -3,17 +3,37 @@ const router = express.Router();
 const db = require('../db/database');
 
 // 1. 메인 페이지
-router.get('/', (req, res) => {
-    res.render('index', {
-        title: '물고기자리 - 프리미엄 숙성회',
-        branding: 'PISCES since 2002',
-        metaDescription: '칼 없는 주방, 주방장 없는 횟집! 물고기자리에서 성공적인 프리미엄 숙성회 프랜차이즈 창업을 시작하세요. 20여 년의 노하우로 최상급 활선어 숙성회를 무한리필로 제공합니다.',
-        metaKeywords: '물고기자리, 숙성회, 무한리필, 활어회, 프랜차이즈, 창업, 횟집, 소자본창업, 일식창업'
-    });
+router.get('/', async (req, res) => {
+    try {
+        // 현재 날짜 기준으로 노출 대상이 되는 활성 팝업 리스트 조회
+        const [popups] = await db.query(
+            `SELECT * FROM popups 
+             WHERE is_active = 1 
+               AND start_date <= NOW() 
+               AND end_date >= NOW()`
+        );
+
+        res.render('index', {
+            title: '물고기자리 - 프리미엄 숙성회',
+            branding: 'PISCES since 2002',
+            metaDescription: '칼 없는 주방, 주방장 없는 횟집! 물고기자리에서 성공적인 프리미엄 숙성회 프랜차이즈 창업을 시작하세요. 20여 년 of 노하우로 최상급 활선어 숙성회를 무한리필로 제공합니다.',
+            metaKeywords: '물고기자리, 숙성회, 무한리필, 활어회, 프랜차이즈, 창업, 횟집, 소자본창업, 일식창업',
+            popups: popups
+        });
+    } catch (err) {
+        console.error('❌ Failed to fetch active popups for landing page:', err);
+        res.render('index', {
+            title: '물고기자리 - 프리미엄 숙성회',
+            branding: 'PISCES since 2002',
+            metaDescription: '칼 없는 주방, 주방장 없는 횟집! 물고기자리에서 성공적인 프리미엄 숙성회 프랜차이즈 창업을 시작하세요. 20여 년 of 노하우로 최상급 활선어 숙성회를 무한리필로 제공합니다.',
+            metaKeywords: '물고기자리, 숙성회, 무한리필, 활어회, 프랜차이즈, 창업, 횟집, 소자본창업, 일식창업',
+            popups: []
+        });
+    }
 });
 
 // 2. 메뉴 소개 라우트
-router.get(['/menu', '/menu/:category'], (req, res) => {
+router.get(['/menu', '/menu/:category'], async (req, res) => {
     const categoryParam = req.params.category || 'recommend';
     
     const categoryMap = {
@@ -27,13 +47,21 @@ router.get(['/menu', '/menu/:category'], (req, res) => {
     
     const activeTab = categoryMap[categoryParam] || 'recommended';
     
-    res.render('menu', {
-        title: '메뉴소개 | 물고기자리 - 프리미엄 숙성회',
-        branding: 'PISCES since 2002',
-        activeTab: activeTab,
-        metaDescription: '물고기자리의 대표 메뉴를 소개합니다. 엄선된 최고급 원어로 오랜 시간 정성껏 빚어내는 프리미엄 숙성회 모듬부터 다채로운 사이드 메뉴까지 경험해 보세요.',
-        metaKeywords: '물고기자리 메뉴, 숙성회 코스, 모듬회, 매운탕, 초밥, 횟집 메뉴, 모듬숙성회'
-    });
+    try {
+        const [menuList] = await db.query('SELECT * FROM menus ORDER BY sort_order ASC, id ASC');
+        
+        res.render('menu', {
+            title: '메뉴소개 | 물고기자리 - 프리미엄 숙성회',
+            branding: 'PISCES since 2002',
+            activeTab: activeTab,
+            menuList: menuList,
+            metaDescription: '물고기자리의 대표 메뉴를 소개합니다. 엄선된 최고급 원어로 오랜 시간 정성껏 빚어내는 프리미엄 숙성회 모듬부터 다채로운 사이드 메뉴까지 경험해 보세요.',
+            metaKeywords: '물고기자리 메뉴, 숙성회 코스, 모듬회, 매운탕, 초밥, 횟집 메뉴, 모듬숙성회'
+        });
+    } catch (err) {
+        console.error('❌ Failed to fetch menu list:', err);
+        res.status(500).send('<h1>메뉴 데이터를 로드하는 도중 오류가 발생했습니다.</h1>');
+    }
 });
 
 // 3. 가맹 관련 라우트 리다이렉션
