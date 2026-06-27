@@ -272,8 +272,10 @@
             text-decoration: none;
             display: inline-flex;
             align-items: center;
+            justify-content: center;
             gap: 6px;
             transition: all 0.25s ease;
+            box-sizing: border-box;
         }
 
         .btn-write:hover {
@@ -498,6 +500,169 @@
                 display: block;
             }
         }
+
+        /* 모바일 카드 목록 및 필터 토글 전용 스타일 */
+        @media (max-width: 768px) {
+            .board-controls {
+                flex-direction: column;
+                align-items: stretch;
+                gap: 15px;
+                padding: 15px;
+            }
+            .control-desc {
+                text-align: center;
+            }
+            .btn-write {
+                width: 100%;
+                justify-content: center;
+            }
+            
+            /* 테이블/카드 가시성 제어 */
+            .desktop-only-table {
+                display: none !important;
+            }
+            .mobile-only-card {
+                display: block !important;
+            }
+        }
+
+        @media (min-width: 769px) {
+            .mobile-only-card {
+                display: none !important;
+            }
+        }
+
+        .mobile-cards-container {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+        .mobile-board-card {
+            background: #ffffff;
+            border: 1px solid #e2e8f0;
+            border-radius: 16px;
+            padding: 20px;
+            box-shadow: 0 4px 12px rgba(15, 23, 42, 0.01);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        .mobile-board-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(15, 23, 42, 0.03);
+        }
+        .card-header-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+        .card-popup-info {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .card-popup-info img {
+            width: 60px;
+            height: 60px;
+            border-radius: 8px;
+            object-fit: cover;
+            border: 1px solid #cbd5e1;
+            cursor: pointer;
+        }
+        .card-popup-meta {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            max-width: 180px;
+        }
+        .card-popup-title {
+            font-size: 15px;
+            font-weight: 800;
+            color: #0f172a;
+            word-break: break-all;
+        }
+        .card-popup-id {
+            font-size: 11px;
+            color: #94a3b8;
+            font-weight: 700;
+        }
+        .card-badges {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            flex-wrap: wrap;
+        }
+        .card-body-row {
+            margin-bottom: 14px;
+            border-top: 1px solid #f1f5f9;
+            padding-top: 12px;
+            font-size: 13px;
+            color: #64748b;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        .card-meta-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 6px;
+        }
+        .card-meta-label {
+            font-weight: 700;
+            color: #94a3b8;
+        }
+        .card-meta-value {
+            color: #334155;
+            font-weight: 600;
+            word-break: break-all;
+        }
+        .card-actions-row {
+            margin-top: 14px;
+            border-top: 1px dashed #e2e8f0;
+            padding-top: 12px;
+            display: flex;
+            justify-content: flex-end;
+            gap: 12px;
+        }
+        .btn-card-edit {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(2, 132, 199, 0.06);
+            border: 1px solid rgba(2, 132, 199, 0.15);
+            color: #0284c7;
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-size: 12px;
+            font-weight: 800;
+            text-decoration: none;
+            transition: all 0.2s ease;
+        }
+        .btn-card-edit:hover {
+            background: #0284c7;
+            color: #ffffff;
+        }
+        .btn-card-del {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(239, 68, 68, 0.06);
+            border: 1px solid rgba(239, 68, 68, 0.15);
+            color: #ef4444;
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-size: 12px;
+            font-weight: 800;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .btn-card-del:hover {
+            background: #ef4444;
+            color: #ffffff;
+        }
     </style>
 </head>
 <body>
@@ -624,7 +789,7 @@
             <div class="table-card">
                 <div class="table-container">
                     <% if (list && list.length > 0) { %>
-                        <table>
+                        <table class="desktop-only-table">
                             <thead>
                                 <tr>
                                     <th style="width: 70px; text-align: center;">ID</th>
@@ -669,7 +834,7 @@
                                             <% if (item.link_url) { %>
                                                 <div style="font-size: 11px; font-weight: normal; color: #64748b; margin-top: 4px; font-family: monospace;">
                                                     이동: <%= item.link_url %> (<%= item.target %>)
-                                                </div>
+                                                  </div>
                                             <% } %>
                                         </td>
                                         <td style="text-align: center; font-weight: bold; color: #334155;">
@@ -706,6 +871,81 @@
                                 <% }) %>
                             </tbody>
                         </table>
+
+                        <!-- 모바일용 카드 리스트 -->
+                        <div class="mobile-only-card mobile-cards-container">
+                            <% 
+                                list.forEach(item => { 
+                                    const startDate = new Date(item.start_date);
+                                    const endDate = new Date(item.end_date);
+                                    
+                                    let statusText = '노출중';
+                                    let statusClass = 'status-running';
+                                    
+                                    if (item.is_active === 0) {
+                                        statusText = '노출중지';
+                                        statusClass = 'status-stopped';
+                                    } else if (now < startDate) {
+                                        statusText = '노출대기';
+                                        statusClass = 'status-waiting';
+                                    } else if (now > endDate) {
+                                        statusText = '기간만료';
+                                        statusClass = 'status-expired';
+                                    }
+                            %>
+                                <div class="mobile-board-card" id="card-row-<%= item.id %>">
+                                    <div class="card-header-row">
+                                        <div class="card-popup-info">
+                                            <img src="<%= item.image_url %>" alt="<%= item.title %>" onclick="window.open('<%= item.image_url %>', '_blank')" onerror="this.src='/images/logo.webp'">
+                                            <div class="card-popup-meta">
+                                                <span class="card-popup-title"><%= item.title %></span>
+                                                <span class="card-popup-id">ID: <%= item.id %></span>
+                                            </div>
+                                        </div>
+                                        <div class="card-badges">
+                                            <span class="badge-status <%= statusClass %>"><%= statusText %></span>
+                                        </div>
+                                    </div>
+
+                                    <div class="card-body-row">
+                                        <% if (item.link_url) { %>
+                                            <div class="card-meta-item">
+                                                <span class="card-meta-label">링크 주소</span>
+                                                <span class="card-meta-value"><%= item.link_url %> (<%= item.target %>)</span>
+                                            </div>
+                                        <% } %>
+                                        <div class="card-meta-item">
+                                            <span class="card-meta-label">크기 (W x H)</span>
+                                            <span class="card-meta-value"><%= item.width %> x <%= item.height %> px</span>
+                                        </div>
+                                        <div class="card-meta-item">
+                                            <span class="card-meta-label">위치 (L, T)</span>
+                                            <span class="card-meta-value">X: <%= item.position_left %>, Y: <%= item.position_top %></span>
+                                        </div>
+                                        <div class="card-meta-item" style="align-items: flex-start; flex-direction: column; gap: 4px;">
+                                            <span class="card-meta-label">노출 시작일</span>
+                                            <span class="card-meta-value" style="color: #334155;"><%= new Date(item.start_date).toLocaleString('ko-KR') %></span>
+                                        </div>
+                                        <div class="card-meta-item" style="align-items: flex-start; flex-direction: column; gap: 4px;">
+                                            <span class="card-meta-label">노출 종료일</span>
+                                            <span class="card-meta-value" style="color: #ef4444;"><%= new Date(item.end_date).toLocaleString('ko-KR') %></span>
+                                        </div>
+                                        <div class="card-meta-item" style="border-top: 1px solid #f1f5f9; padding-top: 8px; margin-top: 4px;">
+                                            <span class="card-meta-label">노출 여부 활성화</span>
+                                            <label class="switch">
+                                                <input type="checkbox" id="toggle-card-<%= item.id %>" <%= item.is_active === 1 ? 'checked' : '' %> onchange="togglePopupMobile('<%= item.id %>')">
+                                                <span class="slider"></span>
+                                            </label>
+                                        </div>
+                                    </div>
+
+                                    <div class="card-actions-row">
+                                        <a href="/console/popup/edit/<%= item.id %>" class="btn-card-edit">수정</a>
+                                        <button type="button" class="btn-card-del" onclick="deletePopup('<%= item.id %>')">삭제</button>
+                                    </div>
+                                </div>
+                            <% }) %>
+                        </div>
                     <% } else { %>
                         <div style="text-align: center; padding: 50px; color: #64748b;">
                             등록된 팝업 데이터 내역이 존재하지 않습니다.
@@ -744,6 +984,32 @@
             }
         }
 
+        // 모바일용 비동기 활성화 상태 토글
+        async function togglePopupMobile(id) {
+            const checkbox = document.getElementById(`toggle-card-${id}`);
+            
+            try {
+                const response = await fetch(`/api/popup/toggle/${id}`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                });
+
+                const data = await response.json();
+                if (data.success) {
+                    location.reload();
+                } else {
+                    alert(data.message || '상태 변경에 실패했습니다.');
+                    checkbox.checked = !checkbox.checked;
+                }
+            } catch (err) {
+                console.error('Toggle error:', err);
+                alert('서버 통신 에러가 발생하여 상태 변경에 실패했습니다.');
+                checkbox.checked = !checkbox.checked;
+            }
+        }
+
         // 비동기 팝업 삭제 처리
         async function deletePopup(id) {
             if (!confirm('정말로 이 팝업을 영구 삭제하시겠습니까?')) {
@@ -762,9 +1028,10 @@
                 if (data.success) {
                     alert(data.message || '삭제되었습니다.');
                     const tr = document.getElementById(`row-${id}`);
-                    if (tr) {
-                        tr.remove();
-                    } else {
+                    const card = document.getElementById(`card-row-${id}`);
+                    if (tr) tr.remove();
+                    if (card) card.remove();
+                    if (!tr && !card) {
                         location.reload();
                     }
                 } else {

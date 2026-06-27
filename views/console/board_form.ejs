@@ -332,6 +332,7 @@
             border: none;
             transition: all 0.3s ease;
             text-decoration: none;
+            box-sizing: border-box;
         }
 
         .btn-primary {
@@ -400,18 +401,48 @@
         }
 
         @media (max-width: 768px) {
+            .console-main {
+                padding: 24px 16px;
+            }
+
+            .form-card {
+                padding: 20px 15px;
+                border-radius: 16px;
+            }
+
             .form-row {
                 grid-template-columns: 1fr;
                 gap: 15px;
+                margin-bottom: 15px;
+            }
+
+            .form-group {
+                margin-bottom: 18px;
             }
 
             .btn-bar {
                 flex-direction: column-reverse;
+                gap: 10px;
+                margin-top: 25px;
+                padding-top: 20px;
             }
 
             .btn {
                 width: 100%;
                 box-sizing: border-box;
+                padding: 14px 20px;
+            }
+
+            /* 라디오 그룹 정렬 조율 */
+            .radio-group {
+                flex-direction: column;
+                gap: 12px;
+            }
+
+            /* CKEditor 모바일 크기 안정화 */
+            .ck-editor__editable_inline {
+                min-height: 220px;
+                padding: 10px 15px !important;
             }
         }
 

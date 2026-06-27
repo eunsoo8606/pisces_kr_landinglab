@@ -12,6 +12,14 @@
     <link rel="shortcut icon" href="/favicon.ico?v=2" type="image/x-icon">
     <link rel="icon" href="/favicon.webp?v=2" type="image/png">
 
+    <!-- 검색엔진 소유권 인증 태그 -->
+    <% if (locals.googleVerification) { %>
+    <meta name="google-site-verification" content="<%= googleVerification %>">
+    <% } %>
+    <% if (locals.naverVerification) { %>
+    <meta name="naver-site-verification" content="<%= naverVerification %>">
+    <% } %>
+
     <!-- 기본 SEO 메타 태그 -->
     <meta name="description" content="<%= locals.metaDescription || '칼 없는 주방, 주방장 없는 횟집. 물고기자리에서 성공적인 프리미엄 숙성회 프랜차이즈 창업을 시작하세요.' %>">
     <meta name="keywords" content="<%= locals.metaKeywords || '물고기자리, 숙성회, 무한리필, 활어회, 프랜차이즈, 창업, 맛집, 횟집' %>">

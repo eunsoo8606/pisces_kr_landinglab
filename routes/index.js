@@ -118,4 +118,41 @@ router.get(['/community', '/community/:category'], async (req, res) => {
     }
 });
 
+// 6. sitemap.xml 동적 생성 라우트
+router.get('/sitemap.xml', (req, res) => {
+    const baseUrl = `${req.protocol}://${req.get('host')}`;
+    const urls = [
+        { loc: `${baseUrl}/`, changefreq: 'daily', priority: '1.0' },
+        { loc: `${baseUrl}/brand/about`, changefreq: 'weekly', priority: '0.8' },
+        { loc: `${baseUrl}/menu`, changefreq: 'weekly', priority: '0.8' },
+        { loc: `${baseUrl}/community`, changefreq: 'weekly', priority: '0.8' }
+    ];
+
+    let xml = '<?xml version="1.0" encoding="UTF-8"?>';
+    xml += '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">';
+    urls.forEach(url => {
+        xml += '<url>';
+        xml += `<loc>${url.loc}</loc>`;
+        xml += `<changefreq>${url.changefreq}</changefreq>`;
+        xml += `<priority>${url.priority}</priority>`;
+        xml += '</url>';
+    });
+    xml += '</urlset>';
+
+    res.header('Content-Type', 'application/xml');
+    res.send(xml);
+});
+
+// 7. robots.txt 동적 생성 라우트
+router.get('/robots.txt', (req, res) => {
+    const baseUrl = `${req.protocol}://${req.get('host')}`;
+    let robots = 'User-agent: *\n';
+    robots += 'Allow: /\n';
+    robots += 'Disallow: /console/\n\n';
+    robots += `Sitemap: ${baseUrl}/sitemap.xml\n`;
+    
+    res.header('Content-Type', 'text/plain');
+    res.send(robots);
+});
+
 module.exports = router;

@@ -327,6 +327,7 @@
         .btn-filter-search {
             display: inline-flex;
             align-items: center;
+            justify-content: center;
             gap: 8px;
             background: #0284c7;
             border: none;
@@ -338,6 +339,7 @@
             cursor: pointer;
             box-shadow: 0 4px 12px rgba(2, 132, 199, 0.15);
             transition: all 0.25s ease;
+            box-sizing: border-box;
         }
 
         .btn-filter-search:hover {
@@ -347,6 +349,9 @@
         }
 
         .btn-filter-reset {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
             background: #f1f5f9;
             border: 1px solid #cbd5e1;
             color: #334155;
@@ -358,6 +363,7 @@
             text-align: center;
             cursor: pointer;
             transition: all 0.25s ease;
+            box-sizing: border-box;
         }
 
         .btn-filter-reset:hover {
@@ -369,6 +375,7 @@
         .btn-write {
             display: inline-flex;
             align-items: center;
+            justify-content: center;
             gap: 8px;
             background: #16a34a;
             border: none;
@@ -381,6 +388,7 @@
             cursor: pointer;
             box-shadow: 0 4px 12px rgba(22, 163, 74, 0.15);
             transition: all 0.25s ease;
+            box-sizing: border-box;
         }
 
         .btn-write:hover {
@@ -513,6 +521,7 @@
             align-items: center;
             gap: 8px;
             margin-top: 20px;
+            flex-wrap: wrap;
         }
 
         .page-link {
@@ -608,6 +617,188 @@
                 width: 100%;
                 justify-content: center;
             }
+        }
+
+        /* 모바일 카드 목록 및 필터 토글 전용 스타일 */
+        .btn-toggle-filter {
+            display: none;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            width: 100%;
+            background: #ffffff;
+            border: 1px solid #cbd5e1;
+            color: #475569;
+            padding: 12px;
+            border-radius: 12px;
+            font-weight: 800;
+            font-size: 14px;
+            cursor: pointer;
+            margin-bottom: 20px;
+            transition: all 0.25s ease;
+            box-shadow: 0 2px 6px rgba(15, 23, 42, 0.015);
+        }
+        .btn-toggle-filter:hover {
+            background: #f8fafc;
+            color: #0f172a;
+        }
+        .btn-toggle-filter svg {
+            transition: transform 0.25s ease;
+        }
+        .btn-toggle-filter.active svg {
+            transform: rotate(180deg);
+        }
+
+        @media (max-width: 768px) {
+            .btn-toggle-filter {
+                display: flex;
+            }
+            .board-controls {
+                display: none;
+            }
+            .board-controls.open {
+                display: block;
+                animation: slideDown 0.25s ease-out forwards;
+            }
+            
+            /* 테이블/카드 가시성 제어 */
+            .desktop-only-table {
+                display: none !important;
+            }
+            .mobile-only-card {
+                display: block !important;
+            }
+        }
+
+        @media (min-width: 769px) {
+            .mobile-only-card {
+                display: none !important;
+            }
+        }
+
+        .mobile-cards-container {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+        .mobile-board-card {
+            background: #ffffff;
+            border: 1px solid #e2e8f0;
+            border-radius: 16px;
+            padding: 20px;
+            box-shadow: 0 4px 12px rgba(15, 23, 42, 0.01);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        .mobile-board-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(15, 23, 42, 0.03);
+        }
+        .card-header-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+        .card-num-info {
+            font-size: 12px;
+            color: #94a3b8;
+            font-weight: 700;
+        }
+        .card-badges {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .card-body-row {
+            margin-bottom: 14px;
+        }
+        .card-title-text {
+            font-size: 16px;
+            font-weight: 800;
+            color: #0f172a;
+            line-height: 1.45;
+            text-decoration: none;
+            display: block;
+        }
+        .card-title-text:hover {
+            color: #0284c7;
+        }
+        .card-content-summary {
+            font-size: 13.5px;
+            color: #475569;
+            margin-top: 8px;
+            line-height: 1.6;
+        }
+        .card-footer-row {
+            border-top: 1px solid #f1f5f9;
+            padding-top: 12px;
+            font-size: 12.5px;
+            color: #64748b;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+        .card-meta-item {
+            display: flex;
+            justify-content: space-between;
+        }
+        .card-meta-label {
+            font-weight: 700;
+            color: #94a3b8;
+        }
+        .card-meta-value {
+            color: #334155;
+        }
+        .card-actions-row {
+            margin-top: 14px;
+            border-top: 1px dashed #e2e8f0;
+            padding-top: 12px;
+            display: flex;
+            justify-content: flex-end;
+            gap: 12px;
+        }
+        .btn-card-edit {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(2, 132, 199, 0.06);
+            border: 1px solid rgba(2, 132, 199, 0.15);
+            color: #0284c7;
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-size: 12px;
+            font-weight: 800;
+            text-decoration: none;
+            transition: all 0.2s ease;
+        }
+        .btn-card-edit:hover {
+            background: #0284c7;
+            color: #ffffff;
+        }
+        .btn-card-del {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(239, 68, 68, 0.06);
+            border: 1px solid rgba(239, 68, 68, 0.15);
+            color: #ef4444;
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-size: 12px;
+            font-weight: 800;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .btn-card-del:hover {
+            background: #ef4444;
+            color: #ffffff;
+        }
+
+        @keyframes slideDown {
+            from { opacity: 0; transform: translateY(-8px); }
+            to { opacity: 1; transform: translateY(0); }
         }
     </style>
 </head>
@@ -726,8 +917,16 @@
                 </div>
             </div>
 
+            <!-- 모바일 전용 검색/필터 토글 버튼 -->
+            <button type="button" class="btn-toggle-filter active" id="btnToggleFilter">
+                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="6 9 12 15 18 9"></polyline>
+                </svg>
+                <span>검색 / 필터 조건 접기</span>
+            </button>
+
             <!-- 컨트롤 바 (고도화된 기간/조건 검색 필터) -->
-            <div class="board-controls">
+            <div class="board-controls open" id="boardControls">
                 <form action="/console/board/<%= currentCategory %>" method="GET" class="filter-form">
                     <!-- 1. 기간 설정 필터 -->
                     <div class="filter-row">
@@ -784,7 +983,7 @@
             <div class="table-card">
                 <div class="table-container">
                     <% if (list && list.length > 0) { %>
-                        <table>
+                        <table class="desktop-only-table">
                             <thead>
                                 <tr>
                                     <th style="width: 70px;">번호</th>
@@ -909,6 +1108,98 @@
                                 <% }) %>
                             </tbody>
                         </table>
+
+                        <!-- 모바일 전용 카드형 리스트 -->
+                        <div class="mobile-only-card mobile-cards-container">
+                            <% list.forEach((item, index) => { %>
+                                <div class="mobile-board-card" id="card-row-<%= item.id %>">
+                                    <div class="card-header-row">
+                                        <span class="card-num-info">#<%= totalItems - ((currentPage - 1) * 10 + index) %></span>
+                                        <div class="card-badges">
+                                            <% if (currentCategory === 'notice') { %>
+                                                <% if (item.is_pinned === 1) { %>
+                                                    <span class="badge-pinned">필독고정</span>
+                                                <% } else { %>
+                                                    <span class="badge-type" style="background:#f1f5f9; color:#475569; border-color:#cbd5e1;">일반</span>
+                                                <% } %>
+                                            <% } else if (currentCategory === 'faq') { %>
+                                                <span class="badge-type">FAQ</span>
+                                            <% } else if (currentCategory === 'voice') { %>
+                                                <span class="badge-status <%= item.status === 'complete' ? 'status-complete' : 'status-pending' %>">
+                                                    <%= item.status === 'complete' ? '답변완료' : '답변대기' %>
+                                                </span>
+                                            <% } else if (currentCategory === 'inquiry') { %>
+                                                <% 
+                                                    const inquiryTypeMap = {
+                                                        'franchise': '가맹/창업',
+                                                        'location': '상권분석',
+                                                        'alliance': '제휴/납품',
+                                                        'other': '기타문의'
+                                                    };
+                                                %>
+                                                <span class="badge-type"><%= inquiryTypeMap[item.inquiry_type] || '기타' %></span>
+                                                <span class="badge-status <%= item.status === 'complete' ? 'status-complete' : 'status-pending' %>">
+                                                    <%= item.status === 'complete' ? '답변완료' : '답변대기' %>
+                                                </span>
+                                            <% } %>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="card-body-row">
+                                        <% if (currentCategory === 'notice') { %>
+                                            <a href="/console/board/edit/<%= item.id %>" class="card-title-text"><%= item.title %></a>
+                                        <% } else if (currentCategory === 'faq') { %>
+                                            <a href="/console/board/edit/<%= item.id %>" class="card-title-text">Q. <%= item.title %></a>
+                                            <div class="card-content-summary">
+                                                <%= item.content.length > 60 ? item.content.substring(0, 60) + '...' : item.content %>
+                                            </div>
+                                        <% } else if (currentCategory === 'voice') { %>
+                                            <a href="/console/board/edit/<%= item.id %>" class="card-title-text">
+                                                <%= item.content.length > 50 ? item.content.substring(0, 50) + '...' : item.content %>
+                                            </a>
+                                        <% } else if (currentCategory === 'inquiry') { %>
+                                            <a href="/console/board/edit/<%= item.id %>" class="card-title-text"><%= item.title %></a>
+                                        <% } %>
+                                    </div>
+
+                                    <div class="card-footer-row">
+                                        <% if (currentCategory !== 'faq') { %>
+                                            <div class="card-meta-item">
+                                                <span class="card-meta-label">작성자</span>
+                                                <span class="card-meta-value"><%= item.author_name %></span>
+                                            </div>
+                                            <div class="card-meta-item">
+                                                <span class="card-meta-label">연락처</span>
+                                                <span class="card-meta-value"><%= item.author_phone %></span>
+                                            </div>
+                                        <% } %>
+                                        <% if (currentCategory === 'inquiry' && item.author_email) { %>
+                                            <div class="card-meta-item">
+                                                <span class="card-meta-label">이메일</span>
+                                                <span class="card-meta-value"><%= item.author_email %></span>
+                                            </div>
+                                        <% } %>
+                                        <div class="card-meta-item">
+                                            <span class="card-meta-label">등록일</span>
+                                            <span class="card-meta-value"><%= new Date(item.created_at).toLocaleDateString('ko-KR') %></span>
+                                        </div>
+                                        <% if (currentCategory === 'notice') { %>
+                                            <div class="card-meta-item">
+                                                <span class="card-meta-label">조회수</span>
+                                                <span class="card-meta-value"><%= item.views %></span>
+                                            </div>
+                                        <% } %>
+                                    </div>
+
+                                    <div class="card-actions-row">
+                                        <a href="/console/board/edit/<%= item.id %>" class="btn-card-edit">
+                                            <%= (currentCategory === 'voice' || currentCategory === 'inquiry') ? '답변' : '수정' %>
+                                        </a>
+                                        <button type="button" class="btn-card-del" onclick="deleteItem('<%= item.id %>')">삭제</button>
+                                    </div>
+                                </div>
+                            <% }) %>
+                        </div>
                     <% } else { %>
                         <div style="text-align: center; padding: 50px; color: #64748b;">
                             접수되거나 검색 결과에 매칭되는 데이터 내역이 존재하지 않습니다.
@@ -957,11 +1248,12 @@
                 const data = await response.json();
                 if (data.success) {
                     alert(data.message || '삭제되었습니다.');
-                    // DOM에서 즉시 해당 줄 제거
+                    // DOM에서 즉시 해당 줄 및 카드 제거
                     const tr = document.getElementById(`row-${id}`);
-                    if (tr) {
-                        tr.remove();
-                    } else {
+                    const card = document.getElementById(`card-row-${id}`);
+                    if (tr) tr.remove();
+                    if (card) card.remove();
+                    if (!tr && !card) {
                         location.reload();
                     }
                 } else {
@@ -986,6 +1278,22 @@
 
             btnToggleMenu.addEventListener('click', toggleSidebar);
             sidebarBackdrop.addEventListener('click', toggleSidebar);
+        }
+
+        // 모바일 검색/필터 아코디언 토글 제어
+        const btnToggleFilter = document.getElementById('btnToggleFilter');
+        const boardControls = document.getElementById('boardControls');
+        if (btnToggleFilter && boardControls) {
+            btnToggleFilter.addEventListener('click', () => {
+                const isOpen = boardControls.classList.toggle('open');
+                btnToggleFilter.classList.toggle('active');
+                const textSpan = btnToggleFilter.querySelector('span');
+                if (isOpen) {
+                    textSpan.innerText = '검색 / 필터 조건 접기';
+                } else {
+                    textSpan.innerText = '검색 / 필터 조건 열기';
+                }
+            });
         }
     </script>
 </body>

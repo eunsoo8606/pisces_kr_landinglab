@@ -1710,16 +1710,23 @@ document.addEventListener('DOMContentLoaded', () => {
                 return;
             }
 
-            // 3) 이메일 유효성 검사
-            if (!emailIdInput.value.trim()) {
-                alert('이메일 아이디를 입력해 주세요.');
-                emailIdInput.focus();
-                return;
-            }
-            if (!emailDomainInput.value.trim()) {
-                alert('이메일 도메인을 입력해 주세요.');
-                emailDomainInput.focus();
-                return;
+            // 3) 이메일 유효성 검사 (선택 항목으로 변경)
+            const emailId = emailIdInput.value.trim();
+            const emailDomain = emailDomainInput.value.trim();
+            let emailVal = '';
+
+            if (emailId || emailDomain) {
+                if (!emailId) {
+                    alert('이메일 아이디를 입력해 주세요.');
+                    emailIdInput.focus();
+                    return;
+                }
+                if (!emailDomain) {
+                    alert('이메일 도메인을 입력해 주세요.');
+                    emailDomainInput.focus();
+                    return;
+                }
+                emailVal = `${emailId}@${emailDomain}`;
             }
 
             // 4) 거주지 유효성 검사
@@ -1746,18 +1753,14 @@ document.addEventListener('DOMContentLoaded', () => {
                 // 라디오 및 입력 데이터 수집
                 const visitPath = document.querySelector('input[name="visitPath"]:checked')?.value || '';
                 const experience = document.querySelector('input[name="experience"]:checked')?.value || '';
-                const budget = document.querySelector('input[name="budget"]:checked')?.value || '';
-                const path = document.querySelector('input[name="path"]:checked')?.value || '';
                 const message = document.getElementById('inquirerMessage')?.value || '';
 
                 const formData = {
                     visitPath,
                     experience,
-                    budget,
-                    path,
                     name: nameInput.value.trim(),
                     phone: phoneVal,
-                    email: `${emailIdInput.value.trim()}@${emailDomainInput.value.trim()}`,
+                    email: emailVal,
                     region: addressInput.value.trim(),
                     message
                 };
@@ -1950,16 +1953,24 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // 하단 고정 퀵 문의바 스크롤 감지 및 닫기 제어
+    // 하단 고정 퀵 문의바 스크롤 감지 및 닫기 제어 (Session Storage 연동 및 비동기 AJAX 전송 지원)
     const stickyQuickBar = document.getElementById('stickyQuickBar');
     const btnQuickClose = document.getElementById('btnQuickClose');
     const quickBarForm = document.getElementById('quickBarForm');
-    let isQuickBarClosed = false;
+    const quickAgree = document.getElementById('quickAgree');
 
     if (stickyQuickBar) {
-        // 300px 이상 스크롤 시 아래에서 솟아오름
-        const handleQuickBarScroll = () => {
-            if (isQuickBarClosed) return;
+        // 브라우저 세션 동안 사용자가 명시적으로 닫았는지 확인
+        const isClosed = sessionStorage.getItem('quickBarClosed');
+
+        // 스크롤 위치 감지하여 퀵바 표시 상태 업데이트
+        const handleScroll = () => {
+            if (isClosed === 'true') {
+                stickyQuickBar.classList.add('is-hidden');
+                return;
+            }
+
+            // 300px 이상 스크롤 시 퀵바 노출
             if (window.scrollY > 300) {
                 stickyQuickBar.classList.remove('is-hidden');
             } else {
@@ -1967,35 +1978,79 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         };
 
-        window.addEventListener('scroll', handleQuickBarScroll);
-        handleQuickBarScroll(); // 초기 로딩 상태 체크
+        window.addEventListener('scroll', handleScroll);
+        handleScroll(); // 초기 스크롤 위치 보정
 
-        // 닫기 버튼 클릭 시 숨김 및 복원 비활성화
+        // 닫기 버튼 클릭 처리
         if (btnQuickClose) {
-            btnQuickClose.addEventListener('click', () => {
-                isQuickBarClosed = true;
+            btnQuickClose.addEventListener('click', (e) => {
+                e.preventDefault();
                 stickyQuickBar.classList.add('is-hidden');
+                sessionStorage.setItem('quickBarClosed', 'true');
             });
         }
-        
-        // 폼 유효성 체크
+
+        // 폼 비동기 전송 처리
         if (quickBarForm) {
-            quickBarForm.addEventListener('submit', (e) => {
-                const name = document.getElementById('quickName').value.trim();
-                const phone = document.getElementById('quickPhone').value.trim();
-                
-                if (!name || !phone) {
-                    e.preventDefault();
-                    alert('성함과 연락처를 모두 입력해 주세요.');
+            quickBarForm.addEventListener('submit', async (e) => {
+                e.preventDefault();
+
+                // 필수 수집 동의 체크 여부 확인
+                if (quickAgree && !quickAgree.checked) {
+                    alert('개인정보 수집 및 이용에 동의하셔야 신청이 가능합니다.');
                     return;
                 }
-                
+
+                const nameInput = document.getElementById('quickName');
+                const phoneInput = document.getElementById('quickPhone');
+
+                if (!nameInput || !phoneInput) return;
+
+                const name = nameInput.value.trim();
+                const phone = phoneInput.value.trim();
+
+                if (!name || !phone) {
+                    alert('이름과 연락처를 모두 입력해 주세요.');
+                    return;
+                }
+
                 // 한국 전화번호 길이 체크
                 const cleanPhone = phone.replace(/[^0-9]/g, '');
                 if (cleanPhone.length < 9 || cleanPhone.length > 11) {
-                    e.preventDefault();
                     alert('올바른 연락처 형식이 아닙니다. 다시 확인해 주세요.');
                     return;
+                }
+
+                try {
+                    const submitButton = quickBarForm.querySelector('.btn-quick-submit');
+                    if (submitButton) submitButton.disabled = true;
+
+                    // 비동기 API 요청 전송
+                    const response = await fetch('/inquire', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            inquirerName: name,
+                            inquirerPhone: phone
+                        })
+                    });
+
+                    const result = await response.json();
+
+                    if (result.success) {
+                        alert(result.message || '가맹 상담 신청이 성공적으로 완료되었습니다.');
+                        quickBarForm.reset();
+                    } else {
+                        alert(result.message || '상담 신청 처리 중 오류가 발생했습니다.');
+                    }
+                } catch (err) {
+                    console.error('Quick Inquiry Submission Error:', err);
+                    alert('네트워크 혹은 서버 오류가 발생하여 신청 처리가 실패했습니다.');
+                } finally {
+                    const submitButton = quickBarForm.querySelector('.btn-quick-submit');
+                    if (submitButton) submitButton.disabled = false;
                 }
             });
         }

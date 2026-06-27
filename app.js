@@ -141,9 +141,11 @@ app.use((req, res, next) => {
     })();
 });
 
-// 모든 템플릿에 baseUrl 주입
+// 모든 템플릿에 baseUrl 및 소유권 인증키 주입
 app.use((req, res, next) => {
     res.locals.baseUrl = `${req.protocol}://${req.get('host')}`;
+    res.locals.googleVerification = process.env.GOOGLE_SITE_VERIFICATION || '';
+    res.locals.naverVerification = process.env.NAVER_SITE_VERIFICATION || '';
     next();
 });
 

@@ -24,12 +24,12 @@
                     <span style="font-family: 'Pretendard', sans-serif; font-weight: 500; font-size: 12.5px;">오늘 가공하고,
                         오늘 공급합니다</span>
                 </div>
-                <h2 class="hero-title">
+                <h1 class="hero-title">
                     <span class="brand-name-wrap">
                         <span class="brand-prefix">가장 신선한 숙성회의 시작,</span>
                         <span class="brand-name">물고기자리</span>
                     </span>
-                </h2>
+                </h1>
                 <p class="hero-desc">
                     물고기자리 필렛가공센터가 만드는 가장 신선한 숙성회.<br>
                     매일 줄 서는 맛집의 명성을 가맹점의 일상으로 만드는,<br>흔들리지 않는 성공 파트너입니다.
@@ -1695,168 +1695,13 @@
                         autocomplete="off">
                 </div>
                 <button type="submit" class="btn-quick-submit">
-                    <span>보내기</span>
+                     <span>보내기</span>
                 </button>
             </form>
+            <!-- 닫기 버튼 누락 보완 -->
+            <button type="button" id="btnQuickClose" class="btn-quick-close" aria-label="닫기">&times;</button>
         </div>
     </div>
-
-    <!-- 모바일 자체 필렛시스템 인터랙티브 포커스 사이클 스크립트 -->
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            // 모바일 768px 이하 환경에서만 동작하도록 한정
-            if (window.innerWidth <= 768) {
-                const items = document.querySelectorAll('.hero-features .feature-item');
-                if (items.length === 0) return;
-
-                let currentIndex = 0;
-                let cycleInterval = null;
-                let pauseTimeout = null;
-
-                // 선택된 아이템을 활성화하고 이전 활성 아이템을 비활성화하는 함수
-                function activateItem(index) {
-                    items.forEach((item, idx) => {
-                        if (idx === index) {
-                            item.classList.add('active');
-                        } else {
-                            item.classList.remove('active');
-                        }
-                    });
-                    currentIndex = index;
-                }
-
-                // 3초 간격으로 강점 카테고리가 자동 롤링되도록 사이클 가동
-                function startCycle() {
-                    if (cycleInterval) clearInterval(cycleInterval);
-                    cycleInterval = setInterval(() => {
-                        let nextIndex = (currentIndex + 1) % items.length;
-                        activateItem(nextIndex);
-                    }, 3000);
-                }
-
-                // 사용자가 임의의 항목을 누르면 자동 전환을 멈추고 8초 후 재개
-                function pauseCycle() {
-                    if (cycleInterval) clearInterval(cycleInterval);
-                    if (pauseTimeout) clearTimeout(pauseTimeout);
-                    pauseTimeout = setTimeout(() => {
-                        startCycle();
-                    }, 8000);
-                }
-
-                // 최초 진입 시 첫 번째 항목 활성화 및 롤링 개시
-                activateItem(0);
-                startCycle();
-
-                // 클릭 또는 터치 시 즉시 활성화 및 롤링 정지(딜레이) 트리거
-                items.forEach((item, idx) => {
-                    item.addEventListener('click', () => {
-                        activateItem(idx);
-                        pauseCycle();
-                    });
-                });
-            }
-        });
-    </script>
-
-    <!-- 하단 고정 퀵 문의바 제어 스크립트 -->
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const stickyQuickBar = document.getElementById('stickyQuickBar');
-            const btnQuickClose = document.getElementById('btnQuickClose');
-            const quickBarForm = document.getElementById('quickBarForm');
-            const quickAgree = document.getElementById('quickAgree');
-
-            if (!stickyQuickBar) return;
-
-            // 브라우저 세션 동안 사용자가 명시적으로 닫았는지 확인
-            const isClosed = sessionStorage.getItem('quickBarClosed');
-
-            // 스크롤 위치 감지하여 퀵바 표시 상태 업데이트
-            const handleScroll = () => {
-                if (isClosed === 'true') {
-                    stickyQuickBar.classList.add('is-hidden');
-                    return;
-                }
-
-                // 300px 이상 스크롤 시 퀵바 노출
-                if (window.scrollY > 300) {
-                    stickyQuickBar.classList.remove('is-hidden');
-                } else {
-                    stickyQuickBar.classList.add('is-hidden');
-                }
-            };
-
-            window.addEventListener('scroll', handleScroll);
-            handleScroll(); // 초기 스크롤 위치 보정
-
-            // 닫기 버튼 클릭 처리
-            if (btnQuickClose) {
-                btnQuickClose.addEventListener('click', (e) => {
-                    e.preventDefault();
-                    stickyQuickBar.classList.add('is-hidden');
-                    sessionStorage.setItem('quickBarClosed', 'true');
-                });
-            }
-
-            // 폼 비동기 전송 처리
-            if (quickBarForm) {
-                quickBarForm.addEventListener('submit', async (e) => {
-                    e.preventDefault();
-
-                    // 필수 수집 동의 체크 여부 확인
-                    if (quickAgree && !quickAgree.checked) {
-                        alert('개인정보 수집 및 이용에 동의하셔야 신청이 가능합니다.');
-                        return;
-                    }
-
-                    const nameInput = document.getElementById('quickName');
-                    const phoneInput = document.getElementById('quickPhone');
-
-                    if (!nameInput || !phoneInput) return;
-
-                    const name = nameInput.value.trim();
-                    const phone = phoneInput.value.trim();
-
-                    if (!name || !phone) {
-                        alert('이름과 연락처를 모두 입력해 주세요.');
-                        return;
-                    }
-
-                    try {
-                        const submitButton = quickBarForm.querySelector('.btn-quick-submit');
-                        if (submitButton) submitButton.disabled = true;
-
-                        // 비동기 API 요청 전송
-                        const response = await fetch('/inquire', {
-                            method: 'POST',
-                            headers: {
-                                'Content-Type': 'application/json'
-                            },
-                            body: JSON.stringify({
-                                inquirerName: name,
-                                inquirerPhone: phone
-                            })
-                        });
-
-                        const result = await response.json();
-
-                        if (result.success) {
-                            alert(result.message || '가맹 상담 신청이 성공적으로 완료되었습니다.');
-                            quickBarForm.reset();
-                        } else {
-                            alert(result.message || '상담 신청 처리 중 오류가 발생했습니다.');
-                        }
-                    } catch (err) {
-                        console.error('Quick Inquiry Submission Error:', err);
-                        alert('네트워크 혹은 서버 오류가 발생하여 신청 처리가 실패했습니다.');
-                    } finally {
-                        const submitButton = quickBarForm.querySelector('.btn-quick-submit');
-                        if (submitButton) submitButton.disabled = false;
-                    }
-                });
-            }
-        });
-    </script>
 
     <!-- Scroll to Top Button -->
     <button type="button" id="btnScrollTop" class="btn-scroll-top" aria-label="맨 위로 스크롤">

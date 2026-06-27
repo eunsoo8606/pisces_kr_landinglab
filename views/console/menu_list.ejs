@@ -307,6 +307,9 @@
         }
 
         .btn-filter-reset {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
             padding: 10px 20px;
             background: #f1f5f9;
             border: 1px solid #cbd5e1;
@@ -316,6 +319,7 @@
             border-radius: 10px;
             text-decoration: none;
             transition: all 0.2s ease;
+            box-sizing: border-box;
         }
 
         .btn-filter-reset:hover {
@@ -333,8 +337,10 @@
             cursor: pointer;
             display: inline-flex;
             align-items: center;
+            justify-content: center;
             gap: 6px;
             transition: all 0.25s ease;
+            box-sizing: border-box;
         }
 
         .btn-filter-search:hover {
@@ -354,8 +360,10 @@
             text-decoration: none;
             display: inline-flex;
             align-items: center;
+            justify-content: center;
             gap: 6px;
             transition: all 0.25s ease;
+            box-sizing: border-box;
         }
 
         .btn-write:hover {
@@ -531,6 +539,216 @@
                 display: block;
             }
         }
+
+        /* 모바일 카드 목록 및 필터 토글 전용 스타일 */
+        .btn-toggle-filter {
+            display: none;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            width: 100%;
+            background: #ffffff;
+            border: 1px solid #cbd5e1;
+            color: #475569;
+            padding: 12px;
+            border-radius: 12px;
+            font-weight: 800;
+            font-size: 14px;
+            cursor: pointer;
+            margin-bottom: 20px;
+            transition: all 0.25s ease;
+            box-shadow: 0 2px 6px rgba(15, 23, 42, 0.015);
+            box-sizing: border-box;
+        }
+        .btn-toggle-filter:hover {
+            background: #f8fafc;
+            color: #0f172a;
+        }
+        .btn-toggle-filter svg {
+            transition: transform 0.25s ease;
+        }
+        .btn-toggle-filter.active svg {
+            transform: rotate(180deg);
+        }
+
+        @media (max-width: 768px) {
+            .btn-toggle-filter {
+                display: flex;
+            }
+            .board-controls {
+                display: none;
+            }
+            .board-controls.open {
+                display: block;
+                animation: slideDown 0.25s ease-out forwards;
+            }
+            
+            .filter-row {
+                flex-direction: column;
+                align-items: stretch;
+                gap: 12px;
+            }
+            .filter-label {
+                width: 100%;
+            }
+            .filter-inputs {
+                width: 100%;
+            }
+            .select-control {
+                width: 100% !important;
+            }
+            .filter-btn-group {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            .btn-filter-search, .btn-filter-reset, .btn-write {
+                width: 100%;
+                justify-content: center;
+            }
+
+            /* 테이블/카드 가시성 제어 */
+            .desktop-only-table {
+                display: none !important;
+            }
+            .mobile-only-card {
+                display: block !important;
+            }
+        }
+
+        @media (min-width: 769px) {
+            .mobile-only-card {
+                display: none !important;
+            }
+        }
+
+        .mobile-cards-container {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+        .mobile-board-card {
+            background: #ffffff;
+            border: 1px solid #e2e8f0;
+            border-radius: 16px;
+            padding: 20px;
+            box-shadow: 0 4px 12px rgba(15, 23, 42, 0.01);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        .mobile-board-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(15, 23, 42, 0.03);
+        }
+        .card-header-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+        .card-food-info {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .card-food-info img {
+            width: 50px;
+            height: 50px;
+            border-radius: 8px;
+            object-fit: cover;
+            border: 1px solid #cbd5e1;
+        }
+        .card-food-meta {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+        .card-food-name {
+            font-size: 16px;
+            font-weight: 800;
+            color: #0f172a;
+        }
+        .card-food-id {
+            font-size: 11px;
+            color: #94a3b8;
+            font-weight: 700;
+        }
+        .card-badges {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            flex-wrap: wrap;
+        }
+        .card-body-row {
+            margin-bottom: 14px;
+            border-top: 1px solid #f1f5f9;
+            padding-top: 12px;
+            font-size: 13px;
+            color: #64748b;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+        .card-meta-item {
+            display: flex;
+            justify-content: space-between;
+        }
+        .card-meta-label {
+            font-weight: 700;
+            color: #94a3b8;
+        }
+        .card-meta-value {
+            color: #334155;
+        }
+        .card-actions-row {
+            margin-top: 14px;
+            border-top: 1px dashed #e2e8f0;
+            padding-top: 12px;
+            display: flex;
+            justify-content: flex-end;
+            gap: 12px;
+        }
+        .btn-card-edit {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(2, 132, 199, 0.06);
+            border: 1px solid rgba(2, 132, 199, 0.15);
+            color: #0284c7;
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-size: 12px;
+            font-weight: 800;
+            text-decoration: none;
+            transition: all 0.2s ease;
+        }
+        .btn-card-edit:hover {
+            background: #0284c7;
+            color: #ffffff;
+        }
+        .btn-card-del {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(239, 68, 68, 0.06);
+            border: 1px solid rgba(239, 68, 68, 0.15);
+            color: #ef4444;
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-size: 12px;
+            font-weight: 800;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .btn-card-del:hover {
+            background: #ef4444;
+            color: #ffffff;
+        }
+
+        @keyframes slideDown {
+            from { opacity: 0; transform: translateY(-8px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
     </style>
 </head>
 <body>
@@ -639,8 +857,16 @@
                 </div>
             </div>
 
+            <!-- 모바일 전용 검색/필터 토글 버튼 -->
+            <button type="button" class="btn-toggle-filter active" id="btnToggleFilter">
+                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="6 9 12 15 18 9"></polyline>
+                </svg>
+                <span>검색 / 필터 조건 접기</span>
+            </button>
+
             <!-- 컨트롤 바 -->
-            <div class="board-controls">
+            <div class="board-controls open" id="boardControls">
                 <form action="/console/menu" method="GET" class="filter-form">
                     <div class="filter-row">
                         <div class="filter-label">카테고리 분류</div>
@@ -685,7 +911,7 @@
             <div class="table-card">
                 <div class="table-container">
                     <% if (list && list.length > 0) { %>
-                        <table>
+                        <table class="desktop-only-table">
                             <thead>
                                 <tr>
                                     <th style="width: 70px; text-align: center;">ID</th>
@@ -737,6 +963,48 @@
                                 <% }) %>
                             </tbody>
                         </table>
+
+                        <!-- 모바일용 카드 리스트 -->
+                        <div class="mobile-only-card mobile-cards-container">
+                            <% list.forEach(item => { %>
+                                <div class="mobile-board-card" id="card-row-<%= item.id %>">
+                                    <div class="card-header-row">
+                                        <div class="card-food-info">
+                                            <img src="<%= item.image_url %>" alt="<%= item.name %>" onerror="this.src='/images/logo.webp'">
+                                            <div class="card-food-meta">
+                                                <span class="card-food-name"><%= item.name %></span>
+                                                <span class="card-food-id">ID: <%= item.id %></span>
+                                            </div>
+                                        </div>
+                                        <div class="card-badges">
+                                            <span class="badge-category"><%= categoryLabels[item.category] || item.category %></span>
+                                            <% if (item.badge) { %>
+                                                <span class="badge-badge"><%= item.badge %></span>
+                                            <% } %>
+                                            <% if (item.is_main === 1) { %>
+                                                <span class="badge-main">대표</span>
+                                            <% } %>
+                                        </div>
+                                    </div>
+
+                                    <div class="card-body-row">
+                                        <div class="card-meta-item">
+                                            <span class="card-meta-label">가격</span>
+                                            <span class="card-meta-value" style="font-weight: 800; color: #0f172a;"><%= item.price %></span>
+                                        </div>
+                                        <div class="card-meta-item">
+                                            <span class="card-meta-label">정렬 순서</span>
+                                            <span class="card-meta-value" style="font-weight: 700; color: #0284c7;"><%= item.sort_order %></span>
+                                        </div>
+                                    </div>
+
+                                    <div class="card-actions-row">
+                                        <a href="/console/menu/edit/<%= item.id %>" class="btn-card-edit">수정</a>
+                                        <button type="button" class="btn-card-del" onclick="deleteMenu('<%= item.id %>')">삭제</button>
+                                    </div>
+                                </div>
+                            <% }) %>
+                        </div>
                     <% } else { %>
                         <div style="text-align: center; padding: 50px; color: #64748b;">
                             등록된 메뉴 데이터 내역이 존재하지 않습니다.
@@ -765,11 +1033,12 @@
                 const data = await response.json();
                 if (data.success) {
                     alert(data.message || '삭제되었습니다.');
-                    // DOM에서 즉시 해당 줄 제거
+                    // DOM에서 즉시 해당 줄 및 카드 제거
                     const tr = document.getElementById(`row-${id}`);
-                    if (tr) {
-                        tr.remove();
-                    } else {
+                    const card = document.getElementById(`card-row-${id}`);
+                    if (tr) tr.remove();
+                    if (card) card.remove();
+                    if (!tr && !card) {
                         location.reload();
                     }
                 } else {
@@ -794,6 +1063,22 @@
 
             btnToggleMenu.addEventListener('click', toggleSidebar);
             sidebarBackdrop.addEventListener('click', toggleSidebar);
+        }
+
+        // 모바일 검색/필터 아코디언 토글 제어
+        const btnToggleFilter = document.getElementById('btnToggleFilter');
+        const boardControls = document.getElementById('boardControls');
+        if (btnToggleFilter && boardControls) {
+            btnToggleFilter.addEventListener('click', () => {
+                const isOpen = boardControls.classList.toggle('open');
+                btnToggleFilter.classList.toggle('active');
+                const textSpan = btnToggleFilter.querySelector('span');
+                if (isOpen) {
+                    textSpan.innerText = '검색 / 필터 조건 접기';
+                } else {
+                    textSpan.innerText = '검색 / 필터 조건 열기';
+                }
+            });
         }
     </script>
 </body>

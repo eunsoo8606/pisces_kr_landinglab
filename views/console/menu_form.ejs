@@ -430,9 +430,49 @@
         }
 
         @media (max-width: 768px) {
+            .console-main {
+                padding: 24px 16px;
+            }
+
+            .form-card {
+                padding: 20px 15px;
+                border-radius: 12px;
+            }
+
             .form-row-2 {
                 grid-template-columns: 1fr;
                 gap: 0;
+            }
+
+            .form-group {
+                margin-bottom: 16px;
+            }
+
+            /* 이미지 업로드 미리보기 박스 모바일 대응 */
+            .image-preview-wrap {
+                flex-direction: column;
+                align-items: center;
+                gap: 15px;
+                text-align: center;
+            }
+
+            .image-preview-info {
+                min-height: auto;
+                align-items: center;
+            }
+
+            /* 하단 저장/취소 버튼 모바일 조율 */
+            .form-actions {
+                flex-direction: column-reverse;
+                gap: 10px;
+                padding-top: 20px;
+                margin-top: 15px;
+            }
+
+            .btn-cancel, .btn-save {
+                width: 100%;
+                box-sizing: border-box;
+                padding: 14px 20px;
             }
         }
     </style>
