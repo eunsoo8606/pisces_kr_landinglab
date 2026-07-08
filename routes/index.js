@@ -132,6 +132,17 @@ router.get('/brand/about', (req, res) => {
     });
 });
 
+// 4-2. 오시는길 라우트
+router.get('/brand/location', (req, res) => {
+    res.render('brand/location', {
+        title: '오시는길 | 물고기자리 - 프리미엄 숙성회',
+        branding: 'PISCES since 2002',
+        kakaoKey: process.env.KAKAO_MAP_JAVASCRIPT_KEY || '',
+        metaDescription: '물고기자리 본사 오시는 길을 안내해 드립니다. 경기도 용인시 기흥구 보정동 풍산프라자 703호에서 성공적인 프랜차이즈 상담을 시작해 보세요.',
+        metaKeywords: '물고기자리 본사, 물고기자리 오시는길, 보정동 물고기자리, 풍산프라자'
+    });
+});
+
 // 5. 커뮤니티 라우트 (DB 연동)
 router.get(['/community', '/community/:category'], async (req, res) => {
     const categoryParam = req.params.category || 'notice';

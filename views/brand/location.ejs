@@ -1,0 +1,127 @@
+<%- include('../layout/base', { title: '오시는길 | 물고기자리 - 프리미엄 숙성회' , branding: 'PISCES since 2002' }) %>
+
+    <link rel="stylesheet" href="/css/location.css?v=1.4">
+
+    <main class="location-page">
+        <div class="location-container">
+            <div class="location-header">
+                <span class="sub-title">LOCATION</span>
+                <h1 class="main-title">오시는 길</h1>
+            </div>
+
+            <!-- 지도 구역 -->
+            <section class="map-section">
+                <div id="map"></div>
+            </section>
+
+            <!-- 정보 그리드 (이모지 및 아이콘 없이 미니멀하고 세련되게 구성) -->
+            <section class="location-info-grid">
+                <!-- 카드 1: 주소 -->
+                <div class="info-card">
+                    <h3>주소</h3>
+                    <p style="margin-top: 15px;">경기도 용인시 기흥구 죽전로 17, 703호<br>(보정동, 풍산프라자)</p>
+                </div>
+
+                <!-- 카드 2: 대중교통 -->
+                <div class="info-card">
+                    <h3>대중교통</h3>
+                    <ul class="detail-list" style="margin-top: 15px;">
+                        <li>
+                            <span class="label">지하철</span>
+                            <span>수인분당선 <strong>죽전역</strong> 1번 출구 도보 10분<br>수인분당선 <strong>보정역</strong> 1번 출구 도보 12분</span>
+                        </li>
+                        <li>
+                            <span class="label">버스</span>
+                            <span>보정동카페거리·죽전현대홈타운 정류장 하차 도보 3분</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- 카드 3: 연락처 -->
+                <div class="info-card">
+                    <h3>연락처 / 고객센터</h3>
+                    <ul class="detail-list" style="margin-top: 15px;">
+                        <li>
+                            <span class="label">대표번호</span>
+                            <span>Tel. 1566-6851</span>
+                        </li>
+                        <li>
+                            <span class="label">이메일</span>
+                            <span>fishpartners@naver.com</span>
+                        </li>
+                    </ul>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <!-- 카카오 지도 API (autoload=false 설정) -->
+    <script type="text/javascript"
+        src="//dapi.kakao.com/v2/maps/sdk.js?appkey=<%= kakaoKey %>&autoload=false"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const mapContainer = document.getElementById('map');
+            if (!mapContainer) return;
+
+            const lat = 37.322312;
+            const lng = 127.110255;
+            const title = "물고기자리 본사";
+            const address = "경기도 용인시 기흥구 죽전로 17, 703호";
+
+            if (typeof kakao !== 'undefined' && kakao.maps) {
+                kakao.maps.load(() => {
+                    initMap();
+                });
+            }
+
+            function initMap() {
+                try {
+                    const center = new kakao.maps.LatLng(lat, lng);
+                    const mapOption = {
+                        center: center,
+                        level: 3
+                    };
+
+                    const map = new kakao.maps.Map(mapContainer, mapOption);
+                    const zoomControl = new kakao.maps.ZoomControl();
+                    map.addControl(zoomControl, kakao.maps.ControlPosition.RIGHT);
+
+                    // 커스텀 마커 이미지 설정 (사용자가 등록한 maker.png 적용)
+                    const imageSrc = '/images/maker.png';
+                    const imageSize = new kakao.maps.Size(64, 64);
+                    const imageOptionMarker = { offset: new kakao.maps.Point(32, 64) };
+                    const markerImage = new kakao.maps.MarkerImage(imageSrc, imageSize, imageOptionMarker);
+
+                    const marker = new kakao.maps.Marker({
+                        position: center,
+                        map: map,
+                        title: title,
+                        image: markerImage
+                    });
+
+                    // 이모지를 걷어내고 미니멀하고 플랫하게 디자인된 오버레이 구성
+                    const content = 
+                        '<div class="custom-overlay">' +
+                        '    <div class="overlay-header">' +
+                        '        <span class="overlay-title">' + title + '</span>' +
+                        '    </div>' +
+                        '    <p class="overlay-address">' + address + '</p>' +
+                        '    <div class="overlay-actions">' +
+                        '        <a href="https://map.kakao.com/link/to/' + title + ',' + lat + ',' + lng + '" target="_blank" class="overlay-btn btn-directions">길찾기</a>' +
+                        '    </div>' +
+                        '</div>';
+
+                    const overlay = new kakao.maps.CustomOverlay({
+                        content: content,
+                        map: map,
+                        position: marker.getPosition(),
+                        yAnchor: 1.15
+                    });
+                } catch (err) {
+                    console.error("❌ Location map load failed:", err);
+                }
+            }
+        });
+    </script>
+
+    <%- include('../layout/footer') %>

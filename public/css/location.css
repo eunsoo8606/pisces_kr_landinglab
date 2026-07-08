@@ -1,8 +1,24 @@
-/* Location Page Styles */
 .location-page {
+    position: relative;
     padding-top: 150px;
     background: #fff;
     overflow-x: hidden;
+}
+
+.location-page::before {
+    content: '';
+    position: absolute;
+    top: 20px;
+    right: -50px;
+    width: 800px;
+    height: 800px;
+    background-image: url('/images/logo_original.png');
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    opacity: 0.12; /* 투명도를 12%로 올려 더 선명하게 조정 */
+    pointer-events: none;
+    z-index: 1;
 }
 
 @media (max-width: 768px) {
