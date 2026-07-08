@@ -1,0 +1,247 @@
+/* Location Page Styles */
+.location-page {
+    padding-top: 150px;
+    background: #fff;
+    overflow-x: hidden;
+}
+
+@media (max-width: 768px) {
+    .location-page {
+        padding-top: 100px;
+    }
+}
+
+.location-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+.location-header {
+    text-align: center;
+    margin-bottom: 80px;
+}
+
+.location-header .sub-title {
+    display: block;
+    font-family: var(--font-heading);
+    color: #013b8d;
+    font-weight: 700;
+    letter-spacing: 5px;
+    margin-bottom: 15px;
+    font-size: 0.9rem;
+}
+
+.location-header .main-title {
+    font-size: 4rem;
+    font-weight: 800;
+    color: #111;
+    letter-spacing: -2px;
+}
+
+/* Map Section */
+.map-section {
+    position: relative;
+    border-radius: 30px;
+    overflow: hidden;
+    box-shadow: 0 30px 60px rgba(0, 0, 0, 0.1);
+    margin-bottom: 80px;
+    background: #f8f9fa;
+}
+
+#map {
+    width: 100%;
+    height: 600px;
+}
+
+/* Info Grid */
+.location-info-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 30px;
+    margin-bottom: 150px;
+}
+
+.info-card {
+    background: #fff;
+    padding: 40px;
+    border-radius: 20px;
+    border: 1px solid #eee;
+    transition: all 0.4s ease;
+    height: 100%;
+}
+
+.info-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 20px 40px rgba(1, 59, 141, 0.08);
+    border-color: #013b8d;
+}
+
+.info-card i {
+    font-size: 2rem;
+    color: #013b8d;
+    margin-bottom: 25px;
+}
+
+.info-card h3 {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: 20px;
+    color: #111;
+}
+
+.info-card p {
+    color: #666;
+    line-height: 1.8;
+    margin: 0;
+}
+
+.info-card .detail-list {
+    list-style: none;
+    padding: 0;
+    margin-top: 20px;
+}
+
+.info-card .detail-list li {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    margin-bottom: 12px;
+    color: #555;
+}
+
+.info-card .detail-list .label {
+    font-weight: 700;
+    color: #013b8d;
+    white-space: nowrap;
+    width: 60px;
+}
+
+/* Custom Map Overlay */
+.custom-overlay {
+    position: relative;
+    padding: 20px;
+    background: #fff;
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+    border: 1px solid rgba(1, 59, 141, 0.1);
+    min-width: 280px;
+    bottom: 60px;
+}
+
+.custom-overlay::after {
+    content: '';
+    position: absolute;
+    bottom: -10px;
+    left: 50%;
+    transform: translateX(-50%);
+    border-left: 10px solid transparent;
+    border-right: 10px solid transparent;
+    border-top: 10px solid #fff;
+}
+
+.overlay-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+    border-bottom: 1px solid #f0f4f8;
+    padding-bottom: 10px;
+}
+
+.overlay-title {
+    font-weight: 800;
+    font-size: 1.1rem;
+    color: #111;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.overlay-title i {
+    color: #013b8d;
+}
+
+.overlay-address {
+    font-size: 0.9rem;
+    color: #666;
+    line-height: 1.5;
+    margin-bottom: 15px;
+}
+
+.overlay-actions {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+}
+
+.overlay-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    padding: 8px 10px;
+    border-radius: 8px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    border: none;
+    cursor: pointer;
+    font-family: inherit;
+}
+
+.btn-directions {
+    background: #013b8d;
+    color: #fff;
+}
+
+.btn-directions:hover {
+    background: #002d6b;
+    transform: translateY(-2px);
+}
+
+.btn-copy {
+    background: #f0f4f8;
+    color: #333;
+}
+
+.btn-copy:hover {
+    background: #e1e9f0;
+    transform: translateY(-2px);
+}
+
+.btn-copy.success {
+    background: #28a745;
+    color: #fff;
+}
+
+/* GSAP Animations */
+.fade-up {
+    opacity: 0;
+    transform: translateY(30px);
+}
+
+@media (max-width: 1024px) {
+    .location-info-grid {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+@media (max-width: 768px) {
+    .location-header .main-title {
+        font-size: 2.5rem;
+    }
+
+    #map {
+        height: 400px;
+    }
+
+    .location-info-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .info-card {
+        padding: 30px;
+    }
+}

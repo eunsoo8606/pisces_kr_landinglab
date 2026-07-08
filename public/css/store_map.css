@@ -1,0 +1,306 @@
+/* ==========================================
+   가맹점 현황 (Store Map) 전용 스타일시트
+   ========================================== */
+
+:root {
+    --primary-color: #1f3766;
+    --accent-color: #00a8cc;
+    --border-color: rgba(31, 55, 102, 0.1);
+    --bg-light: #f8fbff;
+}
+
+/* 전체 페이지 레이아웃 */
+.store-map-page {
+    position: relative;
+    width: 100%;
+    height: 100vh;
+    padding-top: 80px; /* 헤더 높이 확보 */
+    box-sizing: border-box;
+    background: #f4f7fc;
+    overflow: hidden;
+}
+
+.store-map-wrapper {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    display: flex;
+}
+
+/* 지도 영역 */
+.map-container {
+    flex: 1;
+    height: 100%;
+    position: relative;
+}
+
+#map {
+    width: 100%;
+    height: 100%;
+}
+
+#map-placeholder {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: rgba(244, 247, 252, 0.95);
+    z-index: 10;
+}
+
+.placeholder-content {
+    text-align: center;
+    padding: 2.5rem;
+    background: #ffffff;
+    border-radius: 16px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+    border: 1px solid var(--border-color);
+}
+
+.placeholder-content i {
+    font-size: 3rem;
+    color: var(--primary-color);
+    margin-bottom: 1rem;
+}
+
+.placeholder-content p {
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: #2d3748;
+    margin-bottom: 0.5rem;
+}
+
+/* 사이드바 (데스크톱 버전) */
+.store-sidebar {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    width: 380px;
+    height: calc(100% - 120px);
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(31, 55, 102, 0.12);
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    z-index: 20;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.sidebar-header {
+    padding: 25px 20px 15px;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.sidebar-title {
+    font-size: 1.3rem;
+    font-weight: 800;
+    color: var(--primary-color);
+    margin: 0 0 4px 0;
+}
+
+.sidebar-subtitle {
+    font-size: 0.8rem;
+    color: #718096;
+    margin: 0 0 15px 0;
+}
+
+/* 검색 상자 스타일 */
+.search-box {
+    display: flex;
+    margin-bottom: 15px;
+    border: 1px solid rgba(49, 78, 141, 0.2);
+    border-radius: 10px;
+    overflow: hidden;
+    background: #ffffff;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.02);
+}
+
+.search-box input {
+    flex: 1;
+    padding: 10px 15px;
+    border: none;
+    outline: none;
+    font-size: 0.9rem;
+    color: #2d3748;
+}
+
+.search-box button {
+    background: var(--primary-color);
+    color: #ffffff;
+    border: none;
+    padding: 0 15px;
+    cursor: pointer;
+    font-size: 0.95rem;
+    transition: background 0.2s ease;
+}
+
+.search-box button:hover {
+    background: #15264b;
+}
+
+/* 필터 버튼 스타일 */
+.filter-options {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+}
+
+.filter-btn {
+    padding: 6px 12px;
+    border: 1px solid rgba(49, 78, 141, 0.15);
+    border-radius: 20px;
+    background: #ffffff;
+    color: #4a5568;
+    font-size: 0.8rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.filter-btn:hover {
+    background: #f7fafc;
+    border-color: rgba(49, 78, 141, 0.3);
+}
+
+.filter-btn.active {
+    background: var(--primary-color);
+    color: #ffffff;
+    border-color: var(--primary-color);
+}
+
+/* Store List Container */
+.store-list-container {
+    flex: 1;
+    overflow-y: auto;
+    background: #ffffff;
+}
+
+.store-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.map-store-item {
+    padding: 20px;
+    border-bottom: 1px solid var(--border-color);
+    transition: background 0.2s ease;
+    cursor: pointer;
+    color: #2d3748 !important;
+}
+
+.map-store-item:hover {
+    background: var(--bg-light);
+}
+
+/* 목록 선택(클릭) 시 스타일 효과 */
+.map-store-item.active {
+    background: var(--bg-light);
+    border-left: 4px solid var(--accent-color);
+}
+
+.store-name {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #1f3766 !important;
+    margin: 0 0 6px 0;
+}
+
+.map-store-item.active .store-name {
+    color: var(--accent-color) !important;
+}
+
+.store-address {
+    font-size: 0.85rem;
+    color: #4a5568 !important;
+    margin: 0 0 6px 0;
+    line-height: 1.4;
+    word-break: keep-all;
+}
+
+.store-phone {
+    font-size: 0.8rem;
+    color: #718096 !important;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.store-phone i {
+    color: var(--accent-color);
+}
+
+.no-result {
+    padding: 40px 20px;
+    text-align: center;
+    color: #718096;
+    font-size: 0.9rem;
+}
+
+/* 모바일 전용 토글 버튼 제거 */
+.sidebar-toggle-btn {
+    display: none !important;
+}
+
+/* 모바일 미디어쿼리 (가로 768px 이하) */
+@media (max-width: 768px) {
+    .store-map-page {
+        height: auto !important;
+        min-height: 100vh;
+        overflow-y: auto;
+        display: flex;
+        flex-direction: column;
+        padding-top: 60px; /* 모바일 헤더 높이에 맞춤 */
+    }
+
+    .store-map-wrapper {
+        flex-direction: column;
+        height: auto;
+    }
+
+    /* 지도는 상단에 적절한 고정 높이로 고정 */
+    .map-container {
+        height: 350px !important;
+        width: 100%;
+        position: relative;
+    }
+
+    /* 사이드바를 지도의 하단에 바로 나열되도록 변경 */
+    .store-sidebar {
+        position: relative !important;
+        top: 0 !important;
+        left: 0 !important;
+        width: 100% !important;
+        height: auto !important;
+        border-radius: 0 !important;
+        box-shadow: none !important;
+        border: none !important;
+        z-index: 10;
+        background: #ffffff !important;
+    }
+
+    .sidebar-header {
+        padding: 20px 15px 15px !important;
+        border-bottom: 1px solid var(--border-color);
+    }
+
+    .sidebar-title {
+        font-size: 1.2rem !important;
+    }
+
+    .store-list-container {
+        overflow-y: visible !important;
+        height: auto !important;
+    }
+
+    .map-store-item {
+        padding: 16px 15px !important;
+    }
+}

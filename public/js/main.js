@@ -1489,10 +1489,14 @@ document.addEventListener('DOMContentLoaded', () => {
             ease: 'power2.in',
             onComplete: () => {
                 // 완전히 사라진 순간 HTML 데이터를 다음 매장 내용으로 바꿈
-                document.getElementById('storeName').innerText = nextData.store;
-                document.getElementById('storeSize').innerText = nextData.size;
-                document.getElementById('storeTable').innerText = nextData.table;
-                document.getElementById('storeSales').innerText = nextData.sales;
+                const nameEl = document.getElementById('storeName');
+                const sizeEl = document.getElementById('storeSize');
+                const tableEl = document.getElementById('storeTable');
+                const salesEl = document.getElementById('storeSales');
+                if (nameEl) nameEl.innerText = nextData.store;
+                if (sizeEl) sizeEl.innerText = nextData.size;
+                if (tableEl) tableEl.innerText = nextData.table;
+                if (salesEl) salesEl.innerText = nextData.sales;
             }
         });
 
@@ -1509,8 +1513,8 @@ document.addEventListener('DOMContentLoaded', () => {
         }, '+=0.1');
     }
 
-    // 매장 데이터가 존재하면 5초마다 자동 트랜지션 실행
-    if (storeItems.length > 0) {
+    // 매장 데이터 및 메인페이지 매장 정보 엘리먼트가 존재하면 5초마다 자동 트랜지션 실행
+    if (storeItems.length > 0 && document.getElementById('storeName')) {
         setInterval(nextStore, 5000);
     }
 
