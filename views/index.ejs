@@ -1,951 +1,622 @@
 <%- include('layout/base', { title: '물고기자리 - 프리미엄 숙성회' , branding: 'PISCES since 2002' }) %>
 
     <section class="hero-dark">
-        <!-- 메인섹션 좌측 배경 비디오 및 오버레이 -->
-        <div class="hero-video-bg">
-            <video autoplay loop muted playsinline>
-                <source src="/video/main.mp4" type="video/mp4">
-            </video>
-            <div class="hero-video-overlay"></div>
+        <!-- 1. 배경 비디오 & 딤드 -->
+        <div class="hero-video-bg-wrap">
+            <video src="/video/main.mp4" autoplay loop muted playsinline class="hero-video-bg"></video>
+            <div class="hero-video-dim"></div>
         </div>
 
-        <!-- 우측 하단에 선명하고 큼직하게 고정되는 숙성회 이미지 -->
-        <div class="hero-sashimi-img">
-            <img src="/images/sashemi.webp" alt="물고기자리 프리미엄 숙성회" fetchpriority="high" decoding="async">
+        <!-- 2. 정가운데 콘텐츠 레이어 -->
+        <div class="hero-center-content">
+            <div class="hero-meta-line">
+                <span class="meta-since">Since 2002</span>
+                <span class="meta-separator">|</span>
+                <span class="meta-brand">PISCES PREMIUM</span>
+            </div>
+
+            <!-- 초대형 메인 타이틀 -->
+            <h1 class="hero-main-title">
+                <span class="title-mask"><span class="title-line accent-cyan">물고기자리</span></span>
+                <span class="title-mask"><span class="title-line">오늘 가공하고<br class="mo-only" /> 오늘 공급합니다</span></span>
+            </h1>
+
+            <!-- 하단 메인 서브 문구 -->
+            <p class="hero-sub-notice">
+                수조 없이도 신선하게,<br class="mo-only" /> 누구나 쉽게 운영할 수 있도록<br class="pc-only" />
+                필렛가공센터가 만드는 가장<br class="mo-only" /> 신선한 프리미엄 숙성회 창업
+            </p>
+
+            <!-- 가맹점 매출 위젯 -->
+
         </div>
 
-        <div class="container hero-dark-container">
-            <!-- 좌측 콘텐츠 블록 -->
-            <div class="hero-left">
-                <div class="hero-meta-line"
-                    style="display: flex; align-items: center; gap: 12px; font-family: 'Outfit', sans-serif; font-size: 13px; letter-spacing: 0.12em; color: rgba(255, 255, 255, 0.6); margin-bottom: 22px; text-transform: uppercase;">
-                    <span style="color: #00f2fe; font-weight: 700;">Since 2002</span>
-                    <span style="color: rgba(255, 255, 255, 0.25);">|</span>
-                    <span style="font-family: 'Pretendard', sans-serif; font-weight: 500; font-size: 12.5px;">오늘 가공하고,
-                        오늘 공급합니다</span>
-                </div>
-                <h1 class="hero-title">
-                    <span class="brand-name-wrap">
-                        <span class="brand-prefix">가장 신선한 숙성회의 시작,</span>
-                        <span class="brand-name">물고기자리</span>
-                    </span>
-                </h1>
-                <p class="hero-desc">
-                    물고기자리 필렛가공센터가 만드는 가장 신선한 숙성회.<br>
-                    매일 줄 서는 맛집의 명성을 가맹점의 일상으로 만드는,<br>흔들리지 않는 성공 파트너입니다.
-                </p>
-                <div class="hero-features">
-                    <div class="feature-item">
-                        <div class="feature-text">
-                            <span class="feature-title">자체 필렛시스템</span>
-                            <span class="feature-info">인천 자체 가공센터 운영</span>
-                            <span class="underline-line"></span>
-                        </div>
-                    </div>
-                    <div class="feature-item">
-                        <div class="feature-text">
-                            <span class="feature-title">원팩 필렛 공급</span>
-                            <span class="feature-info">인력 난 및 인건비 절감</span>
-                            <span class="underline-line"></span>
-                        </div>
-                    </div>
-                    <div class="feature-item">
-                        <div class="feature-text">
-                            <span class="feature-title">단 7시간 명품 영업</span>
-                            <span class="feature-info">짧고 굵은 고효율 매장 운영</span>
-                            <span class="underline-line"></span>
-                        </div>
-                    </div>
-                </div>
+        <!-- 스크롤 시 부드럽게 노출될 젓가락 & 음식 이미지 레이어 및 좌우 설명 카드 -->
+        <div class="hero-scroll-media" id="heroScrollMedia">
+            <!-- 1. 우측 상단 젓가락 숙성회 한 점 -->
+            <div class="hero-scroll-fork">
+                <img src="/images/fork.png" alt="물고기자리 프리미엄 숙성회 한 점">
             </div>
 
-            <!-- 우측 매출 정보 블록 (오버레이) -->
-            <div class="hero-right">
-                <div class="hero-right-title-wrap">
-                    <span class="badge-premium">명품숙성회</span>
-                    <span class="accent-title">압도적인 매출 성과</span>
-                </div>
-                <div class="revenue-box">
-                    <span class="revenue-number" id="revenueNum">60,000,000</span><span class="revenue-unit">원</span>
-                </div>
-            </div>
-        </div>
-    </section>
-    <!-- 서클 마스크 리빌 섹션 (장인의 손길) -->
-    <section class="reveal-section">
-        <div class="reveal-inner">
-            <!-- 배경으로 깔리는 숏츠 영역 -->
-            <div class="shorts-container">
-                <div class="shorts-grid-area">
-                    <div class="shorts-grid">
-                        <div class="shorts-card">
-                            <iframe src="https://www.youtube.com/embed/m9pZFFKTZNM" title="YouTube Shorts"
-                                allowfullscreen></iframe>
-                        </div>
-                        <div class="shorts-card">
-                            <iframe src="https://www.youtube.com/embed/C_lTrWN_eYw" title="YouTube Shorts"
-                                allowfullscreen></iframe>
-                        </div>
-                        <div class="shorts-card">
-                            <iframe src="https://www.youtube.com/embed/vNrSLSDOTls" title="YouTube Shorts"
-                                allowfullscreen></iframe>
-                        </div>
-                    </div>
-
-                </div>
-
-                <div class="shorts-text-area">
-                    <h3 class="shorts-title">홍보하지 않아도 잘되는 곳은<br>이유가 있습니다.</h3>
-                    <div class="shorts-metrics">
-                        <div class="shorts-desc-group">
-                            <p class="shorts-desc-item highlight-desc">
-                                개별적 영상광고 하실 필요 없는<br>
-                                브랜드 알고리즘 이미 형성되어 있는 숙성회 브랜드
-                            </p>
-                            <p class="shorts-desc-item">
-                                소비자는 이미 내 지역에도 물고기자리가<br>
-                                오픈하기만을 기다리고 있습니다.
-                            </p>
-                        </div>
-                    </div>
-                </div>
+            <!-- 2. 아래쪽에서 솟구쳐 나올 메인 음식 요리 접시 -->
+            <div class="hero-scroll-food">
+                <img src="/images/main-food.png" alt="물고기자리 숙성회 요리">
             </div>
 
-            <!-- 스크롤 시 확장될 마스킹 레이어 (장인의 손길 이미지) -->
-            <div class="reveal-overlay">
-                <div class="reveal-image-container">
-                    <img src="/images/artisan_hands.webp" alt="장인의 손길" loading="lazy" decoding="async">
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- 무한 루프 마키(Infinite Marquee) 배너 섹션 -->
-    <section class="section-marquee-banner">
-        <!-- 첫 번째 트랙: 우에서 좌로 (RTL) -->
-        <div class="marquee-wrapper direction-rtl">
-            <div class="marquee-track">
-                <div class="marquee-list">
-                    <span class="marquee-item">
-                        <svg class="marquee-icon sparkle" viewBox="0 0 24 24" fill="currentColor">
-                            <path d="M12 2l2.4 7.6L22 12l-7.6 2.4L12 22l-2.4-7.6L2 12l7.6-2.4z" />
-                        </svg>
-                        PISCES PREMIUM SASHIMI
-                    </span>
-                    <span class="marquee-item">
-                        <svg class="marquee-icon fish" viewBox="0 0 24 24" fill="currentColor">
-                            <path
-                                d="M21,12C21,12 18,7 13,7C8.5,7 5.5,9.5 3.5,12C5.5,14.5 8.5,17 13,17C18,17 21,12 21,12M8,12A1.5,1.5 0 1,1 9.5,10.5A1.5,1.5 0 0,1 8,12Z" />
-                        </svg>
-                        24시간 저온 숙성
-                    </span>
-                    <span class="marquee-item">
-                        <svg class="marquee-icon sparkle" viewBox="0 0 24 24" fill="currentColor">
-                            <path d="M12 2l2.4 7.6L22 12l-7.6 2.4L12 22l-2.4-7.6L2 12l7.6-2.4z" />
-                        </svg>
-                        물고기자리 SINCE 2002
-                    </span>
-                    <span class="marquee-item">
-                        <svg class="marquee-icon fish" viewBox="0 0 24 24" fill="currentColor">
-                            <path
-                                d="M21,12C21,12 18,7 13,7C8.5,7 5.5,9.5 3.5,12C5.5,14.5 8.5,17 13,17C18,17 21,12 21,12M8,12A1.5,1.5 0 1,1 9.5,10.5A1.5,1.5 0 0,1 8,12Z" />
-                        </svg>
-                        물고기자리 자체 필렛시스템
-                    </span>
-                    <span class="marquee-item">
-                        <svg class="marquee-icon sparkle" viewBox="0 0 24 24" fill="currentColor">
-                            <path d="M12 2l2.4 7.6L22 12l-7.6 2.4L12 22l-2.4-7.6L2 12l7.6-2.4z" />
-                        </svg>
-                        자체 필렛공급시스템
-                    </span>
-                    <span class="marquee-item">
-                        <svg class="marquee-icon fish" viewBox="0 0 24 24" fill="currentColor">
-                            <path
-                                d="M21,12C21,12 18,7 13,7C8.5,7 5.5,9.5 3.5,12C5.5,14.5 8.5,17 13,17C18,17 21,12 21,12M8,12A1.5,1.5 0 1,1 9.5,10.5A1.5,1.5 0 0,1 8,12Z" />
-                        </svg>
-                        원가율 37% ~ 42%
-                    </span>
-                </div>
-                <!-- 무한 루프 연결용 복제본 -->
-                <div class="marquee-list" aria-hidden="true">
-                    <span class="marquee-item">
-                        <svg class="marquee-icon sparkle" viewBox="0 0 24 24" fill="currentColor">
-                            <path d="M12 2l2.4 7.6L22 12l-7.6 2.4L12 22l-2.4-7.6L2 12l7.6-2.4z" />
-                        </svg>
-                        PISCES PREMIUM SASHIMI
-                    </span>
-                    <span class="marquee-item">
-                        <svg class="marquee-icon fish" viewBox="0 0 24 24" fill="currentColor">
-                            <path
-                                d="M21,12C21,12 18,7 13,7C8.5,7 5.5,9.5 3.5,12C5.5,14.5 8.5,17 13,17C18,17 21,12 21,12M8,12A1.5,1.5 0 1,1 9.5,10.5A1.5,1.5 0 0,1 8,12Z" />
-                        </svg>
-                        24시간 저온 숙성
-                    </span>
-                    <span class="marquee-item">
-                        <svg class="marquee-icon sparkle" viewBox="0 0 24 24" fill="currentColor">
-                            <path d="M12 2l2.4 7.6L22 12l-7.6 2.4L12 22l-2.4-7.6L2 12l7.6-2.4z" />
-                        </svg>
-                        물고기자리 SINCE 2002
-                    </span>
-                    <span class="marquee-item">
-                        <svg class="marquee-icon fish" viewBox="0 0 24 24" fill="currentColor">
-                            <path
-                                d="M21,12C21,12 18,7 13,7C8.5,7 5.5,9.5 3.5,12C5.5,14.5 8.5,17 13,17C18,17 21,12 21,12M8,12A1.5,1.5 0 1,1 9.5,10.5A1.5,1.5 0 0,1 8,12Z" />
-                        </svg>
-                        물고기자리 자체 필렛시스템
-                    </span>
-                    <span class="marquee-item">
-                        <svg class="marquee-icon sparkle" viewBox="0 0 24 24" fill="currentColor">
-                            <path d="M12 2l2.4 7.6L22 12l-7.6 2.4L12 22l-2.4-7.6L2 12l7.6-2.4z" />
-                        </svg>
-                        자체 필렛공급시스템
-                    </span>
-                    <span class="marquee-item">
-                        <svg class="marquee-icon fish" viewBox="0 0 24 24" fill="currentColor">
-                            <path
-                                d="M21,12C21,12 18,7 13,7C8.5,7 5.5,9.5 3.5,12C5.5,14.5 8.5,17 13,17C18,17 21,12 21,12M8,12A1.5,1.5 0 1,1 9.5,10.5A1.5,1.5 0 0,1 8,12Z" />
-                        </svg>
-                        원가율 37% ~ 42%
-                    </span>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- 두 번째 섹션: 퀄리티 & 슬라이더 영역 -->
-    <section class="section-quality">
-        <div class="container quality-container">
-            <!-- 좌측 설명 텍스트 -->
-            <div class="quality-left">
-                <span class="quality-subtitle">숙성회 무한리필 물고기자리</span>
-                <h2 class="quality-title">
-                    미식가를 사로잡은<br>
-                    압도적 퀄리티
+            <!-- 3. 좌우에서 등장할 프리미엄 설명 카드 4종 -->
+            <!-- 3-1. 상단 좌측 카드 (저온 숙성 -> 캘리그래피식 대형 타이틀 변경) -->
+            <div class="hero-info-card card-top-left calligraphy-style">
+                <span class="cal-sub">2002년부터 다져온 탄탄한 성공 방정식</span>
+                <h2 class="cal-main">24년의 독보적 내공</h2>
+                <h2 class="cal-brand">
+                    물고기자리
                 </h2>
             </div>
 
-            <!-- 우측 슬라이더 -->
-            <div class="quality-right">
-                <div class="quality-slider-container">
-                    <div class="quality-slider">
-                        <!-- 슬라이드 01 -->
-                        <div class="quality-slide active">
-                            <div class="slide-img">
-                                <img src="/images/foods/물고기자리 연출컷-1.jpg" alt="활어와 숙성회의 완벽한 밸런스" loading="lazy"
-                                    decoding="async">
-                            </div>
-                            <div class="slide-text-box">
-                                <div class="slide-badge">
-                                    <span>장점 01</span>
-                                </div>
-                                <h3 class="slide-title">활어와 숙성회의 완벽한 밸런스</h3>
-                                <p class="slide-desc">살아있는 활어의 싱싱함과 24시간 저온 숙성을 통해 끌어올린 깊은 감칠맛을 동시에 잡은 하이브리드 플레이팅</p>
-                            </div>
-                        </div>
-
-                        <!-- 슬라이드 02 -->
-                        <div class="quality-slide">
-                            <div class="slide-img">
-                                <img src="/images/foods/물고기자리 연출컷-12.jpg" alt="엄선된 프리미엄 제철 활어" loading="lazy"
-                                    decoding="async">
-                            </div>
-                            <div class="slide-text-box">
-                                <div class="slide-badge">
-                                    <span>장점 02</span>
-                                </div>
-                                <h3 class="slide-title">엄선된 프리미엄 제철 활어</h3>
-                                <p class="slide-desc">매일 아침 산지에서 직송되는 싱싱한 활어만을 사용하여 사계절 가장 맛있는 생선을 엄선합니다.</p>
-                            </div>
-                        </div>
-
-                        <!-- 슬라이드 03 -->
-                        <div class="quality-slide">
-                            <div class="slide-img">
-                                <img src="/images/foods/skidashe.webp" alt="풍성함을 더하는 수제 곁들임 요리" loading="lazy"
-                                    decoding="async">
-                            </div>
-                            <div class="slide-text-box">
-                                <div class="slide-badge">
-                                    <span>장점 03</span>
-                                </div>
-                                <h3 class="slide-title">풍성함을 더하는 수제 곁들임 요리</h3>
-                                <p class="slide-desc">모듬 튀김, 마끼, 버섯구이 등 메인 숙성회의 맛을 돋보이게 하는 다채로운 쯔끼다시가 함께 제공됩니다.</p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- 방향 컨트롤러 -->
-                    <div class="slider-controls">
-                        <button class="ctrl-btn prev-btn" aria-label="이전 슬라이드">
-                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                                <polyline points="15 18 9 12 15 6"></polyline>
-                            </svg>
-                        </button>
-                        <button class="ctrl-btn next-btn" aria-label="다음 슬라이드">
-                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                                <polyline points="9 18 15 12 9 6"></polyline>
-                            </svg>
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- 두 번째 무한 루프 마키(Infinite Marquee) 배너 섹션: 퀄리티 섹션 하단 -->
-    <section class="section-marquee-banner">
-        <!-- 두 번째 트랙: 좌에서 우로 (LTR) -->
-        <div class="marquee-wrapper direction-ltr">
-            <div class="marquee-track">
-                <div class="marquee-list">
-                    <span class="marquee-item">
-                        <svg class="marquee-icon fish" viewBox="0 0 24 24" fill="currentColor">
-                            <path
-                                d="M21,12C21,12 18,7 13,7C8.5,7 5.5,9.5 3.5,12C5.5,14.5 8.5,17 13,17C18,17 21,12 21,12M8,12A1.5,1.5 0 1,1 9.5,10.5A1.5,1.5 0 0,1 8,12Z" />
-                        </svg>
-                        SHINSEON DIRECT DELIVERY
-                    </span>
-                    <span class="marquee-item">
-                        <svg class="marquee-icon sparkle" viewBox="0 0 24 24" fill="currentColor">
-                            <path d="M12 2l2.4 7.6L22 12l-7.6 2.4L12 22l-2.4-7.6L2 12l7.6-2.4z" />
-                        </svg>
-                        가맹점 월 최고 매출 1억 2천만
-                    </span>
-                    <span class="marquee-item">
-                        <svg class="marquee-icon fish" viewBox="0 0 24 24" fill="currentColor">
-                            <path
-                                d="M21,12C21,12 18,7 13,7C8.5,7 5.5,9.5 3.5,12C5.5,14.5 8.5,17 13,17C18,17 21,12 21,12M8,12A1.5,1.5 0 1,1 9.5,10.5A1.5,1.5 0 0,1 8,12Z" />
-                        </svg>
-                        소자본 창업 성공 모델
-                    </span>
-                    <span class="marquee-item">
-                        <svg class="marquee-icon sparkle" viewBox="0 0 24 24" fill="currentColor">
-                            <path d="M12 2l2.4 7.6L22 12l-7.6 2.4L12 22l-2.4-7.6L2 12l7.6-2.4z" />
-                        </svg>
-                        단 7시간 명품 운영
-                    </span>
-                    <span class="marquee-item">
-                        <svg class="marquee-icon fish" viewBox="0 0 24 24" fill="currentColor">
-                            <path
-                                d="M21,12C21,12 18,7 13,7C8.5,7 5.5,9.5 3.5,12C5.5,14.5 8.5,17 13,17C18,17 21,12 21,12M8,12A1.5,1.5 0 1,1 9.5,10.5A1.5,1.5 0 0,1 8,12Z" />
-                        </svg>
-                        미식가를 사로잡은 압도적 감칠맛
-                    </span>
-                    <span class="marquee-item">
-                        <svg class="marquee-icon sparkle" viewBox="0 0 24 24" fill="currentColor">
-                            <path d="M12 2l2.4 7.6L22 12l-7.6 2.4L12 22l-2.4-7.6L2 12l7.6-2.4z" />
-                        </svg>
-                        독보적인 자체 필렛시스템
-                    </span>
-                </div>
-                <!-- 무한 루프 연결용 복제본 -->
-                <div class="marquee-list" aria-hidden="true">
-                    <span class="marquee-item">
-                        <svg class="marquee-icon fish" viewBox="0 0 24 24" fill="currentColor">
-                            <path
-                                d="M21,12C21,12 18,7 13,7C8.5,7 5.5,9.5 3.5,12C5.5,14.5 8.5,17 13,17C18,17 21,12 21,12M8,12A1.5,1.5 0 1,1 9.5,10.5A1.5,1.5 0 0,1 8,12Z" />
-                        </svg>
-                        SHINSEON DIRECT DELIVERY
-                    </span>
-                    <span class="marquee-item">
-                        <svg class="marquee-icon sparkle" viewBox="0 0 24 24" fill="currentColor">
-                            <path d="M12 2l2.4 7.6L22 12l-7.6 2.4L12 22l-2.4-7.6L2 12l7.6-2.4z" />
-                        </svg>
-                        가맹점 월 최고 매출 1억 2천만
-                    </span>
-                    <span class="marquee-item">
-                        <svg class="marquee-icon fish" viewBox="0 0 24 24" fill="currentColor">
-                            <path
-                                d="M21,12C21,12 18,7 13,7C8.5,7 5.5,9.5 3.5,12C5.5,14.5 8.5,17 13,17C18,17 21,12 21,12M8,12A1.5,1.5 0 1,1 9.5,10.5A1.5,1.5 0 0,1 8,12Z" />
-                        </svg>
-                        소자본 창업 성공 모델
-                    </span>
-                    <span class="marquee-item">
-                        <svg class="marquee-icon sparkle" viewBox="0 0 24 24" fill="currentColor">
-                            <path d="M12 2l2.4 7.6L22 12l-7.6 2.4L12 22l-2.4-7.6L2 12l7.6-2.4z" />
-                        </svg>
-                        단 7시간 명품 운영
-                    </span>
-                    <span class="marquee-item">
-                        <svg class="marquee-icon fish" viewBox="0 0 24 24" fill="currentColor">
-                            <path
-                                d="M21,12C21,12 18,7 13,7C8.5,7 5.5,9.5 3.5,12C5.5,14.5 8.5,17 13,17C18,17 21,12 21,12M8,12A1.5,1.5 0 1,1 9.5,10.5A1.5,1.5 0 0,1 8,12Z" />
-                        </svg>
-                        미식가를 사로잡은 압도적 감칠맛
-                    </span>
-                    <span class="marquee-item">
-                        <svg class="marquee-icon sparkle" viewBox="0 0 24 24" fill="currentColor">
-                            <path d="M12 2l2.4 7.6L22 12l-7.6 2.4L12 22l-2.4-7.6L2 12l7.6-2.4z" />
-                        </svg>
-                        독보적인 자체 필렛시스템
-                    </span>
-                </div>
-            </div>
-        </div>
-    </section>
-    <!-- 매장별 매출 대시보드 섹션 -->
-    <section class="sales-dashboard">
-        <div class="left-wing">
-            <div class="store-slider">
-                <div class="store-item active" data-store="물고기자리 잠실점" data-size="20평" data-table="12개"
-                    data-sales="120,000,000원" data-bg="/images/fish.webp">
-                    <img src="/images/room/room1.jpg" alt="잠실점 실내" loading="lazy" decoding="async">
-                </div>
-                <div class="store-item" data-store="물고기자리 강남점" data-size="18평" data-table="10개" data-sales="98,000,000원"
-                    data-bg="/images/fish.webp">
-                    <img src="/images/room/room2.jpg" alt="강남점 실내" loading="lazy" decoding="async">
-                </div>
-                <div class="store-item" data-store="물고기자리 가락점" data-size="22평" data-table="14개"
-                    data-sales="110,000,000원" data-bg="/images/fish.webp">
-                    <img src="/images/room/room3.jpg" alt="가락점 실내" loading="lazy" decoding="async">
-                </div>
-                <div class="store-item" data-store="물고기자리 논현점" data-size="25평" data-table="14개"
-                    data-sales="140,000,000원" data-bg="/images/fish.webp">
-                    <img src="/images/room/room4.jpg" alt="논현점 실내" loading="lazy" decoding="async">
-                </div>
-                <div class="store-item" data-store="미금점" data-size="15평" data-table="8개" data-sales="85,000,000원"
-                    data-bg="/images/fish.webp">
-                    <img src="/images/room/room2.jpg" alt="미금점 실내" loading="lazy" decoding="async">
-                </div>
-            </div>
-
-            <div class="store-status-card">
-                <div class="status-header">
-                    <span id="storeName">물고기자리 잠실점</span>
-                </div>
-                <ul class="status-details">
-                    <li><span class="label">평수</span> <span id="storeSize">20평</span></li>
-                    <li><span class="label">테이블수</span> <span id="storeTable">12개</span></li>
+            <!-- 3-2. 상단 우측 카드 (필렛공급 / 쉬운운영 / 저온숙성기술 리스트형 개조) -->
+            <div class="hero-info-card card-top-right list-style">
+                <ul class="hero-list-wrap">
+                    <li class="hero-list-item">
+                        <span class="item-text">필렛공급</span>
+                    </li>
+                    <li class="hero-list-item">
+                        <span class="item-text">쉬운운영</span>
+                    </li>
+                    <li class="hero-list-item">
+                        <span class="item-text">저온숙성기술</span>
+                    </li>
                 </ul>
-                <div class="status-sales">
-                    <span class="label">월 매출</span>
-                    <span id="storeSales">120,000,000원</span>
-                </div>
             </div>
-        </div>
+            <!-- 3-3. 하단 좌측 카드 (03번 - SINCE 2002 아웃라인 3D 백그라운드형) -->
+            <div class="hero-info-card card-bottom-left layered-3d outline-style">
+                <span class="layered-text">SINCE 2002</span>
+            </div>
 
-        <div class="right-wing">
-            <div class="wing-bg-slider">
-                <div class="wing-bg-item active" style="background-image: url('/images/fish.webp');"></div>
-                <div class="wing-bg-item" style="background-image: url('/images/fish.webp');"></div>
-                <div class="wing-bg-item" style="background-image: url('/images/fish.webp');"></div>
-                <div class="wing-bg-item" style="background-image: url('/images/fish.webp');"></div>
-                <div class="wing-bg-item" style="background-image: url('/images/fish.webp');"></div>
+            <!-- 3-4. 하단 우측 카드 (04번 - PISCES PREMIUM 솔리드 3D 포그라운드형) -->
+            <div class="hero-info-card card-bottom-right layered-3d solid-style">
+                <span class="layered-text">PISCES PREMIUM</span>
             </div>
-            <div class="wing-overlay"></div>
-            <div class="slogan-container">
-                <p class="sub-slogan">NUMBERS PROVE THE ESSENCE</p>
-                <h2 class="main-slogan">평생 해온 일처럼 능숙하게<br />기술 없이 시작하는 프리미엄 횟집</h2>
-                <div class="accent-line"></div>
-                <br /><br />
-                <!-- 대시보드 우측 약속 리스트 (Minimalist Polish) -->
-                <div class="dashboard-owner-message">
-                    <div class="message-item">
-                        <p>한 점은 신선하게, 한 판은 풍성하게. 언제 방문해도 동일한 품질과 만족을 제공합니다.</p>
-                    </div>
-                    <div class="message-item">
-                        <p>손질 다 된 필렛으로 로스율 0% 도전, 꼼꼼한 사장님이면 충분합니다.</p>
-                    </div>
-                    <div class="message-item">
-                        <p>기술보다 중요한 건 운영입니다. 복잡한 손질은 본사 시스템에 맡기세요.</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-    <!-- 네 번째 섹션: 테이블 단가 성과 -->
-    <section class="section-price">
-        <div class="container price-container">
-            <!-- 좌측 성과 메시지 -->
-            <div class="price-left">
-                <h2 class="price-title">
-                    물고기자리의<br>
-                    압도적인 테이블 단가
-                </h2>
-                <p class="price-desc">
-                    3040 직장인, 가족 단위 손님 등 즐겨 찾는 프리미엄 브랜드<br>
-                    높은 객단가로 적은 테이블 수로도<br>
-                    대형 매장을 뛰어넘는 폭발적인 매출을 올립니다.
+
+            <!-- 모바일 전용 정중앙 브랜드 카피 카드 -->
+            <div class="hero-mobile-center-text">
+                <span class="m-sub">가장 신선한 숙성회의 시작</span>
+                <img src="/images/logo.webp" class="m-logo-img" alt="물고기자리">
+                <p class="m-desc">
+                    물고기자리 필렛가공센터가 만드는 가장 신선한 숙성회.<br>
+                    매일 줄 서는 맛집의 명성을 가맹점의 일상으로 만드는,<br>
+                    흔들리지 않는 성공 파트너입니다.
                 </p>
+            </div>
 
-                <div class="price-summary">
-                    <div class="summary-label-wrap">
-                        <span class="summary-label">평균 테이블 단가</span>
-                        <div class="summary-line"></div>
+            <!-- 은은한 하단 감청 비네팅 오버레이 -->
+            <div class="hero-media-overlay"></div>
+        </div>
+
+        <div class="hero-bottom-fade"></div>
+    </section>
+
+    <!-- 기존 횟집 창업의 Pain Point 문제제기 섹션 (좌우 스플릿 스티키 패럴랙스 - 동시 고정형) -->
+    <section class="section-problems">
+        <div class="problems-split-container">
+            <!-- 좌측: 고정된 이미지 뷰포트 -->
+            <div class="problems-sticky-left">
+                <div class="problems-image-viewport">
+                    <div class="problem-bg-image active" style="background-image: url('/images/trouble_kitchen.png');">
                     </div>
-                    <div class="summary-value" id="tablePriceGlow">
-                        <span id="tablePriceNum">0</span><span class="unit">만원</span>
-                    </div>
+                    <div class="problem-bg-image" style="background-image: url('/images/trouble_tank.png');"></div>
+                    <div class="problem-bg-image" style="background-image: url('/images/trouble_market.png');"></div>
+                    <div class="problems-image-overlay"></div>
                 </div>
             </div>
 
-            <!-- 우측 음식 이미지 -->
-            <div class="price-right">
-                <div class="price-img-wrap">
-                    <img src="/images/main_dish.webp" alt="물고기자리 압도적 테이블 단가 플레이팅" loading="lazy" decoding="async">
+            <!-- 우측: 고정된 고발 텍스트 뷰포트 (Absolute 포개짐 구조) -->
+            <div class="problems-sticky-right">
+                <div class="problems-text-viewport">
+
+                    <!-- 공통 상단 헤더 -->
+                    <div class="problems-header">
+                        <span class="problems-meta-tag">WARNING & REALITY</span>
+                        <h2 class="problems-main-title">
+                            왜 많은 사람들이<br>
+                            <span class="highlight-red">횟집 창업</span>을 망설였을까요?
+                        </h2>
+                        <p class="problems-main-desc">
+                            겉보기엔 화려하지만, 문을 여는 순간 직면해야만 했던 기존 횟집 창업의 3대 고질적인 한계였었습니다.
+                        </p>
+                    </div>
+
+                    <!-- 겹쳐진 텍스트 카드 영역 -->
+                    <div class="problems-cards-stack">
+                        <!-- Card 01 -->
+                        <div class="problem-flow-card active" data-index="0">
+                            <div class="problem-card-content">
+                                <span class="problem-step-num">01</span>
+                                <span class="problem-badge">INCOME & LABOR</span>
+                                <h3 class="problem-title">구인난과 인건비 폭탄</h3>
+                                <p class="problem-desc">
+                                    회를 뜰 줄 아는 전문 일식 조리사(부장님) 의존도가 100%에 달해, 무리한 고액 연봉 요구와 갑작스러운 퇴사 시 매장 영업이 통째로 중단되는
+                                    치명적인 구인 리스크에 시달려야 했습니다.
+                                </p>
+                            </div>
+                        </div>
+
+                        <!-- Card 02 -->
+                        <div class="problem-flow-card" data-index="1">
+                            <div class="problem-card-content">
+                                <span class="problem-step-num">02</span>
+                                <span class="problem-badge">LOSS RATE</span>
+                                <h3 class="problem-title">살인적인 원물 로스율</h3>
+                                <p class="problem-desc">
+                                    수조 관리비와 활어 폐사 리스크는 고스란히 점주의 몫이었습니다. 머리, 뼈, 내장 등 무자비하게 버려지는 부위로 인해 원물 로스율이 15%~25%에
+                                    달해 실질 마진이 급격히 낮아질 수밖에 없었습니다.
+                                </p>
+                            </div>
+                        </div>
+
+                        <!-- Card 03 -->
+                        <div class="problem-flow-card" data-index="2">
+                            <div class="problem-card-content">
+                                <span class="problem-step-num">03</span>
+                                <span class="problem-badge">LABOR STRENGTH</span>
+                                <h3 class="problem-title">몸이 망가지는 노동 강도</h3>
+                                <p class="problem-desc">
+                                    매일 새벽 졸음을 쫓으며 수산시장에서 활어를 공수해야 했습니다. 비늘을 벗기고 내장을 긁어내는 온종일의 중노동과 끊임없는 수조 청소로 몸이 망가지며
+                                    장기 매장 운영이 불가능했었습니다.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- 다섯 번째 섹션: 운영 시간 (밝은 파도 배경) -->
-    <section class="section-hours">
-        <div class="container hours-container">
-            <!-- 상단 소제목 -->
-            <h3 class="hours-subtitle">단 7시간 운영으로도</h3>
-
-            <!-- 중앙 3단 카드 -->
-            <div class="hours-cards-wrap">
-                <!-- 카드 01: 영업 준비 -->
-                <div class="hours-card-float-wrap">
-                    <div class="hours-card card-prep">
-                        <div class="card-bg-img">
-                            <img src="/images/sec_5_box1.webp" alt="영업 준비 단계 뜰채 생선" loading="lazy" decoding="async">
-                        </div>
-                        <div class="card-overlay"></div>
-                        <div class="card-noise-overlay"></div>
-                        <div class="card-content">
-                            <span class="step-label">영업 준비</span>
-                            <h4 class="step-time" data-time="16:00~18:00">16:00~18:00</h4>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- 카드 02: 영업 시간 -->
-                <div class="hours-card-float-wrap">
-                    <div class="hours-card card-active">
-                        <div class="card-bg-img">
-                            <video autoplay loop muted playsinline>
-                                <source src="/video/sec_3.mp4" type="video/mp4">
-                            </video>
-                        </div>
-                        <div class="card-overlay"></div>
-                        <div class="card-noise-overlay"></div>
-                        <div class="card-content">
-                            <span class="step-label">영업 시간</span>
-                            <h4 class="step-time" data-time="18:00~22:30">18:00~22:30</h4>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- 카드 03: 영업 마감 -->
-                <div class="hours-card-float-wrap">
-                    <div class="hours-card card-close">
-                        <div class="card-bg-img">
-                            <img src="/images/sec_5_box3.webp" alt="주방 기기 마감 및 마끼 연출" loading="lazy" decoding="async">
-                        </div>
-                        <div class="card-overlay"></div>
-                        <div class="card-noise-overlay"></div>
-                        <div class="card-content">
-                            <span class="step-label">영업 마감</span>
-                            <h4 class="step-time" data-time="22:30~23:30">22:30~23:30</h4>
-                        </div>
-                    </div>
-                </div>
-
-            </div>
-
-            <!-- 하단 대제목 및 설명 -->
-            <h2 class="hours-title">충분한 1일 매출을 만듭니다.</h2>
-            <p class="hours-desc">운영시간대비 최고의 수익은 물고기자리의 큰 장점입니다.</p>
-        </div>
-    </section>
-
-    <!-- 여섯 번째 섹션: 성공 창업 모델 -->
-    <section class="section-model">
-        <div class="model-header-wrap">
-            <div class="container">
-                <span class="model-subtitle">물고기자리가 검증한</span>
-                <h2 class="model-title">성공 창업 모델</h2>
-                <p class="model-desc">필렛 공급 시스템이 만드는 쉬운 매장 운영. 숙련된 회 기술자 없이도 안정적인 품질과 높은 생산성을 구현합니다.</p>
-            </div>
-        </div>
-
-        <div class="model-cards-wrap">
-            <!-- 카드 01 -->
-            <div class="model-card">
-                <div class="model-card-bg">
-                    <img src="/images/sec6_box1.webp" alt="안정적인 수익 구조" loading="lazy" decoding="async">
-                </div>
-                <div class="model-card-overlay"></div>
-                <div class="model-card-noise-overlay"></div>
-                <div class="model-card-content">
-                    <span class="model-card-num">01</span>
-                    <h3 class="model-card-title">안정적인 수익 구조</h3>
-                </div>
-            </div>
-
-            <!-- 카드 02 -->
-            <div class="model-card">
-                <div class="model-card-bg">
-                    <img src="/images/sec6_box2.webp" alt="서비스 매뉴얼 구축" loading="lazy" decoding="async">
-                </div>
-                <div class="model-card-overlay"></div>
-                <div class="model-card-noise-overlay"></div>
-                <div class="model-card-content">
-                    <span class="model-card-num">02</span>
-                    <h3 class="model-card-title">서비스 매뉴얼 구축</h3>
-                </div>
-            </div>
-
-            <!-- 카드 03 -->
-            <div class="model-card">
-                <div class="model-card-bg">
-                    <img src="/images/sec6_box3.webp" alt="상권별 메뉴 최적화" loading="lazy" decoding="async">
-                </div>
-                <div class="model-card-overlay"></div>
-                <div class="model-card-noise-overlay"></div>
-                <div class="model-card-content">
-                    <span class="model-card-num">03</span>
-                    <h3 class="model-card-title">상권별 메뉴 최적화</h3>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- 일곱 번째 섹션: 성공 성장사 및 타임라인 -->
-    <section class="section-growth">
-        <!-- 배경 비디오 및 오버레이 -->
-        <div class="growth-video-bg">
-            <video autoplay loop muted playsinline>
-                <source src="/video/sec_3.mp4" type="video/mp4">
+    <!-- 물고기자리 필렛 시스템 솔루션 섹션 -->
+    <section class="section-solution">
+        <!-- 좌측 백그라운드 영상 영역 -->
+        <div class="solution-video-wrap">
+            <video class="solution-bg-video" autoplay loop muted playsinline>
+                <source src="/video/sea.mp4" type="video/mp4">
             </video>
-            <div class="growth-video-overlay"></div>
+            <div class="solution-video-dim"></div>
         </div>
-        <div class="container growth-container">
-            <!-- 좌측 성장사 타이틀 블록 -->
-            <div class="growth-title-wrap">
-                <span class="growth-subtitle">직영 5호점 운영으로</span>
-                <h2 class="growth-title">
-                    12배 성장한<br>
-                    <span class="highlight">날선 실전 감각</span>
-                </h2>
-                <p class="growth-desc">
-                    단순히 이론에만 의존하지 않고, 본사가 직접 매장을 운영하며 검증해 낸 현장 중심의 노하우입니다. 매일 현장에서 겪은 수많은 시행착오와 리스크 극복의 경험이 물고기자리 점주님들의
-                    확실한 성공 무기가 됩니다.
-                </p>
-            </div>
 
-            <!-- 하단 가로형 타임라인 영역 -->
-            <div class="timeline-wrap">
-                <!-- 가로 타임라인 선 (데스크톱 전용 반응형 SVG 곡선) -->
-                <svg class="timeline-svg-line" viewBox="0 0 1000 412" preserveAspectRatio="none">
-                    <path class="timeline-line-bg" d="M 0,396 C 400,396 700,250 1000,16" />
-                    <path class="timeline-line-progress-svg" d="M 0,396 C 400,396 700,250 1000,16" />
-                    <!-- 곡선을 따라 흐르는 빛 파티클 -->
-                    <circle class="timeline-glow-particle-svg" r="5" fill="#ffffff" />
-                </svg>
+        <div class="container solution-container">
+            <div class="solution-grid">
 
-                <!-- 가로/세로 타임라인 선 (모바일 전용 수직선) -->
-                <div class="timeline-line">
-                    <div class="timeline-line-progress"></div>
-                    <div class="timeline-glow-particle"></div>
-                </div>
-
-                <!-- 타임라인 노드 리스트 -->
-                <div class="timeline-nodes">
-                    <!-- 노드 01 -->
-                    <div class="timeline-node">
-                        <div class="node-dot-wrap">
-                            <div class="node-dot"></div>
-                        </div>
-                        <div class="node-info">
-                            <h3 class="node-year">2002년 브랜드 론칭</h3>
-                            <span class="node-label">일매출</span>
-                            <div class="node-val shimmer-gold">100<span>만원</span></div>
-                        </div>
+                <!-- 좌측 패널: 메인 슬로건 및 FILLET CENTER 배너 -->
+                <div class="solution-left">
+                    <div class="solution-header-wrap">
+                        <span class="solution-meta-tag">THE ANSWER FOR PROBLEMS</span>
+                        <h2 class="solution-main-title">
+                            물고기자리는 기존의 한계를<br>
+                            이렇게 <span class="highlight-gold">해결했습니다</span>
+                        </h2>
+                        <p class="solution-main-desc">
+                            전문 조리사 구인난, 살인적인 로스율, 몸이 부서지는 노동 강도까지.<br>
+                            기존 횟집 창업의 고질적인 문제들을 완벽히 해결하는 물고기자리만의 쉽고 완벽한 필렛 시스템입니다.
+                        </p>
                     </div>
 
-                    <!-- 노드 02 -->
-                    <div class="timeline-node">
-                        <div class="node-dot-wrap">
-                            <div class="node-dot"></div>
-                        </div>
-                        <div class="node-info">
-                            <h3 class="node-year">2010년</h3>
-                            <span class="node-label">일매출</span>
-                            <div class="node-val shimmer-gold">320<span>만원</span></div>
-                        </div>
-                    </div>
-
-                    <!-- 노드 03 -->
-                    <div class="timeline-node">
-                        <div class="node-dot-wrap">
-                            <div class="node-dot"></div>
-                        </div>
-                        <div class="node-info">
-                            <h3 class="node-year">2025년</h3>
-                            <span class="node-label">일매출</span>
-                            <div class="node-val shimmer-gold">1,000<span>만원</span></div>
-                        </div>
-                    </div>
-
-                    <!-- 노드 04 -->
-                    <div class="timeline-node node-active">
-                        <div class="node-dot-wrap">
-                            <div class="node-dot red-pulse"></div>
-                        </div>
-                        <div class="node-info">
-                            <h3 class="node-year">2026년 현재</h3>
-                            <span class="node-label">직영 5호점 돌파</span>
-                            <div class="node-val highlight shimmer-gold">12배 성장</div>
-                        </div>
+                    <!-- 기술보다 중요한 것은 운영 배너 -->
+                    <div class="solution-banner-card">
+                        <span class="banner-tag">FILLET CENTER</span>
+                        <h3 class="banner-title">
+                            물고기자리의 경쟁력은 <span class="text-gold">시스템</span>에서 시작됩니다.
+                        </h3>
                     </div>
                 </div>
+
+                <!-- 우측 패널: 7대 강점 체크리스트 보드 (세로 무한 자동 롤링 캐러셀) -->
+                <div class="solution-right">
+                    <div class="solution-features-board">
+                        <div class="solution-rolling-track">
+
+                            <!-- 1세트: 기본 -->
+                            <div class="rolling-group">
+                                <!-- Feat Card 01 -->
+                                <div class="sol-feat-card">
+                                    <span class="sol-feat-icon">✓</span>
+                                    <div class="sol-feat-text">
+                                        <h4 class="sol-feat-title">손질 완료 필렛 공급</h4>
+                                        <p class="sol-feat-desc">HACCP 인증 가공 센터에서 당일 손질하여 즉시 쓸 수 있는 필렛 상태로 공급합니다.</p>
+                                    </div>
+                                </div>
+                                <!-- Feat Card 02 -->
+                                <div class="sol-feat-card">
+                                    <span class="sol-feat-icon">✓</span>
+                                    <div class="sol-feat-text">
+                                        <h4 class="sol-feat-title">숙련 회 기술자 의존도 완화</h4>
+                                        <p class="sol-feat-desc">고임금 일식 주방장 없이도 누구나 손쉽고 일정하게 숙성회 상차림을 구현합니다.</p>
+                                    </div>
+                                </div>
+                                <!-- Feat Card 03 -->
+                                <div class="sol-feat-card">
+                                    <span class="sol-feat-icon">✓</span>
+                                    <div class="sol-feat-text">
+                                        <h4 class="sol-feat-title">초보 창업자도 안정 운영 가능</h4>
+                                        <p class="sol-feat-desc">체계화된 레시피와 매뉴얼 배송 시스템으로 초보자도 1주일 교육으로 안착합니다.</p>
+                                    </div>
+                                </div>
+                                <!-- Feat Card 04 -->
+                                <div class="sol-feat-card">
+                                    <span class="sol-feat-icon">✓</span>
+                                    <div class="sol-feat-text">
+                                        <h4 class="sol-feat-title">로스와 인건 부담을 줄이는 구조</h4>
+                                        <p class="sol-feat-desc">원물 손실을 0%에 수렴하게 제어하여 매장 원가 및 고정비 인건 부담을 대폭 절감합니다.</p>
+                                    </div>
+                                </div>
+                                <!-- Feat Card 05 -->
+                                <div class="sol-feat-card">
+                                    <span class="sol-feat-icon">✓</span>
+                                    <div class="sol-feat-text">
+                                        <h4 class="sol-feat-title">복잡한 생선 손질 부담 감소</h4>
+                                        <p class="sol-feat-desc">비늘, 내장 제거 등 매장에서 악취와 부상 위험이 따르는 1차 전처리 공정이 필요 없습니다.</p>
+                                    </div>
+                                </div>
+                                <!-- Feat Card 06 -->
+                                <div class="sol-feat-card">
+                                    <span class="sol-feat-icon">✓</span>
+                                    <div class="sol-feat-text">
+                                        <h4 class="sol-feat-title">매장 운영 표준화 가능</h4>
+                                        <p class="sol-feat-desc">본사 공급 규격에 맞춰 계량된 팩 단위 운영으로 전국 매장에서 정량·정밀 품질을 구현합니다.</p>
+                                    </div>
+                                </div>
+                                <!-- Feat Card 07 -->
+                                <div class="sol-feat-card">
+                                    <span class="sol-feat-icon">✓</span>
+                                    <div class="sol-feat-text">
+                                        <h4 class="sol-feat-title">매장 생산성 극대화</h4>
+                                        <p class="sol-feat-desc">조리 및 전처리 시간이 파격적으로 단축되어 고객 서빙 회전율과 포장/배달 생산성이 올라갑니다.
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- 2세트: 복제본 (무한 루프 이음새용) -->
+                            <div class="rolling-group" aria-hidden="true">
+                                <!-- Feat Card 01 -->
+                                <div class="sol-feat-card">
+                                    <span class="sol-feat-icon">✓</span>
+                                    <div class="sol-feat-text">
+                                        <h4 class="sol-feat-title">손질 완료 필렛 공급</h4>
+                                        <p class="sol-feat-desc">HACCP 인증 가공 센터에서 당일 손질하여 즉시 쓸 수 있는 필렛 상태로 공급합니다.</p>
+                                    </div>
+                                </div>
+                                <!-- Feat Card 02 -->
+                                <div class="sol-feat-card">
+                                    <span class="sol-feat-icon">✓</span>
+                                    <div class="sol-feat-text">
+                                        <h4 class="sol-feat-title">숙련 회 기술자 의존도 완화</h4>
+                                        <p class="sol-feat-desc">고임금 일식 주방장 없이도 누구나 손쉽고 일정하게 숙성회 상차림을 구현합니다.</p>
+                                    </div>
+                                </div>
+                                <!-- Feat Card 03 -->
+                                <div class="sol-feat-card">
+                                    <span class="sol-feat-icon">✓</span>
+                                    <div class="sol-feat-text">
+                                        <h4 class="sol-feat-title">초보 창업자도 안정 운영 가능</h4>
+                                        <p class="sol-feat-desc">체계화된 레시피와 매뉴얼 배송 시스템으로 초보자도 1주일 교육으로 안착합니다.</p>
+                                    </div>
+                                </div>
+                                <!-- Feat Card 04 -->
+                                <div class="sol-feat-card">
+                                    <span class="sol-feat-icon">✓</span>
+                                    <div class="sol-feat-text">
+                                        <h4 class="sol-feat-title">로스와 인건 부담을 줄이는 구조</h4>
+                                        <p class="sol-feat-desc">원물 손실을 0%에 수렴하게 제어하여 매장 원가 및 고정비 인건 부담을 대폭 절감합니다.</p>
+                                    </div>
+                                </div>
+                                <!-- Feat Card 05 -->
+                                <div class="sol-feat-card">
+                                    <span class="sol-feat-icon">✓</span>
+                                    <div class="sol-feat-text">
+                                        <h4 class="sol-feat-title">복잡한 생선 손질 부담 감소</h4>
+                                        <p class="sol-feat-desc">비늘, 내장 제거 등 매장에서 악취와 부상 위험이 따르는 1차 전처리 공정이 필요 없습니다.</p>
+                                    </div>
+                                </div>
+                                <!-- Feat Card 06 -->
+                                <div class="sol-feat-card">
+                                    <span class="sol-feat-icon">✓</span>
+                                    <div class="sol-feat-text">
+                                        <h4 class="sol-feat-title">매장 운영 표준화 가능</h4>
+                                        <p class="sol-feat-desc">본사 공급 규격에 맞춰 계량된 팩 단위 운영으로 전국 매장에서 정량·정밀 품질을 구현합니다.</p>
+                                    </div>
+                                </div>
+                                <!-- Feat Card 07 -->
+                                <div class="sol-feat-card">
+                                    <span class="sol-feat-icon">✓</span>
+                                    <div class="sol-feat-text">
+                                        <h4 class="sol-feat-title">매장 생산성 극대화</h4>
+                                        <p class="sol-feat-desc">조리 및 전처리 시간이 파격적으로 단축되어 고객 서빙 회전율과 포장/배달 생산성이 올라갑니다.
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
             </div>
         </div>
     </section>
-
-    <!-- 여덟 번째 섹션: 월별 일일 최고 매출 랭킹보드 -->
-    <section class="section-ranking">
-        <div class="container ranking-container">
-            <!-- 상단 헤더 영역 -->
-            <div class="ranking-header">
-                <span class="ranking-subtitle">매월 일일 최고 매출 생산</span>
-                <h2 class="ranking-title">다양한 상권에서 최상의 매출</h2>
-            </div>
-
-            <!-- 2025년 드롭다운 및 월별 수평 탭 -->
-            <div class="ranking-selector-wrap">
-                <div class="year-select-wrap">
-                    <select class="year-select" id="yearSelect">
-                        <option value="2025">2025년</option>
-                        <option value="2024">2024년</option>
-                        <option value="2023">2023년</option>
-                    </select>
-                    <div class="select-arrow">
-                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                            stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
-                            <polyline points="6 9 12 15 18 9"></polyline>
-                        </svg>
-                    </div>
-                </div>
-
-                <!-- 데스크톱 전용 1~12월 수평 탭 -->
-                <div class="month-tabs-wrap desktop-only">
-                    <div class="month-tabs">
-                        <% for(let m=1; m<=12; m++) { %>
-                            <button class="month-tab <%= m === 1 ? 'active' : '' %>" data-month="<%= m %>">
-                                <%= m %>월
-                            </button>
-                            <% } %>
-                    </div>
-                </div>
-
-                <!-- 모바일 전용 단일 월 캐러셀 스위처 -->
-                <div class="mobile-month-selector mobile-only">
-                    <button class="month-arrow-btn prev-month" id="prevMonthBtn" aria-label="이전 달">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                            stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
-                            <polyline points="15 18 9 12 15 6"></polyline>
-                        </svg>
-                    </button>
-                    <span class="active-month-text" id="activeMonthDisplay">1월</span>
-                    <button class="month-arrow-btn next-month" id="nextMonthBtn" aria-label="다음 달">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                            stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
-                            <polyline points="9 18 15 12 9 6"></polyline>
-                        </svg>
-                    </button>
-                </div>
-            </div>
-
-            <!-- 랭킹 순위표 테이블 -->
-            <div class="ranking-board-wrap">
-                <div class="ranking-table">
-                    <!-- 1위 ~ 5위 행 (JS에서 동적 렌더링) -->
-                    <div class="ranking-row-header">
-                        <div class="col-rank">순위</div>
-                        <div class="col-branch">지점명</div>
-                        <div class="col-sales">일 최고 매출</div>
-                    </div>
-                    <div class="ranking-rows" id="rankingRows">
-                        <!-- JS에서 5개 행 동적 생성 -->
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- 아홉 번째 섹션: 필렛 시스템 -->
+    <!-- 필렛 시스템 (좌우 스플릿 프리미엄 리디자인) -->
     <section class="section-fillet">
-
-
+        <!-- 정중앙 깔끔한 검은색 세로 드로잉 라인 및 하단 양쪽 확장 라인 -->
+        <div class="fillet-center-line-wrap">
+            <div class="fillet-center-line"></div>
+            <div class="fillet-bottom-line"></div>
+        </div>
         <div class="container fillet-container">
-            <!-- 메인 카피 영역 -->
-            <div class="fillet-header">
-                <span class="fillet-subtitle">특허받은 자체 필렛공급시스템</span>
-                <h2 class="fillet-title">
-                    <span class="reveal-text">가장 완벽하고 쉬운</span>
-                    <br class="mobile-br">
-                    <span class="reveal-text highlight-wrap"><span class="highlight">'필렛 시스템'</span></span>
-                </h2>
-                <p class="fillet-desc">
-                    매장은 판매에 집중하고, 가공은 본사가 책임집니다.<br>
-                    복잡한 활어 관리와 손질 없이 간편하게 최고의 숙성회를 제공할 수 있습니다.
-                </p>
-            </div>
+            <div class="fillet-split-grid">
 
-            <!-- 중앙 필렛 이미지 영역 -->
-            <div class="fillet-image-wrap">
-                <div class="fillet-slide active">
-                    <img src="/images/sec9_img1.webp" alt="물고기자리 필렛 시스템 손질" class="fillet-chef-img" loading="lazy"
-                        decoding="async">
-                </div>
-                <div class="fillet-slide">
-                    <img src="/images/sec9_img2.png" alt="물고기자리 장인 사시미 칼질" class="fillet-chef-img" loading="lazy"
-                        decoding="async">
-                </div>
-                <div class="fillet-slide">
-                    <img src="/images/sec9_img3.png" alt="물고기자리 프리미엄 숙성회 플레이팅" class="fillet-chef-img" loading="lazy"
-                        decoding="async">
-                </div>
-                <!-- 이미지 모서리 경계를 그윽하게 감싸는 섀도우 오버레이 -->
-                <div class="fillet-shadow-overlay"></div>
-                <!-- 필렛 이미지 뒷배경 광원 연출 -->
-                <div class="image-behind-glow"></div>
-            </div>
+                <!-- 좌측 콘텐츠 패널 -->
+                <div class="fillet-left-panel">
+                    <div class="fillet-header">
+                        <span class="fillet-subtitle">특허받은 자체 필렛공급시스템</span>
+                        <h2 class="fillet-title">
+                            가장 완벽하고 쉬운<br>
+                            <span class="reveal-text highlight-wrap"><span class="highlight">필렛 시스템</span></span>
+                        </h2>
+                        <p class="fillet-desc">
+                            매장은 판매에 집중하고, 가공은 본사가 책임집니다.<br>
+                            복잡한 활어 관리와 손질 없이 간편하게 최고의 숙성회를 제공할 수 있습니다.
+                        </p>
+                    </div>
 
-            <!-- 하단 2단 카드 영역 -->
-            <div class="fillet-cards">
-                <!-- 카드 01 -->
-                <div class="fillet-card">
-                    <h3 class="card-title">불필요한 주방 실장님 NO!</h3>
-                    <div class="fillet-card-content">
-                        <p>최소 인력으로 증명하는</p>
-                        <p class="accent">월 매출 1억의 기적</p>
-                        <p>횟집 장사의 고정관념을 깨고, 수익을 UP!</p>
+                    <!-- 좌측 카드 스택 -->
+                    <div class="fillet-cards-stack">
+                        <div class="fillet-stack-card">
+                            <span class="card-num">01</span>
+                            <div class="card-text">
+                                <h3 class="card-title">불필요한 주방 실장님 NO!</h3>
+                                <p class="card-desc">최소 인력으로 증명하는 <span class="accent">월 매출 1억의 기적</span>. 횟집 장사의 고정관념을
+                                    깨고 순수익을 극대화합니다.</p>
+                            </div>
+                        </div>
+                        <div class="fillet-stack-card">
+                            <span class="card-num">02</span>
+                            <div class="card-text">
+                                <h3 class="card-title">고정비는 줄이고, 순수익은 높이다</h3>
+                                <p class="card-desc">수조 관리, 활어 손실, 조리사 인건비 등 일반 횟집의 수많은 지출 항목이 물고기자리에서는 <span
+                                        class="accent">완벽하게 절감</span>됩니다.</p>
+                            </div>
+                        </div>
                     </div>
                 </div>
-                <!-- 카드 02 -->
-                <div class="fillet-card">
-                    <h3 class="card-title">고정비는 줄이고, 순수익은 높이다</h3>
-                    <div class="fillet-card-content">
-                        <p>일반 횟집과 비교해 보세요.</p>
-                        <p class="accent">수많은 지출 항목이 물고기자리에서는</p>
-                        <p>완벽하게 절감됩니다.</p>
+
+                <!-- 우측 이미지 쇼케이스 패널 -->
+                <div class="fillet-right-panel">
+                    <div class="fillet-image-showcase">
+                        <div class="fillet-slide active">
+                            <img src="/images/filet-work1.png" alt="물고기자리 필렛 시스템 손질" class="fillet-show-img"
+                                loading="lazy" decoding="async">
+                        </div>
+                        <div class="fillet-slide">
+                            <img src="/images/filet-work2.png" alt="물고기자리 장인 사시미 칼질" class="fillet-show-img"
+                                loading="lazy" decoding="async">
+                        </div>
+                        <div class="fillet-slide">
+                            <img src="/images/filet-work3.png" alt="물고기자리 프리미엄 숙성회 플레이팅" class="fillet-show-img"
+                                loading="lazy" decoding="async">
+                        </div>
+                        <!-- 백라이트 광원 및 그라데이션 오버레이 -->
+                        <div class="fillet-shadow-overlay"></div>
+                        <div class="image-behind-glow"></div>
+
+                        <!-- 3단 이미지 자동 루프 스위칭 인디케이터 바 -->
+                        <div class="showcase-indicator">
+                            <span class="ind-bar active"></span>
+                            <span class="ind-bar"></span>
+                            <span class="ind-bar"></span>
+                        </div>
                     </div>
                 </div>
+
             </div>
         </div>
     </section>
 
-    <!-- 열 번째 섹션: 자체생산센터 (비교 섹션) -->
-    <section class="section-factory">
-        <!-- 배경 오버레이 (가독성을 위한 그라디언트 딤 처리) -->
-        <div class="factory-bg-overlay"></div>
+    <!-- 브랜드 철학 섹션 (신선함은 시간과의 싸움 - 비고정식 무한 롤러) -->
+    <section class="section-philosophy">
+        <div class="philo-carousel-container">
 
-        <div class="container factory-container">
-            <!-- 상단 헤더 영역 -->
-            <div class="factory-header">
-                <span class="factory-subtitle">자체 필렛가공센터</span>
-                <h2 class="factory-title">
-                    <span class="title-bold">오늘 가공한 회,</span><br class="mobile-br">
-                    <span class="title-highlight">오늘 매장으로</span>
+            <!-- 좌측 소개 영역 (고정되어 있되, 우측 카우셀과 나란히 정렬) -->
+            <div class="philo-intro-card">
+                <span class="philo-meta-tag">BRAND PHILOSOPHY</span>
+                <h2 class="philo-main-title">
+                    신선함은<br>
+                    <span class="highlight-gold">시간과의 싸움</span>입니다
                 </h2>
-                <p class="factory-desc">
-                    물고기자리는 자체 필렛가공센터를 통해 당일 생산 · 당일 공급 원칙을 지키며<br class="pc-br">
-                    산지에서 매장 주방까지 다이렉트로 이어지는 최상의 신선함을 제공합니다.
+                <h3 class="philo-sub-title">
+                    당일 생산 · 당일 공급 원칙으로<br>
+                    매장마다 일정한 품질의 숙성회를 제공합니다.
+                </h3>
+                <div class="philo-divider"></div>
+                <p class="philo-desc">
+                    활어 입고부터 가공, 숙성, 배송까지 하루 안에 이어지는 시스템을 통해 신선함의 기준을 지킵니다. 좋은 회는 원물뿐 아니라 언제 가공하고, 어떻게 숙성하고, 어떤 온도로
+                    배송되는지가 맛과 품질을 결정합니다.
                 </p>
 
-                <!-- 수익 시뮬레이션 요약 배지 박스 -->
-                <div class="profit-simulation-box">
-                    <div class="sim-badge">순수익 시뮬레이션</div>
-                    <p class="sim-text">
-                        타사 대비 <strong>원가율 12% 절감</strong> 시, 월 매출 6,000만 원 기준<br class="mobile-br">
-                        <strong>매달 약 720만 원</strong>의 압도적인 순수익 차이가 발생합니다.
-                    </p>
+                <!-- 자동 롤링 안내 위젯 -->
+                <div class="philo-nav-controls">
+                    <div class="philo-auto-badge">
+                        <span class="badge-dot"></span>
+                        <span class="badge-txt">AUTO ROLLING</span>
+                    </div>
+                    <span class="philo-drag-notice">마우스를 올리면 흐름이 일시정지됩니다.</span>
                 </div>
             </div>
 
-            <!-- 비교 카드 영역 -->
-            <div class="factory-cards">
-                <!-- 타사 브랜드 카드 -->
-                <div class="factory-card card-other">
-                    <h3 class="card-brand-title">타사 숙성회 브랜드</h3>
-                    <p class="card-brand-desc">유통 대행 필렛 수급</p>
-                    <div class="price-info">
-                        <span class="price-label">부담스러운 원가율</span>
-                        <span class="price-value">50% ~ 53% <span class="arrow-up">▲</span></span>
-                    </div>
-                </div>
+            <!-- 우측 가로 슬라이더 영역 (마우스 호버 시 일시정지되는 무한 자동 롤링) -->
+            <div class="philo-carousel-viewport">
+                <div class="philo-carousel-track">
 
-                <!-- 물고기자리 카드 (강조형) -->
-                <div class="factory-card card-pisces">
-                    <!-- 손글씨 느낌의 빨간 별표 데코레이션 SVG -->
-                    <div class="star-decor">
-                        <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path
-                                d="M50 8 L62 38 L94 38 L68 56 L78 88 L50 70 L22 88 L32 56 L6 38 L38 38 L50 8 M50 8 L60 35 M22 88 L15 93"
-                                stroke="#ff3344" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" />
-                        </svg>
-                    </div>
-                    <h3 class="card-brand-title">물고기자리</h3>
-                    <p class="card-brand-desc">
-                        자체 팩토리 직접 공급<br>
-                        <span class="profit-highlight-sub">* 월 6,000만 원 매출 기준 매달 약 720만 원 순수익 추가 확보</span>
-                    </p>
-                    <div class="price-info">
-                        <span class="price-label">압도적인 마진 (낮은 원가율)</span>
-                        <span class="price-value">37% ~ 42% <span class="arrow-down">▼</span></span>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- 열한 번째 섹션: 공법 및 다이렉트 시스템 -->
-    <section class="section-process">
-        <div class="process-container">
-            <div class="process-wrapper">
-                <!-- 좌측 칼럼 (저온 숙성 공법) -->
-                <div class="process-col col-left">
-                    <div class="process-card">
-                        <!-- 배경 이미지 및 조도 조절을 위한 반투명 오버레이 -->
-                        <div class="card-bg">
-                            <img src="/images/sec_11_1.webp" alt="물고기자리 독자적인 저온 숙성회 플레이팅" loading="lazy"
-                                decoding="async">
+                    <!-- 1세트 (기본) -->
+                    <div class="philo-slide-group">
+                        <!-- Step 1 -->
+                        <div class="philo-slide-card card-step-1">
+                            <div class="card-image-bg">
+                                <img src="/images/fresh_flatfish.png" alt="활어 입고" loading="lazy" decoding="async">
+                            </div>
                             <div class="card-overlay"></div>
+                            <div class="card-content">
+                                <div class="card-header">
+                                    <span class="card-step-num">01</span>
+                                    <span class="card-step-tag">HARVEST</span>
+                                </div>
+                                <h4 class="card-step-title">활어 입고</h4>
+                                <p class="card-step-desc">A등급 엄선된 대형 원물 활어만을 선별하여 매일 아침 직송으로 입고합니다.</p>
+                            </div>
                         </div>
-                        <!-- 이미지 위에 얹어지는 텍스트 콘텐츠 -->
-                        <div class="card-content">
-                            <h2 class="process-title">
-                                좋은 생선에 숙성을 더해<br>
-                                <span class="highlight">최고의 맛을 완성합니다</span>
-                            </h2>
-                            <p class="process-desc">
-                                엄선된 원물과 물고기자리만의 숙성 노하우가 만나<br>
-                                활어에서는 결코 느낄 수 없는 깊은 감칠맛을 선사합니다.<br>
-                                그 어디에서도 경험하지 못한 깊은 맛과<br>
-                                차원이 다른 찰진 식감을 선사합니다.
-                            </p>
+
+                        <!-- Step 2 -->
+                        <div class="philo-slide-card card-step-2">
+                            <div class="card-image-bg">
+                                <img src="/images/gagong.png" alt="가공" loading="lazy" decoding="async">
+                            </div>
+                            <div class="card-overlay"></div>
+                            <div class="card-content">
+                                <div class="card-header">
+                                    <span class="card-step-num">02</span>
+                                    <span class="card-step-tag">HACCP SYSTEM</span>
+                                </div>
+                                <h4 class="card-step-title">위생 가공</h4>
+                                <p class="card-step-desc">자체 위생 가공센터(HACCP)에서 베테랑의 칼끝으로 정밀하고 깨끗하게 손질합니다.</p>
+                            </div>
+                        </div>
+
+                        <!-- Step 3 -->
+                        <div class="philo-slide-card card-step-3">
+                            <div class="card-image-bg">
+                                <img src="/images/aging.png" alt="숙성" loading="lazy" decoding="async">
+                            </div>
+                            <div class="card-overlay"></div>
+                            <div class="card-content">
+                                <div class="card-header">
+                                    <span class="card-step-num">03</span>
+                                    <span class="card-step-tag">AGING</span>
+                                </div>
+                                <h4 class="card-step-title">24시간 저온 숙성</h4>
+                                <p class="card-step-desc">최적의 감칠맛과 찰진 식감을 위해 물고기자리만의 노하우로 저온 숙성합니다.</p>
+                            </div>
+                        </div>
+
+                        <!-- Step 4 -->
+                        <div class="philo-slide-card card-step-4">
+                            <div class="card-image-bg">
+                                <img src="/images/delivery.png" alt="배송" loading="lazy" decoding="async">
+                            </div>
+                            <div class="card-overlay"></div>
+                            <div class="card-content">
+                                <div class="card-header">
+                                    <span class="card-step-num">04</span>
+                                    <span class="card-step-tag">COLD CHAIN</span>
+                                </div>
+                                <h4 class="card-step-title">콜드체인 배송</h4>
+                                <p class="card-step-desc">완벽한 온도가 유지되는 콜드체인 시스템을 통해 매장까지 직송 배송됩니다.</p>
+                            </div>
+                        </div>
+
+                        <!-- Step 5 -->
+                        <div class="philo-slide-card card-step-5">
+                            <div class="card-image-bg">
+                                <img src="/images/pack.png" alt="매장 공급" loading="lazy" decoding="async">
+                            </div>
+                            <div class="card-overlay"></div>
+                            <div class="card-content">
+                                <div class="card-header">
+                                    <span class="card-step-num">05</span>
+                                    <span class="card-step-tag">DELIVERY</span>
+                                </div>
+                                <h4 class="card-step-title">매장 공급 및 완제품</h4>
+                                <p class="card-step-desc">칼 없는 주방에서 팩만 뜯어 썰어내어 손님에게 최상의 숙성회를 즉시 제공합니다.</p>
+                            </div>
                         </div>
                     </div>
-                </div>
 
-                <!-- 우측 칼럼 (다이렉트 시스템) -->
-                <div class="process-col col-right">
-                    <div class="process-card">
-                        <!-- 배경 이미지 및 조도 조절을 위한 반투명 오버레이 -->
-                        <div class="card-bg">
-                            <img src="/images/sec_11_2.webp" alt="물고기자리 다이렉트 주방 위생 조리 작업" loading="lazy"
-                                decoding="async">
+                    <!-- 2세트 (무한 루프 복제본) -->
+                    <div class="philo-slide-group" aria-hidden="true">
+                        <!-- Step 1 -->
+                        <div class="philo-slide-card card-step-1">
+                            <div class="card-image-bg">
+                                <img src="/images/fresh_flatfish.png" alt="활어 입고" loading="lazy" decoding="async">
+                            </div>
                             <div class="card-overlay"></div>
+                            <div class="card-content">
+                                <div class="card-header">
+                                    <span class="card-step-num">01</span>
+                                    <span class="card-step-tag">HARVEST</span>
+                                </div>
+                                <h4 class="card-step-title">활어 입고</h4>
+                                <p class="card-step-desc">A등급 엄선된 대형 원물 활어만을 선별하여 매일 아침 직송으로 입고합니다.</p>
+                            </div>
                         </div>
-                        <!-- 이미지 위에 얹어지는 텍스트 콘텐츠 -->
-                        <div class="card-content">
-                            <h2 class="process-title">
-                                신선함은<br>
-                                <span class="highlight">시간과의 싸움입니다</span>
-                            </h2>
-                            <p class="process-desc">
-                                물고기자리는 활어 입고부터 가공, 배송까지<br>
-                                외주 대행 없이 하루 안에 완료하는 다이렉트 시스템을 운영합니다.<br>
-                                중간 유통의 공백이 없기에<br>
-                                가장 완벽하고 위생적인 신선도를 약속합니다.
-                            </p>
+
+                        <!-- Step 2 -->
+                        <div class="philo-slide-card card-step-2">
+                            <div class="card-image-bg">
+                                <img src="/images/gagong.png" alt="가공" loading="lazy" decoding="async">
+                            </div>
+                            <div class="card-overlay"></div>
+                            <div class="card-content">
+                                <div class="card-header">
+                                    <span class="card-step-num">02</span>
+                                    <span class="card-step-tag">HACCP SYSTEM</span>
+                                </div>
+                                <h4 class="card-step-title">위생 가공</h4>
+                                <p class="card-step-desc">자체 위생 가공센터(HACCP)에서 베테랑의 칼끝으로 정밀하고 깨끗하게 손질합니다.</p>
+                            </div>
+                        </div>
+
+                        <!-- Step 3 -->
+                        <div class="philo-slide-card card-step-3">
+                            <div class="card-image-bg">
+                                <img src="/images/aging.png" alt="숙성" loading="lazy" decoding="async">
+                            </div>
+                            <div class="card-overlay"></div>
+                            <div class="card-content">
+                                <div class="card-header">
+                                    <span class="card-step-num">03</span>
+                                    <span class="card-step-tag">AGING</span>
+                                </div>
+                                <h4 class="card-step-title">24시간 저온 숙성</h4>
+                                <p class="card-step-desc">최적의 감칠맛 and 찰진 식감을 위해 물고기자리만의 노하우로 저온 숙성합니다.</p>
+                            </div>
+                        </div>
+
+                        <!-- Step 4 -->
+                        <div class="philo-slide-card card-step-4">
+                            <div class="card-image-bg">
+                                <img src="/images/delivery.png" alt="배송" loading="lazy" decoding="async">
+                            </div>
+                            <div class="card-overlay"></div>
+                            <div class="card-content">
+                                <div class="card-header">
+                                    <span class="card-step-num">04</span>
+                                    <span class="card-step-tag">COLD CHAIN</span>
+                                </div>
+                                <h4 class="card-step-title">콜드체인 배송</h4>
+                                <p class="card-step-desc">완벽한 온도가 유지되는 콜드체인 시스템을 통해 매장까지 직송 배송됩니다.</p>
+                            </div>
+                        </div>
+
+                        <!-- Step 5 -->
+                        <div class="philo-slide-card card-step-5">
+                            <div class="card-image-bg">
+                                <img src="/images/pack.png" alt="매장 공급" loading="lazy" decoding="async">
+                            </div>
+                            <div class="card-overlay"></div>
+                            <div class="card-content">
+                                <div class="card-header">
+                                    <span class="card-step-num">05</span>
+                                    <span class="card-step-tag">DELIVERY</span>
+                                </div>
+                                <h4 class="card-step-title">매장 공급 및 완제품</h4>
+                                <p class="card-step-desc">칼 없는 주방에서 팩만 뜯어 썰어내어 손님에게 최상의 숙성회를 즉시 제공합니다.</p>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -1067,6 +738,645 @@
                     </div>
                 </div>
             </div>
+        </div>
+    </section>
+
+    <!-- 매장별 매출 대시보드 섹션 -->
+    <section class="sales-dashboard">
+        <div class="left-wing">
+            <div class="store-slider">
+                <div class="store-item active" data-store="물고기자리 잠실점" data-size="20평" data-table="12개"
+                    data-sales="120,000,000원" data-bg="/images/foods/물고기자리 연출컷-1.jpg">
+                    <img src="/images/room/room1.jpg" alt="잠실점 실내" loading="lazy" decoding="async">
+                </div>
+                <div class="store-item" data-store="물고기자리 강남점" data-size="18평" data-table="10개" data-sales="98,000,000원"
+                    data-bg="/images/foods/물고기자리 연출컷-12.jpg">
+                    <img src="/images/room/room2.jpg" alt="강남점 실내" loading="lazy" decoding="async">
+                </div>
+                <div class="store-item" data-store="물고기자리 가락점" data-size="22평" data-table="14개"
+                    data-sales="110,000,000원" data-bg="/images/main_dish.webp">
+                    <img src="/images/room/room3.jpg" alt="가락점 실내" loading="lazy" decoding="async">
+                </div>
+                <div class="store-item" data-store="물고기자리 논현점" data-size="25평" data-table="14개"
+                    data-sales="140,000,000원" data-bg="/images/sec_11_1.webp">
+                    <img src="/images/room/room4.jpg" alt="논현점 실내" loading="lazy" decoding="async">
+                </div>
+                <div class="store-item" data-store="미금점" data-size="15평" data-table="8개" data-sales="85,000,000원"
+                    data-bg="/images/sec_11_2.webp">
+                    <img src="/images/room/room2.jpg" alt="미금점 실내" loading="lazy" decoding="async">
+                </div>
+            </div>
+
+            <div class="store-status-card">
+                <div class="status-header">
+                    <span id="storeName">물고기자리 잠실점</span>
+                </div>
+                <ul class="status-details">
+                    <li><span class="label">평수</span> <span id="storeSize">20평</span></li>
+                    <li><span class="label">테이블수</span> <span id="storeTable">12개</span></li>
+                </ul>
+                <div class="status-sales">
+                    <span class="label">월 매출</span>
+                    <span id="storeSales">120,000,000원</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="right-wing">
+            <div class="wing-overlay"></div>
+            <div class="slogan-container">
+                <span class="sub-slogan">BRAND</span>
+                <h2 class="main-slogan">
+                    트렌드는 짧지만,<br>
+                    <span class="highlight-gold">본질</span>은 영원합니다
+                </h2>
+                <div class="accent-line" style="display: none;"></div> <!-- 불필요한 라인 제거 -->
+
+                <h3 class="dashboard-essence-subtitle">
+                    프리미엄 숙성회를<br>
+                    더 쉽고 안정적으로 운영할 수 있도록 만든<br>
+                    숙성회 전문 프랜차이즈
+                </h3>
+                <p class="dashboard-essence-desc">
+                    2002년 브랜드 론칭 이후 쌓아온 운영 경험을 바탕으로 생산,<br>
+                    필렛 공급, 저온 숙성, 매장 운영 시스템까지<br>
+                    가맹점이 안정적으로 운영할 수 있는 구조를 만들어가고 있습니다.
+                </p>
+
+                <!-- 대시보드 우측 3단 피처 (스크린샷 시안 완벽 재현) -->
+                <div class="dashboard-features">
+                    <div class="feat-item-box">
+                        <div class="feat-deco-bar bar-heritage"></div>
+                        <span class="feat-lbl">HERITAGE</span>
+                        <h4 class="feat-title">SINCE 2002</h4>
+                    </div>
+                    <div class="feat-item-box">
+                        <div class="feat-deco-bar bar-direct"></div>
+                        <span class="feat-lbl">DIRECT SYSTEM</span>
+                        <h4 class="feat-title">필렛 공급</h4>
+                    </div>
+                    <div class="feat-item-box">
+                        <div class="feat-deco-bar bar-model"></div>
+                        <span class="feat-lbl">STORE MODEL</span>
+                        <h4 class="feat-title">쉬운 운영</h4>
+                    </div>
+                    <div class="solution-bottom-fade"></div>
+                </div>
+    </section>
+
+    <!-- 네 번째 섹션: 테이블 단가 성과 -->
+    <section class="section-price">
+        <div class="container price-container">
+            <!-- 좌측 상단 성과 메시지 -->
+            <div class="price-left">
+                <h2 class="price-title">
+                    물고기자리의<br>
+                    압도적인 테이블 단가
+                </h2>
+                <p class="price-desc">
+                    3040 직장인, 가족 단위 손님 등 즐겨 찾는 프리미엄 브랜드<br>
+                    높은 객단가로 적은 테이블 수로도<br>
+                    대형 매장을 뛰어넘는 폭발적인 매출을 올립니다.
+                </p>
+            </div>
+
+            <!-- 중앙 음식 이미지 -->
+            <div class="price-right">
+                <div class="price-img-wrap">
+                    <img src="/images/main_dish.webp" alt="물고기자리 압도적 테이블 단가 플레이팅" loading="lazy" decoding="async">
+                </div>
+            </div>
+
+            <!-- 우측 하단 평균 테이블 단가 -->
+            <div class="price-summary">
+                <div class="summary-label-wrap">
+                    <span class="summary-label">평균 테이블 단가</span>
+                    <div class="summary-line"></div>
+                </div>
+                <div class="summary-value" id="tablePriceGlow">
+                    <span id="tablePriceNum">0</span><span class="unit">만원</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 일곱 번째 섹션: 성공 성장사 & 좌우 반갈 호버 인터랙티브 쇼케이스 -->
+    <section class="section-growth">
+        <div class="growth-showcase-wrap">
+
+            <!-- 1. 좌측 50% 인터랙티브 구역 (방이점 & 좌측 이미지 & 원형 좌측 반: 이미지) -->
+            <div class="growth-half half-left">
+                <!-- 좌측 상단 컷아웃/이미지 슬롯 -->
+                <div class="growth-layer-left-top">
+                    <img src="/images/foods/tukim.png" alt="물고기자리 메뉴" class="growth-img-left-top">
+                </div>
+
+                <!-- 좌측 매출 스폿 (방이점) -->
+                <div class="growth-sales-spot spot-left">
+                    <h3 class="sales-num">115,780,200</h3>
+                    <span class="sales-label"><strong class="accent-branch">사당점</strong> 최고 월매출</span>
+                </div>
+
+                <!-- 좌측 하단 트럭/매장 이미지 슬롯 -->
+                <div class="growth-layer-left-bottom">
+                    <img src="/images/foods/hot-soop.png" alt="물고기자리 물류 트럭" class="growth-img-left-bottom">
+                </div>
+
+                <!-- 중앙 원형의 '좌측 반' (이미지) -->
+                <div class="circle-half circle-half-left">
+                    <video autoplay loop muted playsinline class="circle-video-half" width="300">
+                        <source src="/video/left-mugogijari.mp4" type="video/mp4">
+                    </video>
+                    <div class="circle-inner-shadow"></div>
+                </div>
+            </div>
+
+            <!-- 2. 우측 50% 인터랙티브 구역 (논현점 & 우측 매장 사진 & 원형 우측 반: 동영상 & 우측 하단 성장 그래프) -->
+            <div class="growth-half half-right">
+                <!-- 우측 상단 매장 이미지 슬롯 -->
+                <div class="growth-layer-right">
+                    <img src="/images/restorant.png" alt="물고기자리 매장 전경" class="growth-img-store">
+                </div>
+
+                <!-- 우측 상단 브랜드 성장 노하우 메시지 블록 -->
+                <div class="growth-text-block-right">
+                    <span class="growth-sub-badge">직영 19호점 운영 · 23년 검증 노하우</span>
+                    <h2 class="growth-text-title">
+                        12배 성장한<br>
+                        <span class="accent-blue">날선 실전 감각</span>
+                    </h2>
+                    <p class="growth-text-desc">
+                        단순히 이론에만 의존하지 않고, 23년간 본사가 직접 매장을 운영하며 검증해 낸 현장 중심의 노하우입니다.<br>
+                        매일 현장에서 겪은 수많은 시행착오와 리스크 극복의 경험이 점주님들의 확실한 성공 무기가 됩니다.
+                    </p>
+                </div>
+
+                <!-- 우측 하단 12배 성장 4단 막대그래프 영역 -->
+                <div class="growth-bar-chart">
+                    <div class="bar-chart-bars">
+                        <!-- 막대 01 (2002년) -->
+                        <div class="chart-bar-item bar-1">
+                            <div class="bar-top-val cyan">100<span>만원</span></div>
+                            <div class="bar-fill-wrap">
+                                <div class="bar-fill"></div>
+                            </div>
+                            <div class="bar-bottom-info">
+                                <span class="bar-year">2002년</span>
+                                <span class="bar-lbl">론칭</span>
+                            </div>
+                        </div>
+
+                        <!-- 막대 02 (2010년) -->
+                        <div class="chart-bar-item bar-2">
+                            <div class="bar-top-val cyan">320<span>만원</span></div>
+                            <div class="bar-fill-wrap">
+                                <div class="bar-fill"></div>
+                            </div>
+                            <div class="bar-bottom-info">
+                                <span class="bar-year">2010년</span>
+                                <span class="bar-lbl">일매출</span>
+                            </div>
+                        </div>
+
+                        <!-- 막대 03 (2025년) -->
+                        <div class="chart-bar-item bar-3">
+                            <div class="bar-top-val cyan">1,000<span>만원</span></div>
+                            <div class="bar-fill-wrap">
+                                <div class="bar-fill"></div>
+                            </div>
+                            <div class="bar-bottom-info">
+                                <span class="bar-year">2025년</span>
+                                <span class="bar-lbl">일매출</span>
+                            </div>
+                        </div>
+
+                        <!-- 막대 04 (2026년 현재) -->
+                        <div class="chart-bar-item bar-4 active">
+                            <div class="bar-top-val red">12배 성장</div>
+                            <div class="bar-fill-wrap">
+                                <div class="bar-fill red-bar"></div>
+                            </div>
+                            <div class="bar-bottom-info">
+                                <span class="bar-year highlight-red">2026년</span>
+                                <span class="bar-lbl">직영 5호점</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 중앙 원형의 '우측 반' (동영상) -->
+                <div class="circle-half circle-half-right">
+                    <video autoplay loop muted playsinline class="circle-video-half">
+                        <source src="/video/sec_3.mp4" type="video/mp4">
+                    </video>
+                    <div class="circle-inner-shadow"></div>
+                </div>
+            </div>
+
+            <!-- 중앙 원형 테두리 선 -->
+            <div class="growth-circle-border"></div>
+
+        </div>
+    </section>
+
+    <!-- 여덟 번째 섹션: 월별 일일 최고 매출 랭킹보드 -->
+    <section class="section-ranking">
+        <div class="container ranking-container">
+            <!-- 상단 헤더 영역 -->
+            <div class="ranking-header">
+                <span class="ranking-subtitle">매월 일일 최고 매출 생산</span>
+                <h2 class="ranking-title">다양한 상권에서 최상의 매출</h2>
+            </div>
+
+            <!-- 2025년 드롭다운 및 월별 수평 탭 -->
+            <div class="ranking-selector-wrap">
+                <div class="year-select-wrap">
+                    <select class="year-select" id="yearSelect">
+                        <option value="2025">2025년</option>
+                        <option value="2024">2024년</option>
+                        <option value="2023">2023년</option>
+                    </select>
+                    <div class="select-arrow">
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                            <polyline points="6 9 12 15 18 9"></polyline>
+                        </svg>
+                    </div>
+                </div>
+
+                <!-- 데스크톱 전용 1~12월 수평 탭 -->
+                <div class="month-tabs-wrap desktop-only">
+                    <div class="month-tabs">
+                        <% for(let m=1; m<=12; m++) { %>
+                            <button class="month-tab <%= m === 1 ? 'active' : '' %>" data-month="<%= m %>">
+                                <%= m %>월
+                            </button>
+                            <% } %>
+                    </div>
+                </div>
+
+                <!-- 모바일 전용 단일 월 캐러셀 스위처 -->
+                <div class="mobile-month-selector mobile-only">
+                    <button class="month-arrow-btn prev-month" id="prevMonthBtn" aria-label="이전 달">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
+                            <polyline points="15 18 9 12 15 6"></polyline>
+                        </svg>
+                    </button>
+                    <span class="active-month-text" id="activeMonthDisplay">1월</span>
+                    <button class="month-arrow-btn next-month" id="nextMonthBtn" aria-label="다음 달">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
+                            <polyline points="9 18 15 12 9 6"></polyline>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+
+            <!-- 랭킹 순위표 테이블 -->
+            <div class="ranking-board-wrap">
+                <div class="ranking-table">
+                    <!-- 1위 ~ 5위 행 (JS에서 동적 렌더링) -->
+                    <div class="ranking-row-header">
+                        <div class="col-rank">순위</div>
+                        <div class="col-branch">지점명</div>
+                        <div class="col-sales">일 최고 매출</div>
+                    </div>
+                    <div class="ranking-rows" id="rankingRows">
+                        <!-- JS에서 5개 행 동적 생성 -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 무한 루프 마키(Infinite Marquee) 배너 섹션 -->
+    <section class="section-marquee-banner">
+        <!-- 첫 번째 트랙: 우에서 좌로 (RTL) -->
+        <div class="marquee-wrapper direction-rtl">
+            <div class="marquee-track">
+                <div class="marquee-list">
+                    <span class="marquee-item">
+                        <img src="/images/logo/favicon1.png" alt="물고기자리 파비콘" class="marquee-favicon">
+                        PISCES PREMIUM
+                    </span>
+                    <span class="marquee-item">
+                        <img src="/images/logo/favicon1.png" alt="물고기자리 파비콘" class="marquee-favicon">
+                        PISCES PREMIUM
+                    </span>
+                    <span class="marquee-item">
+                        <img src="/images/logo/favicon1.png" alt="물고기자리 파비콘" class="marquee-favicon">
+                        PISCES PREMIUM
+                    </span>
+                    <span class="marquee-item">
+                        <img src="/images/logo/favicon1.png" alt="물고기자리 파비콘" class="marquee-favicon">
+                        PISCES PREMIUM
+                    </span>
+                    <span class="marquee-item">
+                        <img src="/images/logo/favicon1.png" alt="물고기자리 파비콘" class="marquee-favicon">
+                        PISCES PREMIUM
+                    </span>
+                    <span class="marquee-item">
+                        <img src="/images/logo/favicon1.png" alt="물고기자리 파비콘" class="marquee-favicon">
+                        PISCES PREMIUM
+                    </span>
+                </div>
+                <!-- 무한 루프 연결용 복제본 -->
+                <div class="marquee-list" aria-hidden="true">
+                    <span class="marquee-item">
+                        <img src="/images/logo/favicon1.png" alt="물고기자리 파비콘" class="marquee-favicon">
+                        PISCES PREMIUM
+                    </span>
+                    <span class="marquee-item">
+                        <img src="/images/logo/favicon1.png" alt="물고기자리 파비콘" class="marquee-favicon">
+                        PISCES PREMIUM
+                    </span>
+                    <span class="marquee-item">
+                        <img src="/images/logo/favicon1.png" alt="물고기자리 파비콘" class="marquee-favicon">
+                        PISCES PREMIUM
+                    </span>
+                    <span class="marquee-item">
+                        <img src="/images/logo/favicon1.png" alt="물고기자리 파비콘" class="marquee-favicon">
+                        PISCES PREMIUM
+                    </span>
+                    <span class="marquee-item">
+                        <img src="/images/logo/favicon1.png" alt="물고기자리 파비콘" class="marquee-favicon">
+                        PISCES PREMIUM
+                    </span>
+                    <span class="marquee-item">
+                        <img src="/images/logo/favicon1.png" alt="물고기자리 파비콘" class="marquee-favicon">
+                        PISCES PREMIUM
+                    </span>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- 서클 마스크 리빌 섹션 (장인의 손길) -->
+    <section class="reveal-section">
+        <div class="reveal-inner">
+            <!-- 배경으로 깔리는 숏츠 영역 -->
+            <div class="shorts-container">
+                <div class="shorts-grid-area">
+                    <div class="shorts-grid">
+                        <div class="shorts-card">
+                            <iframe src="https://www.youtube.com/embed/m9pZFFKTZNM" title="YouTube Shorts"
+                                allowfullscreen></iframe>
+                        </div>
+                        <div class="shorts-card">
+                            <iframe src="https://www.youtube.com/embed/C_lTrWN_eYw" title="YouTube Shorts"
+                                allowfullscreen></iframe>
+                        </div>
+                        <div class="shorts-card">
+                            <iframe src="https://www.youtube.com/embed/vNrSLSDOTls" title="YouTube Shorts"
+                                allowfullscreen></iframe>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="shorts-text-area">
+                    <h3 class="shorts-title">홍보하지 않아도 잘되는 곳은<br>이유가 있습니다.</h3>
+                    <div class="shorts-metrics">
+                        <div class="shorts-desc-group">
+                            <p class="shorts-desc-item highlight-desc">
+                                개별적 영상광고 하실 필요 없는<br>
+                                브랜드 알고리즘 이미 형성되어 있는 숙성회 브랜드
+                            </p>
+                            <p class="shorts-desc-item">
+                                소비자는 이미 내 지역에도 물고기자리가<br>
+                                오픈하기만을 기다리고 있습니다.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 스크롤 시 확장될 마스킹 레이어 (장인의 손길 이미지) -->
+            <div class="reveal-overlay">
+                <div class="reveal-image-container">
+                    <img src="/images/artisan_hands.webp" alt="장인의 손길" loading="lazy" decoding="async">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 두 번째 무한 루프 마키(Infinite Marquee) 배너 섹션: 퀄리티 섹션 하단 -->
+    <section class="section-marquee-banner">
+        <!-- 두 번째 트랙: 좌에서 우로 (LTR) -->
+        <div class="marquee-wrapper direction-ltr">
+            <div class="marquee-track">
+                <div class="marquee-list">
+                    <span class="marquee-item">
+                        <img src="/images/logo/favicon1.png" alt="물고기자리 파비콘" class="marquee-favicon">
+                        PISCES PREMIUM
+                    </span>
+                    <span class="marquee-item">
+                        <img src="/images/logo/favicon1.png" alt="물고기자리 파비콘" class="marquee-favicon">
+                        PISCES PREMIUM
+                    </span>
+                    <span class="marquee-item">
+                        <img src="/images/logo/favicon1.png" alt="물고기자리 파비콘" class="marquee-favicon">
+                        PISCES PREMIUM
+                    </span>
+                    <span class="marquee-item">
+                        <img src="/images/logo/favicon1.png" alt="물고기자리 파비콘" class="marquee-favicon">
+                        PISCES PREMIUM
+                    </span>
+                    <span class="marquee-item">
+                        <img src="/images/logo/favicon1.png" alt="물고기자리 파비콘" class="marquee-favicon">
+                        PISCES PREMIUM
+                    </span>
+                    <span class="marquee-item">
+                        <img src="/images/logo/favicon1.png" alt="물고기자리 파비콘" class="marquee-favicon">
+                        PISCES PREMIUM
+                    </span>
+                </div>
+                <!-- 무한 루프 연결용 복제본 -->
+                <div class="marquee-list" aria-hidden="true">
+                    <span class="marquee-item">
+                        <img src="/images/logo/favicon1.png" alt="물고기자리 파비콘" class="marquee-favicon">
+                        PISCES PREMIUM
+                    </span>
+                    <span class="marquee-item">
+                        <img src="/images/logo/favicon1.png" alt="물고기자리 파비콘" class="marquee-favicon">
+                        PISCES PREMIUM
+                    </span>
+                    <span class="marquee-item">
+                        <img src="/images/logo/favicon1.png" alt="물고기자리 파비콘" class="marquee-favicon">
+                        PISCES PREMIUM
+                    </span>
+                    <span class="marquee-item">
+                        <img src="/images/logo/favicon1.png" alt="물고기자리 파비콘" class="marquee-favicon">
+                        PISCES PREMIUM
+                    </span>
+                    <span class="marquee-item">
+                        <img src="/images/logo/favicon1.png" alt="물고기자리 파비콘" class="marquee-favicon">
+                        PISCES PREMIUM
+                    </span>
+                    <span class="marquee-item">
+                        <img src="/images/logo/favicon1.png" alt="물고기자리 파비콘" class="marquee-favicon">
+                        PISCES PREMIUM
+                    </span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+    <!-- 두 번째 섹션: 퀄리티 & 슬라이더 영역 -->
+    <section class="section-quality">
+        <div class="container quality-container">
+            <!-- 좌측 설명 텍스트 (체크박스 없이 고품격 설명 카피만 깔끔히 구성) -->
+            <div class="quality-left">
+                <span class="quality-subtitle">FRESHNESS SERVED TOGETHER</span>
+                <h2 class="quality-title">
+                    다양한<br>
+                    <span class="highlight-gold">스끼다시 구성</span>
+                </h2>
+
+                <h3 class="quality-accent-quote">
+                    메인은 신선하게, 곁들임은 풍성하게.<br>
+                    물고기자리는 한 상의 만족까지 설계합니다.
+                </h3>
+
+                <p class="quality-desc">
+                    물고기자리는 숙성회의 신선함뿐 아니라 함께 제공되는 다양한 스끼다시 구성을 통해 고객이 한 상 가득한 만족을 경험할 수 있도록 합니다. 깔끔한 곁들임 메뉴부터 따뜻한 사이드,
+                    식사의 완성도를 높이는 구성까지 프리미엄 숙성회와 어울리는 메뉴 경험을 제공합니다.
+                </p>
+            </div>
+
+            <!-- 우측 슬라이더 (기존 체크박스 스타일 대신 타이틀/본문에 가치를 대체 반영) -->
+            <div class="quality-right">
+                <div class="quality-slider-container">
+                    <div class="quality-slider">
+                        <!-- 슬라이드 01 -->
+                        <div class="quality-slide active">
+                            <div class="slide-img">
+                                <img src="/images/foods/물고기자리 연출컷-1.jpg" alt="활어와 숙성회의 완벽한 밸런스" loading="lazy"
+                                    decoding="async">
+                            </div>
+                            <div class="slide-text-box">
+                                <div class="slide-badge">
+                                    <span>장점 01</span>
+                                </div>
+                                <h3 class="slide-title">고객 만족을 극대화하는 풍성한 상차림</h3>
+                                <p class="slide-desc">메인 숙성회와 어울리는 고품격 곁들임 구성을 통해 테이블 만족도를 높이고 객단가와 재방문을 극대화하는 탁월한 메뉴
+                                    구성을 제공합니다.</p>
+                            </div>
+                        </div>
+
+                        <!-- 슬라이드 02 -->
+                        <div class="quality-slide">
+                            <div class="slide-img">
+                                <img src="/images/foods/물고기자리 연출컷-12.jpg" alt="엄선된 프리미엄 제철 활어" loading="lazy"
+                                    decoding="async">
+                            </div>
+                            <div class="slide-text-box">
+                                <div class="slide-badge">
+                                    <span>장점 02</span>
+                                </div>
+                                <h3 class="slide-title">전문점의 위상을 세우는 시각적 풍성함</h3>
+                                <p class="slide-desc">사계절 산지에서 엄선하여 직송되는 프리미엄 제철 활어와 격이 다른 연출로 일식 전문점의 압도적인 아우라를 구현합니다.
+                                </p>
+                            </div>
+                        </div>
+
+                        <!-- 슬라이드 03 -->
+                        <div class="quality-slide">
+                            <div class="slide-img">
+                                <img src="/images/foods/skidashe.webp" alt="풍성함을 더하는 수제 곁들임 요리" loading="lazy"
+                                    decoding="async">
+                            </div>
+                            <div class="slide-text-box">
+                                <div class="slide-badge">
+                                    <span>장점 03</span>
+                                </div>
+                                <h3 class="slide-title">매장 운영 효율을 극대화한 스마트 사이드</h3>
+                                <p class="slide-desc">주방 인력의 손길을 최소화하고 운영 편의성을 강화하면서도 프리미엄급 수제 요리로 상차림의 신뢰도를 한층 더 높였습니다.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 방향 컨트롤러 -->
+                    <div class="slider-controls">
+                        <button class="ctrl-btn prev-btn" aria-label="이전 슬라이드">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="15 18 9 12 15 6"></polyline>
+                            </svg>
+                        </button>
+                        <button class="ctrl-btn next-btn" aria-label="다음 슬라이드">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="9 18 15 12 9 6"></polyline>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- 다섯 번째 섹션: 운영 시간 (밝은 파도 배경) -->
+    <section class="section-hours">
+        <div class="container hours-container">
+            <!-- 상단 소제목 -->
+            <h3 class="hours-subtitle">단 7시간 운영으로도</h3>
+
+            <!-- 중앙 3단 카드 -->
+            <div class="hours-cards-wrap">
+                <!-- 카드 01: 영업 준비 -->
+                <div class="hours-card-float-wrap">
+                    <div class="hours-card card-prep">
+                        <div class="card-bg-img">
+                            <img src="/images/sec_5_box1.webp" alt="영업 준비 단계 뜰채 생선" loading="lazy" decoding="async">
+                        </div>
+                        <div class="card-overlay"></div>
+                        <div class="card-noise-overlay"></div>
+                        <div class="card-content">
+                            <span class="step-label">영업 준비</span>
+                            <h4 class="step-time" data-time="16:00~18:00">16:00~18:00</h4>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 카드 02: 영업 시간 -->
+                <div class="hours-card-float-wrap">
+                    <div class="hours-card card-active">
+                        <div class="card-bg-img">
+                            <video autoplay loop muted playsinline>
+                                <source src="/video/sec_3.mp4" type="video/mp4">
+                            </video>
+                        </div>
+                        <div class="card-overlay"></div>
+                        <div class="card-noise-overlay"></div>
+                        <div class="card-content">
+                            <span class="step-label">영업 시간</span>
+                            <h4 class="step-time" data-time="18:00~22:30">18:00~22:30</h4>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 카드 03: 영업 마감 -->
+                <div class="hours-card-float-wrap">
+                    <div class="hours-card card-close">
+                        <div class="card-bg-img">
+                            <img src="/images/sec_5_box3.webp" alt="주방 기기 마감 및 마끼 연출" loading="lazy" decoding="async">
+                        </div>
+                        <div class="card-overlay"></div>
+                        <div class="card-noise-overlay"></div>
+                        <div class="card-content">
+                            <span class="step-label">영업 마감</span>
+                            <h4 class="step-time" data-time="22:30~23:30">22:30~23:30</h4>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- 하단 대제목 및 설명 -->
+            <h2 class="hours-title">충분한 1일 매출을 만듭니다.</h2>
+            <p class="hours-desc">운영시간대비 최고의 수익은 물고기자리의 큰 장점입니다.</p>
         </div>
     </section>
 
@@ -1695,7 +2005,7 @@
                         autocomplete="off">
                 </div>
                 <button type="submit" class="btn-quick-submit">
-                     <span>보내기</span>
+                    <span>보내기</span>
                 </button>
             </form>
             <!-- 닫기 버튼 누락 보완 -->
@@ -1712,7 +2022,7 @@
     </button>
 
     <!-- 메인 팝업 노출 마크업 및 스크립트 -->
-    <% if (typeof popups !== 'undefined' && popups.length > 0) { %>
+    <% if (typeof popups !=='undefined' && popups.length> 0) { %>
         <style>
             /* 레이어 팝업 스타일 */
             .custom-popup-layer {
@@ -1722,20 +2032,24 @@
                 border-radius: 12px;
                 box-shadow: 0 10px 35px rgba(15, 23, 42, 0.15);
                 z-index: 1000;
-                display: none; /* JS 제어 시까지 기본 숨김 */
+                display: none;
+                /* JS 제어 시까지 기본 숨김 */
                 flex-direction: column;
                 overflow: hidden;
             }
+
             .popup-layer-content {
                 flex: 1;
                 overflow: hidden;
             }
+
             .popup-layer-content img {
                 width: 100%;
                 height: 100%;
                 object-fit: cover;
                 display: block;
             }
+
             .popup-layer-footer {
                 height: 40px;
                 background: #1e293b;
@@ -1746,6 +2060,7 @@
                 color: #ffffff;
                 font-size: 12px;
             }
+
             .popup-close-today {
                 display: inline-flex;
                 align-items: center;
@@ -1753,6 +2068,7 @@
                 cursor: pointer;
                 user-select: none;
             }
+
             .popup-close-today input {
                 cursor: pointer;
                 accent-color: #0284c7;
@@ -1760,6 +2076,7 @@
                 height: 14px;
                 margin: 0;
             }
+
             .btn-popup-close {
                 background: none;
                 border: none;
@@ -1769,6 +2086,7 @@
                 padding: 4px 8px;
                 font-size: 12px;
             }
+
             .btn-popup-close:hover {
                 text-decoration: underline;
             }
@@ -1786,26 +2104,28 @@
 
         <!-- 레이어 팝업 컨테이너 -->
         <div id="landing-popups">
-            <% popups.forEach(popup => { %>
-                <div id="popup-layer-<%= popup.id %>" class="custom-popup-layer" style="width: <%= popup.width %>px; height: <%= popup.height %>px; top: <%= popup.position_top %>px; left: <%= popup.position_left %>px;">
+            <% popups.forEach(popup=> { %>
+                <div id="popup-layer-<%= popup.id %>" class="custom-popup-layer"
+                    style="width: <%= popup.width %>px; height: <%= popup.height %>px; top: <%= popup.position_top %>px; left: <%= popup.position_left %>px;">
                     <div class="popup-layer-content">
                         <% if (popup.link_url) { %>
                             <a href="<%= popup.link_url %>" target="<%= popup.target %>">
                                 <img src="<%= popup.image_url %>" alt="<%= popup.title %>">
                             </a>
-                        <% } else { %>
-                            <img src="<%= popup.image_url %>" alt="<%= popup.title %>">
-                        <% } %>
+                            <% } else { %>
+                                <img src="<%= popup.image_url %>" alt="<%= popup.title %>">
+                                <% } %>
                     </div>
                     <div class="popup-layer-footer">
                         <label class="popup-close-today">
                             <input type="checkbox" id="close-today-<%= popup.id %>">
                             <span>오늘 하루 열지 않기</span>
                         </label>
-                        <button type="button" class="btn-popup-close" onclick="closePopupLayer('<%= popup.id %>')">닫기</button>
+                        <button type="button" class="btn-popup-close"
+                            onclick="closePopupLayer('<%= popup.id %>')">닫기</button>
                     </div>
                 </div>
-            <% }) %>
+                <% }) %>
         </div>
 
         <script>
@@ -1813,10 +2133,10 @@
             function closePopupLayer(id) {
                 const layer = document.getElementById(`popup-layer-${id}`);
                 const checkCloseToday = document.getElementById(`close-today-${id}`);
-                
+
                 if (layer) {
                     layer.style.display = 'none';
-                    
+
                     if (checkCloseToday && checkCloseToday.checked) {
                         // 24시간(오늘 하루) 보지 않기 설정 (Expiry Time 지정)
                         const expiryDate = new Date();
@@ -1830,11 +2150,11 @@
             document.addEventListener('DOMContentLoaded', () => {
                 const now = new Date().getTime();
                 const popupLayers = document.querySelectorAll('.custom-popup-layer');
-                
+
                 popupLayers.forEach(layer => {
                     const idStr = layer.id.replace('popup-layer-', '');
                     const hideExpiry = localStorage.getItem(`popup_hide_${idStr}`);
-                    
+
                     if (hideExpiry && now < parseInt(hideExpiry, 10)) {
                         layer.style.display = 'none';
                     } else {
@@ -1846,6 +2166,6 @@
                 });
             });
         </script>
-    <% } %>
+        <% } %>
 
-    <%- include('layout/footer') %>
+            <%- include('layout/footer') %>

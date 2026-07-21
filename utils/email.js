@@ -43,7 +43,7 @@ async function sendInquiryNotification(inquiry) {
         subject: `[물고기자리] 새로운 ${boardTitle} 등록`,
         html: `
             <div style="font-family: 'Noto Sans KR', sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; background-color: #f8f9fa;">
-                <div style="background: linear-gradient(135deg, #050b14 0%, #0c1a30 100%); padding: 30px; text-align: center; border-radius: 10px 10px 0 0; border-bottom: 3px solid #00f2fe;">
+                <div style="background: linear-gradient(135deg, #050b14 0%, #0c1a30 100%); padding: 30px; text-align: center; border-radius: 10px 10px 0 0; border-bottom: 3px solid #0056b3;">
                     <h1 style="color: white; margin: 0; font-size: 24px;">🔔 새로운 문의가 등록되었습니다</h1>
                 </div>
                 
@@ -74,7 +74,7 @@ ${inquiry.content}
                     
                     <div style="text-align: center; margin-top: 30px;">
                         <a href="${BASE_URL}/console" 
-                           style="display: inline-block; padding: 15px 40px; background: linear-gradient(90deg, #00f2fe 0%, #00a8cc 100%); color: #00182e; text-decoration: none; border-radius: 8px; font-weight: 700; font-size: 16px;">
+                           style="display: inline-block; padding: 15px 40px; background: linear-gradient(90deg, #0056b3 0%, #00a8cc 100%); color: #00182e; text-decoration: none; border-radius: 8px; font-weight: 700; font-size: 16px;">
                             관리자 페이지에서 답변하기
                         </a>
                     </div>
@@ -109,7 +109,7 @@ async function sendConsultationNotification(consultation) {
         subject: '[물고기자리] 새로운 창업 상담 신청',
         html: `
             <div style="font-family: 'Noto Sans KR', sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; background-color: #f8f9fa;">
-                <div style="background: linear-gradient(135deg, #050b14 0%, #0c1a30 100%); padding: 30px; text-align: center; border-radius: 10px 10px 0 0; border-bottom: 3px solid #00f2fe;">
+                <div style="background: linear-gradient(135deg, #050b14 0%, #0c1a30 100%); padding: 30px; text-align: center; border-radius: 10px 10px 0 0; border-bottom: 3px solid #0056b3;">
                     <h1 style="color: white; margin: 0; font-size: 24px;">🎯 새로운 창업 상담 신청</h1>
                 </div>
                 
@@ -140,7 +140,7 @@ ${consultation.message}
                     
                     <div style="text-align: center; margin-top: 30px;">
                         <a href="${BASE_URL}/console" 
-                           style="display: inline-block; padding: 15px 40px; background: linear-gradient(90deg, #00f2fe 0%, #00a8cc 100%); color: #00182e; text-decoration: none; border-radius: 8px; font-weight: 700; font-size: 16px;">
+                           style="display: inline-block; padding: 15px 40px; background: linear-gradient(90deg, #0056b3 0%, #00a8cc 100%); color: #00182e; text-decoration: none; border-radius: 8px; font-weight: 700; font-size: 16px;">
                             관리자 페이지에서 확인하기
                         </a>
                     </div>
@@ -179,7 +179,7 @@ async function sendReplyNotification(data) {
         subject: `[물고기자리] ${boardTitle} 답변이 등록되었습니다`,
         html: `
             <div style="font-family: 'Noto Sans KR', sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; background-color: #f8f9fa;">
-                <div style="background: linear-gradient(135deg, #050b14 0%, #0c1a30 100%); padding: 30px; text-align: center; border-radius: 10px 10px 0 0; border-bottom: 3px solid #00f2fe;">
+                <div style="background: linear-gradient(135deg, #050b14 0%, #0c1a30 100%); padding: 30px; text-align: center; border-radius: 10px 10px 0 0; border-bottom: 3px solid #0056b3;">
                     <h1 style="color: white; margin: 0; font-size: 24px;">✅ 답변이 등록되었습니다</h1>
                 </div>
                 
@@ -200,7 +200,7 @@ async function sendReplyNotification(data) {
                     
                     <div style="margin-bottom: 30px;">
                         <h2 style="color: #333; margin: 0 0 10px 0; font-size: 16px;">💬 관리자 답변</h2>
-                        <div style="background: #f0fbfc; padding: 20px; border-radius: 8px; border-left: 4px solid #00f2fe; white-space: pre-wrap; color: #333; line-height: 1.8;">
+                        <div style="background: #f0fbfc; padding: 20px; border-radius: 8px; border-left: 4px solid #0056b3; white-space: pre-wrap; color: #333; line-height: 1.8;">
 ${replyContent}
                         </div>
                     </div>
@@ -210,7 +210,7 @@ ${replyContent}
                             추가 문의사항이 있으시면 언제든지 연락주세요.
                         </p>
                         <a href="${BASE_URL}" 
-                           style="display: inline-block; padding: 15px 40px; background: linear-gradient(90deg, #00f2fe 0%, #00a8cc 100%); color: #00182e; text-decoration: none; border-radius: 8px; font-weight: 700; font-size: 16px;">
+                           style="display: inline-block; padding: 15px 40px; background: linear-gradient(90deg, #0056b3 0%, #00a8cc 100%); color: #00182e; text-decoration: none; border-radius: 8px; font-weight: 700; font-size: 16px;">
                             물고기자리 홈페이지 바로가기
                         </a>
                     </div>

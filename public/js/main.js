@@ -30,21 +30,21 @@ document.addEventListener('DOMContentLoaded', () => {
             stepTimes.forEach(el => {
                 const timeStr = el.dataset.time || el.innerText || "";
                 if (!timeStr.trim()) return; // 비어 있는 텍스트는 무시
-                
+
                 el.innerHTML = ''; // 기존 텍스트 제거
-                
+
                 const wrapper = document.createElement('div');
                 wrapper.className = 'ticker-wrapper';
-                
+
                 [...timeStr].forEach(char => {
                     if (/[0-9]/.test(char)) {
                         const box = document.createElement('div');
                         box.className = 'ticker-number-box';
-                        
+
                         const list = document.createElement('div');
                         list.className = 'ticker-number-list';
                         list.dataset.target = char;
-                        
+
                         // 0~9 숫자 리스트 2세트 구성 (회전 연출 극대화)
                         const digits = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
                         digits.forEach(d => {
@@ -52,10 +52,10 @@ document.addEventListener('DOMContentLoaded', () => {
                             span.innerText = d;
                             list.appendChild(span);
                         });
-                        
+
                         box.appendChild(list);
                         wrapper.appendChild(box);
-                        
+
                         // Y축 초기 위치
                         gsap.set(list, { y: 0 });
                     } else {
@@ -85,6 +85,9 @@ document.addEventListener('DOMContentLoaded', () => {
         window.addEventListener('scroll', checkScroll);
         checkScroll(); // 초기 상태 체크
     }
+
+    // 2-2. 메인 히어로 핀 고정 & 음식/젓가락 스크롤 연동 리빌 (GSAP ScrollTrigger Pinning)
+
 
     // 3. 일체형 메가 메뉴 인터렉션 (GSAP)
     const megaMenu = document.querySelector('.mega-menu');
@@ -118,131 +121,502 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // 4. 프리미엄 다크 히어로 섹션 등장 애니메이션 & 매출 카운트업
+    // 4. 프리미엄 히어로 섹션 100% 정가운데 배치 및 아래에서 솟구쳐 팽창하는 3D 스크롤 모션
     const heroDarkSection = document.querySelector('.hero-dark');
-    const heroSashimiImg = document.querySelector('.hero-sashimi-img');
-    const heroLeft = document.querySelector('.hero-left');
-    const heroRight = document.querySelector('.hero-right');
+    const heroCenterContent = document.querySelector('.hero-center-content');
+    const heroFloatingFood = document.getElementById('heroFloatingFood');
     const revenueNumEl = document.getElementById('revenueNum');
 
-    if (heroLeft && heroRight) {
+    if (heroDarkSection) {
+        const salesWidget = document.querySelector('.hero-sales-widget');
         const heroTimeline = gsap.timeline();
 
-        // 1) 우측 하단 숙성회 이미지가 웅장하게 페이드인하며 안착 (움직임 효과 제거)
-        if (heroSashimiImg) {
-            heroTimeline.fromTo(heroSashimiImg,
-                { opacity: 0 },
-                {
-                    opacity: 1,
-                    duration: 2.0,
-                    ease: 'power3.out'
-                }
-            );
+        // 1) 좌측 타이틀 텍스트 순차 슬라이드 리빌
+        const titleLines = document.querySelectorAll('.title-line');
+        if (titleLines.length > 0) {
+            heroTimeline.to(titleLines, {
+                y: 0,
+                duration: 1.1,
+                stagger: 0.12,
+                ease: 'power4.out'
+            });
         }
 
+        // 2) 서브 공지 문구 페이드인
+        const subNotice = document.querySelector('.hero-sub-notice');
+        if (subNotice) {
+            heroTimeline.to(subNotice, {
+                opacity: 1,
+                y: 0,
+                duration: 0.9,
+                ease: 'power3.out'
+            }, '-=0.8');
+        }
 
+        // 3) 매출 스탯 위젯 페이드인
+        if (salesWidget) {
+            heroTimeline.to(salesWidget, {
+                opacity: 1,
+                y: 0,
+                duration: 0.9,
+                ease: 'power3.out'
+            }, '-=0.7');
+        }
 
-        // 2) 좌측 텍스트 정보 및 타이틀 사선 컷 리빌 등장 애니메이션
-        // 개별 요소의 초기 상태 설정
-        gsap.set(['.brand-prefix', '.brand-name', '.hero-desc'], {
-            opacity: 0,
-            x: -45,
-            skewX: -10,
-            clipPath: 'polygon(0 0, 0% 0, 0% 100%, 0 100%)'
-        });
+        // 음식 솟구침 진입 비활성화
 
-        heroTimeline.to(heroLeft, {
-            opacity: 1,
-            y: 0,
-            duration: 0.6,
-            ease: 'power2.out'
-        }, '-=1.4');
+        // 5) 매출 카운트업 및 지점명 순차 롤링 (기존 강점 계승)
+        const branchNameEl = document.querySelector('.widget-branch-name');
+        const branches = ['강남본점', '여의도점', '분당정자점', '마포염리점', '영등포점', '용산역점', '수지구청점', '목동점', '판교점', '잠실새내점'];
 
-        heroTimeline.to('.brand-prefix', {
-            opacity: 1,
-            x: 0,
-            skewX: 0,
-            clipPath: 'polygon(0 0, 100% 0, 100% 100%, 0 100%)',
-            duration: 1.3,
-            ease: 'power4.out'
-        }, '-=1.2');
-
-        heroTimeline.to('.brand-name', {
-            opacity: 1,
-            x: 0,
-            skewX: 0,
-            clipPath: 'polygon(0 0, 100% 0, 100% 100%, 0 100%)',
-            duration: 1.4,
-            ease: 'power4.out'
-        }, '-=1.1');
-
-        heroTimeline.to('.hero-desc', {
-            opacity: 1,
-            x: 0,
-            skewX: 0,
-            clipPath: 'polygon(0 0, 100% 0, 100% 100%, 0 100%)',
-            duration: 1.2,
-            ease: 'power3.out'
-        }, '-=1.0');
-
-        // 3) 우측 매출 정보 오버레이 등장
-        heroTimeline.to(heroRight, {
-            opacity: 1,
-            y: 0,
-            duration: 1.2,
-            ease: 'power3.out'
-        }, '-=0.9');
-
-        // 4) 매출액 카운트업 롤링 애니메이션 연동 및 1초 간격 실시간 롤링 루프
         if (revenueNumEl) {
             const countObj = { val: 60000000 };
             const targetVal = 98450000;
 
             heroTimeline.to(countObj, {
                 val: targetVal,
-                duration: 2.5,
+                duration: 2.2,
                 ease: 'power3.out',
                 onUpdate: () => {
                     revenueNumEl.innerText = Math.floor(countObj.val).toLocaleString();
                 },
                 onComplete: () => {
-                    // 카운트업 완료 시 강력한 골드/화이트 글로우 플래시 효과 트리거
+                    revenueNumEl.innerText = targetVal.toLocaleString();
                     revenueNumEl.classList.add('glow-active');
+
+                    if (salesWidget) {
+                        salesWidget.classList.add('pulse-active');
+                        setTimeout(() => salesWidget.classList.remove('pulse-active'), 850);
+                    }
+
+                    if (branchNameEl) {
+                        gsap.fromTo(branchNameEl,
+                            { scale: 0.8, opacity: 0 },
+                            {
+                                scale: 1, opacity: 1, duration: 0.4, ease: 'back.out(1.7)', onStart: () => {
+                                    branchNameEl.innerText = '[강남본점]';
+                                }
+                            }
+                        );
+                    }
+
                     setTimeout(() => {
-                        revenueNumEl.classList.remove('glow-active');
-                        
-                        // 최초 완료 1초 후 실시간 갱신 루프 활성화 (9천만원대 유지)
+                        if (revenueNumEl) revenueNumEl.classList.remove('glow-active');
+
                         let currentVal = targetVal;
+                        let lastBranchIdx = 0;
+
                         setInterval(() => {
-                            // 9천만 원 ~ 9천 9백 9십만 원 사이 만원 단위 난수
                             const nextVal = 90000000 + Math.floor(Math.random() * 990) * 10000;
                             const rollObj = { val: currentVal };
-                            
+
+                            if (branchNameEl) {
+                                let nextIdx = lastBranchIdx;
+                                while (nextIdx === lastBranchIdx) {
+                                    nextIdx = Math.floor(Math.random() * branches.length);
+                                }
+                                lastBranchIdx = nextIdx;
+                                const nextBranch = branches[nextIdx];
+
+                                gsap.to(branchNameEl, {
+                                    y: -12,
+                                    opacity: 0,
+                                    duration: 0.18,
+                                    ease: 'power2.in',
+                                    onComplete: () => {
+                                        branchNameEl.innerText = `[${nextBranch}]`;
+                                        gsap.fromTo(branchNameEl,
+                                            { y: 12, opacity: 0 },
+                                            { y: 0, opacity: 1, duration: 0.22, ease: 'power2.out' }
+                                        );
+                                    }
+                                });
+                            }
+
                             gsap.to(rollObj, {
                                 val: nextVal,
                                 duration: 0.35,
                                 ease: 'power2.out',
                                 onUpdate: () => {
-                                    revenueNumEl.innerText = Math.floor(rollObj.val).toLocaleString();
+                                    if (revenueNumEl) revenueNumEl.innerText = Math.floor(rollObj.val).toLocaleString();
                                 },
                                 onComplete: () => {
                                     currentVal = nextVal;
-                                    // 갱신 시 미세 글로우 플래시 효과 트리거
-                                    revenueNumEl.classList.add('glow-mini');
-                                    setTimeout(() => {
-                                        revenueNumEl.classList.remove('glow-mini');
-                                    }, 250);
+                                    if (revenueNumEl) {
+                                        revenueNumEl.classList.add('glow-mini');
+                                        setTimeout(() => {
+                                            revenueNumEl.classList.remove('glow-mini');
+                                        }, 250);
+                                    }
                                 }
                             });
-                        }, 1350); // 약 1.35초 주기 (0.35초 롤링 + 1초 멈춤)
-                        
+                        }, 1450);
                     }, 1200);
                 }
-            }, '-=0.6');
+            }, '-=0.5');
+        }
+
+        // 6) 스크롤 연동 텍스트 소거 & 우측 젓가락 및 하단 음식 등장 ScrollTrigger 연출 (반응형 최적화)
+        if (heroCenterContent) {
+            const scrollFork = document.querySelector('.hero-scroll-fork');
+            const scrollFood = document.querySelector('.hero-scroll-food');
+            const mediaOverlay = document.querySelector('.hero-media-overlay');
+            const mobileCenterText = document.querySelector('.hero-mobile-center-text');
+            const infoCardsLeft = document.querySelectorAll('.hero-info-card.card-top-left, .hero-info-card.card-bottom-left');
+            const infoCardsRight = document.querySelectorAll('.hero-info-card.card-top-right, .hero-info-card.card-bottom-right');
+
+            // 화면 크기별로 모션 거리 가변 조율
+            const isMobile = window.innerWidth <= 768;
+            const textY = isMobile ? -40 : -120;
+            const cardXOffset = isMobile ? 30 : 60;
+
+            // 스크롤 시 젓가락의 x, y 목표 좌표 (모바일은 좁으므로 가벼운 거리 이동)
+            const forkTranslateX = isMobile ? 30 : 60;
+            const forkTranslateY = isMobile ? -30 : -60;
+
+            // GSAP로 초기 대기 위치를 디바이스별 오프셋에 맞춰 동적 세팅
+            gsap.set(infoCardsLeft, { x: -cardXOffset });
+            gsap.set(infoCardsRight, { x: cardXOffset });
+            gsap.set(scrollFork, { x: forkTranslateX, y: forkTranslateY });
+
+            const heroScrollTl = gsap.timeline({
+                scrollTrigger: {
+                    trigger: heroDarkSection,
+                    start: 'top top',
+                    end: isMobile ? '+=550' : 'bottom top',
+                    scrub: 1.2, // 스크롤 댐핑 감도
+                    pin: true,  // 모바일에서도 고정 유지
+                    pinSpacing: true, // 다음 섹션이 미리 덮어 올라오지 않도록 핀스페이싱 유지
+                    invalidateOnRefresh: true
+                }
+            });
+
+            heroScrollTl
+                // A) 처음에 나온 중앙 텍스트가 서서히 페이드아웃 되며 위로 상승 소멸
+                .to(heroCenterContent, {
+                    opacity: 0,
+                    y: textY,
+                    scale: 0.96,
+                    duration: 1,
+                    ease: 'power2.inOut'
+                })
+                // B) 우측 상단 젓가락 이미지가 대각선 방향으로 내려오며 페이드인
+                .to(scrollFork, {
+                    x: 0,
+                    y: 0,
+                    opacity: 1,
+                    duration: 1.3,
+                    ease: 'power2.out'
+                }, 0.1)
+                // C) 아래에서 메인 음식 접시 이미지가 위로 솟구치며 페이드인
+                .to(scrollFood, {
+                    y: 0,
+                    opacity: 1,
+                    duration: 1.3,
+                    ease: 'power2.out'
+                }, 0.1)
+                // D) 좌측 설명 카드 2종 왼쪽에서 슬라이드인 하며 페이드인
+                .to(infoCardsLeft, {
+                    x: 0,
+                    opacity: 1,
+                    duration: 1.2,
+                    stagger: 0.15,
+                    ease: 'power2.out'
+                }, 0.25)
+                // E) 우측 설명 카드 2종 오른쪽에서 슬라이드인 하며 페이드인
+                .to(infoCardsRight, {
+                    x: 0,
+                    opacity: 1,
+                    duration: 1.2,
+                    stagger: 0.15,
+                    ease: 'power2.out'
+                }, 0.25)
+                // F) 하단 비네팅 페이드인
+                .to(mediaOverlay, {
+                    opacity: 0.85,
+                    duration: 1.0
+                }, 0.2);
+
+            // 모바일 전용 정중앙 브랜드 카피 카드 페이드인 연동
+            if (mobileCenterText) {
+                heroScrollTl.to(mobileCenterText, {
+                    opacity: 1,
+                    duration: 1.2,
+                    ease: 'power2.out'
+                }, 0.25);
+            }
+
+            // 요소들이 화면에 100% 다 배치되어 노출된 상태를 사용자가 완전히 감상할 수 있도록 홀딩 스크롤 구간 확보
+            heroScrollTl.to({}, { duration: 0.6 });
+
+            // 우측 상단 3대 강점 리스트 아이템 순차 색상 페이드 무한 루프
+            const listTexts = document.querySelectorAll('.hero-list-item .item-text');
+            if (listTexts.length > 0) {
+                // 초기 색상을 반투명 흰색으로 명시 세팅
+                gsap.set(listTexts, { color: 'rgba(255, 255, 255, 0.45)' });
+
+                const loopTl = gsap.timeline({ repeat: -1 });
+                listTexts.forEach((item, idx) => {
+                    loopTl.to(item, {
+                        color: '#0056b3', // 로열 블루로 선명하게 강조 점화
+                        duration: 0.9,    // 0.9초 동안 부드럽게 점입
+                        ease: 'power2.out'
+                    }, idx * 1.3) // 1.3초 간격 순차 릴레이
+                        .to(item, {
+                            color: 'rgba(255, 255, 255, 0.45)', // 다시 스르륵 은은한 흰색으로 페이드아웃
+                            duration: 0.9,    // 0.9초 동안 복원
+                            ease: 'power2.in'
+                        }, (idx * 1.3) + 0.9);
+                });
+            }
+
+            // 젓가락 숙성회 이미지 둥실둥실(Floating) 상하 무한 모션 주입
+            const forkImg = document.querySelector('.hero-scroll-fork img');
+            if (forkImg) {
+                gsap.to(forkImg, {
+                    y: 15,
+                    duration: 1.8,
+                    ease: 'sine.inOut',
+                    yoyo: true,
+                    repeat: -1
+                });
+            }
         }
     }
 
-    // 5. 두 번째 섹션 (.section-quality) GSAP ScrollTrigger 진입 모션 (사방 교차 입체 리빌 모션 튜닝)
+    // ==========================================================================
+    // 4-2. 기존 창업 Pain Point 섹션 GSAP 애니메이션 (ScrollTrigger - 좌우 동시 고정 릴레이)
+    // ==========================================================================
+    try {
+        const sectionProblems = document.querySelector('.section-problems');
+        const cards = document.querySelectorAll('.problem-flow-card');
+        const bgImages = document.querySelectorAll('.problem-bg-image');
+
+        if (sectionProblems && cards.length > 0 && bgImages.length > 0) {
+            // GSAP가 직접 스타일링을 제어하도록 초기 세팅 (0번만 보이고 1,2번은 숨김)
+            gsap.set(cards, { opacity: 0, y: 30, visibility: 'hidden' });
+            gsap.set(bgImages, { opacity: 0, scale: 1.08 });
+
+            // 첫번째 요소 활성화
+            gsap.set(cards[0], { opacity: 1, y: 0, visibility: 'visible' });
+            gsap.set(bgImages[0], { opacity: 1, scale: 1 });
+
+            const isMobile = window.innerWidth <= 768;
+            const scrollDistance = isMobile ? '+=1200' : '+=2000';
+
+            const pinTimeline = gsap.timeline({
+                scrollTrigger: {
+                    trigger: sectionProblems,
+                    start: 'top top',
+                    end: scrollDistance, // 고정되어 스크롤할 총 거리 (모바일은 좀 더 기민하게)
+                    pin: true,
+                    scrub: 0.5,
+                    invalidateOnRefresh: true
+                }
+            });
+
+            // Step 1: 0번 카드/이미지 -> 1번 카드/이미지 전환
+            pinTimeline
+                .to(cards[0], { opacity: 0, y: -30, visibility: 'hidden', duration: 1 })
+                .to(bgImages[0], { opacity: 0, scale: 0.95, duration: 1 }, '<')
+                .to(cards[1], { opacity: 1, y: 0, visibility: 'visible', duration: 1 }, '-=0.3')
+                .to(bgImages[1], { opacity: 1, scale: 1, duration: 1 }, '<')
+                // 대기시간 확보 (스크롤 감지 스냅 유지용 빈 트윈)
+                .to({}, { duration: 0.8 });
+
+            // Step 2: 1번 카드/이미지 -> 2번 카드/이미지 전환
+            pinTimeline
+                .to(cards[1], { opacity: 0, y: -30, visibility: 'hidden', duration: 1 })
+                .to(bgImages[1], { opacity: 0, scale: 0.95, duration: 1 }, '<')
+                .to(cards[2], { opacity: 1, y: 0, visibility: 'visible', duration: 1 }, '-=0.3')
+                .to(bgImages[2], { opacity: 1, scale: 1, duration: 1 }, '<')
+                // 대기시간 확보
+                .to({}, { duration: 0.8 });
+        }
+    } catch (err) {
+        console.error("section-problems split-sticky double pin animation failed:", err);
+    }
+
+    // ==========================================================================
+    // 4-3. 물고기자리 필렛 시스템 솔루션 섹션 GSAP 애니메이션 (ScrollTrigger)
+    // ==========================================================================
+    try {
+        const sectionSolution = document.querySelector('.section-solution');
+        if (sectionSolution) {
+            // 좌측 헤더 및 배너 카드 페이드인
+            gsap.fromTo('.solution-left > *',
+                { opacity: 0, y: 40 },
+                {
+                    opacity: 1,
+                    y: 0,
+                    duration: 0.8,
+                    stagger: 0.2,
+                    ease: 'power2.out',
+                    scrollTrigger: {
+                        trigger: '.section-solution',
+                        start: 'top 80%',
+                        toggleActions: 'play none none none'
+                    }
+                }
+            );
+
+            // 우측 무한 롤링 보드 전체: 스크롤 진입 시 부드럽게 페이드인-업 리빌 (1회성)
+            gsap.fromTo('.solution-features-board',
+                { opacity: 0, y: 50 },
+                {
+                    opacity: 1,
+                    y: 0,
+                    duration: 1.0,
+                    ease: 'power2.out',
+                    scrollTrigger: {
+                        trigger: '.section-solution',
+                        start: 'top 75%',
+                        toggleActions: 'play none none none'
+                    }
+                }
+            );
+        }
+    } catch (err) {
+        console.error("section-solution GSAP animation failed:", err);
+    }
+
+    // 4.5. 매장별 매출 대시보드 (sales-dashboard) 상호작용 및 우측 윙 이미지 텍스처 Ken Burns 크로스페이드
+    const salesDashboard = document.querySelector('.sales-dashboard');
+    if (salesDashboard) {
+        const storeItems = salesDashboard.querySelectorAll('.store-item');
+        const wingBgItems = salesDashboard.querySelectorAll('.wing-bg-item');
+        const storeNameEl = document.getElementById('storeName');
+        const storeSizeEl = document.getElementById('storeSize');
+        const storeTableEl = document.getElementById('storeTable');
+        const storeSalesEl = document.getElementById('storeSales');
+
+        let currentStoreIdx = 0;
+        let autoPlayTimer = null;
+
+        const updateDashboard = (index) => {
+            if (index < 0 || index >= storeItems.length) return;
+            currentStoreIdx = index;
+
+            // 1) 좌측 리스트 클래스 토글
+            storeItems.forEach((item, idx) => {
+                if (idx === index) item.classList.add('active');
+                else item.classList.remove('active');
+            });
+
+
+
+            // 3) 정보 수치 카드 페이드 슬라이드 업데이트 (GSAP)
+            const targetItem = storeItems[index];
+            const nextData = {
+                store: targetItem.getAttribute('data-store'),
+                size: targetItem.getAttribute('data-size'),
+                table: targetItem.getAttribute('data-table'),
+                sales: targetItem.getAttribute('data-sales')
+            };
+
+            const animateTextSlot = (el, text) => {
+                if (!el) return;
+                gsap.to(el, {
+                    y: -10,
+                    opacity: 0,
+                    duration: 0.2,
+                    ease: 'power2.in',
+                    onComplete: () => {
+                        el.innerText = text;
+                        gsap.fromTo(el,
+                            { y: 10, opacity: 0 },
+                            { y: 0, opacity: 1, duration: 0.25, ease: 'power2.out' }
+                        );
+                    }
+                });
+            };
+
+            animateTextSlot(storeNameEl, nextData.store);
+            animateTextSlot(storeSizeEl, nextData.size);
+            animateTextSlot(storeTableEl, nextData.table);
+            animateTextSlot(storeSalesEl, nextData.sales);
+        };
+
+        // 수동 클릭 바인딩
+        storeItems.forEach((item, index) => {
+            item.addEventListener('click', () => {
+                stopAutoPlay();
+                updateDashboard(index);
+                startAutoPlay();
+            });
+        });
+
+        // 4초 주기 자동 롤링
+        const startAutoPlay = () => {
+            autoPlayTimer = setInterval(() => {
+                let nextIdx = (currentStoreIdx + 1) % storeItems.length;
+                updateDashboard(nextIdx);
+            }, 4000);
+        };
+
+        const stopAutoPlay = () => {
+            if (autoPlayTimer) clearInterval(autoPlayTimer);
+        };
+
+        // ScrollTrigger 연동: 대시보드가 보일 때 자동 롤링 활성/비활성 및 우측 브랜드 텍스트 유동적 애니메이트 리빌
+        const sloganContainer = salesDashboard.querySelector('.slogan-container');
+        if (sloganContainer) {
+            const animTargets = sloganContainer.querySelectorAll('.sub-slogan, .main-slogan, .dashboard-essence-subtitle, .dashboard-essence-desc');
+            const featDecoBars = sloganContainer.querySelectorAll('.feat-deco-bar');
+            const featItemBoxes = sloganContainer.querySelectorAll('.feat-item-box');
+
+            // 초기 위치 및 페이드 상태 설정
+            gsap.set(animTargets, { opacity: 0, y: 35 });
+            gsap.set(featDecoBars, { scaleX: 0 }); // 가로 0%
+            gsap.set(featItemBoxes, { opacity: 0, y: 25 }); // 3단 텍스트
+
+            const revealTimeline = gsap.timeline({
+                scrollTrigger: {
+                    trigger: salesDashboard,
+                    start: 'top 70%',
+                    toggleActions: 'play none none none'
+                }
+            });
+
+            revealTimeline
+                // 1) 지점 롤러 자동 구동 연동
+                .add(() => startAutoPlay())
+                // 2) 텍스트 stagger 솟아오름 리빌
+                .to(animTargets, {
+                    opacity: 1,
+                    y: 0,
+                    duration: 0.85,
+                    stagger: 0.15,
+                    ease: 'power3.out'
+                })
+                // 3) 삼색 가로 데코바 게이지 드로잉 효과 (왼쪽 ➡️ 오른쪽 슥 채워짐)
+                .to(featDecoBars, {
+                    scaleX: 1,
+                    duration: 0.95,
+                    stagger: 0.12,
+                    ease: 'power2.out'
+                }, '-=0.55')
+                // 4) 피처 수치 텍스트들 퉁퉁 솟아오름
+                .to(featItemBoxes, {
+                    opacity: 1,
+                    y: 0,
+                    duration: 0.75,
+                    stagger: 0.12,
+                    ease: 'back.out(1.5)'
+                }, '-=0.65');
+        }
+
+        ScrollTrigger.create({
+            trigger: salesDashboard,
+            start: 'top 80%',
+            end: 'bottom 20%',
+            onLeave: () => stopAutoPlay(),
+            onEnterBack: () => startAutoPlay(),
+            onLeaveBack: () => stopAutoPlay()
+        });
+    }
+
+    // 5. 두 번째 섹션 (.section-quality) GSAP ScrollTrigger 진입 모션 (사방 교차 입체 리빌 모션 복원)
     const sectionQuality = document.querySelector('.section-quality');
     const qualityLeft = document.querySelector('.quality-left');
     const qualityRight = document.querySelector('.quality-right');
@@ -250,6 +624,8 @@ document.addEventListener('DOMContentLoaded', () => {
     if (sectionQuality && qualityLeft && qualityRight) {
         const qualityTitle = qualityLeft.querySelector('.quality-title');
         const qualitySubtitle = qualityLeft.querySelector('.quality-subtitle');
+        const qualityQuote = qualityLeft.querySelector('.quality-accent-quote');
+        const qualityDesc = qualityLeft.querySelector('.quality-desc');
 
         // 타이틀을 <br> 기준으로 분리하여 좌/우 교차 진입 준비
         if (qualityTitle) {
@@ -267,6 +643,8 @@ document.addEventListener('DOMContentLoaded', () => {
         gsap.set(qualitySubtitle, { opacity: 0, y: -45 }); // 위 ➡️ 아래 초기 상태
         gsap.set(qualityRight, { opacity: 0, y: 70 });       // 아래 ➡️ 위 초기 상태
         gsap.set(qualityLeft, { opacity: 1, y: 0 });          // 부모 래퍼 노출
+        gsap.set(qualityQuote, { opacity: 0, y: 30 });
+        gsap.set(qualityDesc, { opacity: 0, y: 30 });
 
         const qualityTimeline = gsap.timeline({
             scrollTrigger: {
@@ -284,28 +662,42 @@ document.addEventListener('DOMContentLoaded', () => {
             .to(qualitySubtitle, {
                 opacity: 0.9,
                 y: 0,
-                duration: 0.8,
+                duration: 0.7,
                 ease: 'power3.out'
             })
             // 2) 타이틀 1열: 왼쪽 ➡️ 오른쪽으로 슬라이드인
             .to(lineLeft, {
                 opacity: 1,
                 x: 0,
-                duration: 0.9,
+                duration: 0.8,
                 ease: 'power3.out'
-            }, '-=0.5')
+            }, '-=0.4')
             // 3) 타이틀 2열: 오른쪽 ➡️ 왼쪽으로 슬라이드인 (교차 교차)
             .to(lineRight, {
                 opacity: 1,
                 x: 0,
-                duration: 0.9,
+                duration: 0.8,
                 ease: 'power3.out'
-            }, '-=0.7')
-            // 4) 우측 이미지 카드: 아래 ➡️ 위로 솟구치며 안착
+            }, '-=0.6')
+            // 4) 강조 소제목 구문: 슥 드러나기
+            .to(qualityQuote, {
+                opacity: 1,
+                y: 0,
+                duration: 0.7,
+                ease: 'power3.out'
+            }, '-=0.5')
+            // 5) 본문 설명: 슥 드러나기
+            .to(qualityDesc, {
+                opacity: 1,
+                y: 0,
+                duration: 0.7,
+                ease: 'power3.out'
+            }, '-=0.5')
+            // 6) 우측 이미지 카드: 아래 ➡️ 위로 솟구치며 안착
             .to(qualityRight, {
                 opacity: 1,
                 y: 0,
-                duration: 1.1,
+                duration: 1.0,
                 ease: 'power3.out'
             }, '-=0.6');
     }
@@ -425,77 +817,55 @@ document.addEventListener('DOMContentLoaded', () => {
     const sectionPrice = document.querySelector('.section-price');
     const priceLeft = document.querySelector('.price-left');
     const priceRight = document.querySelector('.price-right');
+    const summaryValue = document.querySelector('.summary-value');
     const tablePriceNumEl = document.getElementById('tablePriceNum');
-    const tablePriceGlowEl = document.getElementById('tablePriceGlow');
-    const priceImgWrapImg = document.querySelector('.price-img-wrap img');
 
     if (sectionPrice && priceLeft && priceRight) {
+        // 초깃값 세팅: 금액 수치만 아래에서 수직으로 스르륵 등장 준비
+        if (summaryValue) gsap.set(summaryValue, { opacity: 0, y: 35 });
+
         const priceTimeline = gsap.timeline({
             scrollTrigger: {
                 trigger: sectionPrice,
-                start: 'top 75%', // 섹션 상단이 뷰포트 75% 도달 시
+                start: 'top 70%', // 섹션 진입 시점
                 toggleActions: 'play none none none',
             }
         });
 
-        priceTimeline.to(priceLeft, {
-            opacity: 1,
-            y: 0,
-            duration: 1.0,
-            ease: 'power3.out'
-        })
+        priceTimeline
+            // A) 좌측 타이틀 & 설명 솟구침
+            .to(priceLeft, {
+                opacity: 1,
+                y: 0,
+                duration: 0.9,
+                ease: 'power3.out'
+            })
+            // B) 우측 음식 플레이팅 솟구침
             .to(priceRight, {
                 opacity: 1,
                 y: 0,
                 duration: 1.0,
                 ease: 'power3.out'
-            }, '-=0.7');
+            }, '-=0.7')
+            // C) [심플 & 정갈 연출!] 고정 라인 아래로 금액 수치(10만원)만 스르륵 수직 솟구침!
+            .to(summaryValue, {
+                opacity: 1,
+                y: 0,
+                duration: 0.8,
+                ease: 'power3.out'
+            }, '-=0.5');
 
-        // 단가 카운트업 롤링 (0 -> 10)
+        // D) 단가 카운트업 롤링 (0 -> 10)
         if (tablePriceNumEl) {
             const priceCountObj = { val: 0 };
             priceTimeline.to(priceCountObj, {
                 val: 10,
-                duration: 1.6,
-                ease: 'power3.out',
+                duration: 1.4,
+                ease: 'power2.out',
                 onUpdate: () => {
                     tablePriceNumEl.innerText = Math.floor(priceCountObj.val);
-                },
-                onComplete: () => {
-                    if (tablePriceGlowEl) {
-                        tablePriceGlowEl.classList.add('glow-active');
-                        setTimeout(() => {
-                            tablePriceGlowEl.classList.remove('glow-active');
-                        }, 1200);
-                    }
                 }
-            }, '-=0.5');
-        }
-
-        // 우측 음식 이미지 마우스 입체 3D 패러랙스 연동
-        if (priceImgWrapImg) {
-            sectionPrice.addEventListener('mousemove', (e) => {
-                const { clientX, clientY } = e;
-                // 미세한 깊이 반응 (-15px ~ +15px 범위)
-                const xPos = (clientX / window.innerWidth - 0.5) * 30;
-                const yPos = (clientY / window.innerHeight - 0.5) * 30;
-
-                gsap.to(priceImgWrapImg, {
-                    x: xPos,
-                    y: yPos,
-                    duration: 0.8,
-                    ease: 'power2.out'
-                });
-            });
-
-            sectionPrice.addEventListener('mouseleave', () => {
-                gsap.to(priceImgWrapImg, {
-                    x: 0,
-                    y: 0,
-                    duration: 1.0,
-                    ease: 'power3.out'
-                });
-            });
+            }, '-=0.6');
         }
     }
 
@@ -557,11 +927,11 @@ document.addEventListener('DOMContentLoaded', () => {
             lists.forEach((list, idx) => {
                 const targetDigit = parseInt(list.dataset.target, 10);
                 const targetY = -(10 + targetDigit) * 38;
-                
-                gsap.fromTo(list, 
-                    { y: 0 }, 
-                    { 
-                        y: targetY, 
+
+                gsap.fromTo(list,
+                    { y: 0 },
+                    {
+                        y: targetY,
                         scrollTrigger: {
                             trigger: '.section-hours', // 부모 섹션 전체를 트리거로 고정하여 연산 꼬임 방지
                             start: 'top 85%', // 섹션이 화면 아래 85%에 진입할 때 롤링 시작
@@ -681,101 +1051,92 @@ document.addEventListener('DOMContentLoaded', () => {
             );
     }
 
-    // 11. 일곱 번째 섹션 (.section-growth) GSAP ScrollTrigger 진입 모션
+    // 11. 일곱 번째 섹션 (.section-growth) GSAP ScrollTrigger 진입 모션 (좌우 반갈 50:50 인터랙션)
     const sectionGrowth = document.querySelector('.section-growth');
-    const growthTitleWrap = document.querySelector('.growth-title-wrap');
-    const lineProgress = document.querySelector('.timeline-line-progress');
-    const progressLineSvg = document.querySelector('.timeline-line-progress-svg');
-    const glowParticleSvg = document.querySelector('.timeline-glow-particle-svg');
-    const timelineNodes = document.querySelectorAll('.timeline-node');
+    const growthCircleBorder = document.querySelector('.growth-circle-border');
+    const growthSalesSpots = document.querySelectorAll('.growth-sales-spot');
+    const growthHalves = document.querySelectorAll('.growth-half');
 
-    if (sectionGrowth && growthTitleWrap && timelineNodes.length > 0) {
+    if (sectionGrowth) {
         const growthTimeline = gsap.timeline({
             scrollTrigger: {
                 trigger: sectionGrowth,
-                start: 'top 75%', // 섹션 상단이 뷰포트 75% 도달 시
+                start: 'top 75%',
                 toggleActions: 'play none none none',
             }
         });
 
-        // 1) 성장사 타이틀 등장
-        growthTimeline.fromTo(growthTitleWrap,
-            { opacity: 0, y: 40 },
-            {
-                opacity: 1,
-                y: 0,
-                duration: 1.0,
-                ease: 'power3.out'
-            }
-        );
-
-        // 2) 해상도별 가로/세로 타임라인 선 그리기(Draw-in) 및 노드 팝업
-        const isMobile = window.innerWidth <= 768;
-        if (isMobile) {
-            if (lineProgress) {
-                growthTimeline.fromTo(lineProgress,
-                    { scaleY: 0 },
-                    {
-                        scaleY: 1,
-                        duration: 1.5,
-                        ease: 'power2.inOut'
-                    },
-                    '-=0.5'
-                );
-            }
-        } else {
-            // 데스크톱: SVG 굴곡 곡선 선 그리기 (dashoffset 애니메이션)
-            if (progressLineSvg) {
-                // 디스플레이 none 상태에서 0이 반환되는 문제를 막기 위해 3000px 고정값 지정
-                const pathLength = 3000;
-                // 초기 대기 상태의 dasharray와 dashoffset을 정밀 매칭
-                gsap.set(progressLineSvg, {
-                    strokeDasharray: pathLength,
-                    strokeDashoffset: pathLength
-                });
-
-                growthTimeline.fromTo(progressLineSvg,
-                    { strokeDashoffset: pathLength },
-                    {
-                        strokeDashoffset: 0,
-                        duration: 1.6,
-                        ease: 'power2.inOut',
-                        onComplete: () => {
-                            // 선 드로잉 완료 후, 빛 파티클 곡선 이동 애니메이션 무한 루프 활성화
-                            if (glowParticleSvg) {
-                                gsap.timeline({ repeat: -1 })
-                                    .fromTo(glowParticleSvg,
-                                        { offsetDistance: "0%", opacity: 0 },
-                                        {
-                                            offsetDistance: "100%",
-                                            opacity: 1,
-                                            duration: 4.0,
-                                            ease: 'power1.inOut'
-                                        }
-                                    )
-                                    .to(glowParticleSvg, { opacity: 0, duration: 0.3 }, "-=0.3");
-                            }
-                        }
-                    },
-                    '-=0.5'
-                );
-            }
+        // 1) 중앙 원형 테두리 선 줌인
+        if (growthCircleBorder) {
+            growthTimeline.fromTo(growthCircleBorder,
+                { opacity: 0, scale: 0.75 },
+                {
+                    opacity: 1,
+                    scale: 1,
+                    duration: 1.1,
+                    ease: 'power3.out'
+                }
+            );
         }
 
-        // 3) 노드 순차 팝업 (Stagger)
-        // 스크롤 시 선과 점이 어긋나는 현상을 영구 차단하기 위해 Y축 위치 이동(yPercent)을 배제하고
-        // opacity와 scale 팝업으로만 모션을 정갈하게 처리합니다.
-        growthTimeline.fromTo(timelineNodes,
-            { opacity: 0, scale: 0.7 },
-            {
-                opacity: 1,
-                scale: 1,
-                duration: 0.8,
-                stagger: 0.25,
-                ease: 'back.out(1.5)'
-            },
-            '-=1.2'
-        );
+        // 2) 중앙 원형 타원 (호버 전에도 100% 선명하게 솟구침)
+        const circleHalves = document.querySelectorAll('.circle-half');
+        if (circleHalves.length > 0) {
+            growthTimeline.fromTo(circleHalves,
+                { opacity: 0, scale: 0.8 },
+                {
+                    opacity: 0.95,
+                    scale: 1,
+                    duration: 1.0,
+                    ease: 'power3.out'
+                },
+                '-=0.8'
+            );
+        }
+
+        // 3) 좌측 매출 수치 스폿 솟구침
+        if (growthSalesSpots.length > 0) {
+            growthTimeline.fromTo(growthSalesSpots,
+                { opacity: 0, y: 30 },
+                {
+                    opacity: 0.45,
+                    y: 0,
+                    duration: 0.8,
+                    stagger: 0.2,
+                    ease: 'power3.out'
+                },
+                '-=0.6'
+            );
+        }
+
+        // 4) 우측 하단 4단 성장 막대그래프 솟구침 모션
+        const barItems = document.querySelectorAll('.chart-bar-item');
+        const barFills = document.querySelectorAll('.bar-fill');
+        if (barItems.length > 0) {
+            growthTimeline.fromTo(barItems,
+                { opacity: 0, y: 20 },
+                {
+                    opacity: 1,
+                    y: 0,
+                    duration: 0.6,
+                    stagger: 0.12,
+                    ease: 'power3.out'
+                },
+                '-=0.5'
+            );
+        }
+        if (barFills.length > 0) {
+            growthTimeline.fromTo(barFills,
+                { scaleY: 0 },
+                {
+                    scaleY: 1,
+                    duration: 1.0,
+                    stagger: 0.12,
+                    ease: 'power3.out'
+                },
+                '-=0.6'
+            );
+        }
     }
 
     // 12. 여덟 번째 섹션 (.section-ranking) 매출 데이터 및 전광판 오토 롤링 인터렉션
@@ -1089,14 +1450,15 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // 13. 아홉 번째 섹션 (.section-fillet) GSAP ScrollTrigger 진입 모션 & 3D 마우스 패러랙스
+    // 13. 아홉 번째 섹션 (.section-fillet) GSAP ScrollTrigger 진입 모션 & 3D 쇼케이스
     const sectionFillet = document.querySelector('.section-fillet');
     const filletHeader = document.querySelector('.fillet-header');
-    const filletImageWrap = document.querySelector('.fillet-image-wrap');
-    const filletChefImg = document.querySelector('.fillet-chef-img');
-    const filletCards = document.querySelector('.fillet-cards');
+    const filletImageShowcase = document.querySelector('.fillet-image-showcase');
+    const filletStackCards = document.querySelectorAll('.fillet-stack-card');
+    const filletCenterLine = document.querySelector('.fillet-center-line');
+    const filletBottomLine = document.querySelector('.fillet-bottom-line');
 
-    if (sectionFillet && filletHeader && filletImageWrap && filletCards) {
+    if (sectionFillet && filletHeader && filletImageShowcase) {
         const filletTimeline = gsap.timeline({
             scrollTrigger: {
                 trigger: sectionFillet,
@@ -1105,20 +1467,41 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
 
-        // 1) 중앙 이미지 웅장하게 확대 등장 (헤더 모션은 CSS 클래스로 이관)
-        filletTimeline.to(filletImageWrap, {
+        // 0-1) 정중앙 수직 라인 아래로 드로잉
+        if (filletCenterLine) {
+            filletTimeline.to(filletCenterLine, {
+                scaleY: 1,
+                duration: 0.8,
+                ease: 'power3.inOut'
+            }, 0);
+        }
+
+        // 0-2) 하단 도달 후 양쪽(좌우)으로 라인 뻗어나감
+        if (filletBottomLine) {
+            filletTimeline.to(filletBottomLine, {
+                scaleX: 1,
+                duration: 0.8,
+                ease: 'power3.out'
+            }, 0.6);
+        }
+
+        // 1) 우측 쇼케이스 페이드인 및 웅장한 크기 줌인
+        filletTimeline.to(filletImageShowcase, {
             opacity: 1,
             scale: 1,
             duration: 1.2,
             ease: 'power4.out'
-        })
-            // 2) 하단 카드 래퍼 페이드인
-            .to(filletCards, {
+        }, 0.3)
+            // 2) 좌측 스택 카드들 stagger로 부드럽게 상승 페이드인
+            .to(filletStackCards, {
+                y: 0,
                 opacity: 1,
-                duration: 0.5
+                duration: 0.8,
+                stagger: 0.25,
+                ease: 'power3.out'
             }, '-=0.6');
 
-        // 3.5) 필렛 섹션 모션 감지용 통합 옵저버 (IntersectionObserver 방식)
+        // 3.5) 필렛 섹션 모션 감지용 통합 옵저버
         const filletObserver = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
@@ -1130,15 +1513,39 @@ document.addEventListener('DOMContentLoaded', () => {
         }, { threshold: 0.15 });
         filletObserver.observe(sectionFillet);
 
-        // 4) 필렛 이미지 자동 크로스페이드 슬라이더
+        // 4) 필렛 이미지 자동 크로스페이드 슬라이더 및 인디케이터 클릭 연계
         const filletSlides = document.querySelectorAll('.fillet-slide');
+        const indBars = document.querySelectorAll('.showcase-indicator .ind-bar');
         if (filletSlides.length > 1) {
             let currentSlideIdx = 0;
-            setInterval(() => {
+
+            const switchSlide = (nextIdx) => {
                 filletSlides[currentSlideIdx].classList.remove('active');
-                currentSlideIdx = (currentSlideIdx + 1) % filletSlides.length;
+                if (indBars.length > currentSlideIdx) indBars[currentSlideIdx].classList.remove('active');
+
+                currentSlideIdx = nextIdx;
+
                 filletSlides[currentSlideIdx].classList.add('active');
+                if (indBars.length > currentSlideIdx) indBars[currentSlideIdx].classList.add('active');
+            };
+
+            // 3.5초 주기 자동 롤링
+            let autoSlideInterval = setInterval(() => {
+                const nextIdx = (currentSlideIdx + 1) % filletSlides.length;
+                switchSlide(nextIdx);
             }, 3500);
+
+            // 인디케이터 바 수동 클릭 이벤트 바인딩
+            indBars.forEach((bar, idx) => {
+                bar.addEventListener('click', () => {
+                    clearInterval(autoSlideInterval); // 수동 조작 시 자동 롤링 일시정지 후 재시작
+                    switchSlide(idx);
+                    autoSlideInterval = setInterval(() => {
+                        const nextIdx = (currentSlideIdx + 1) % filletSlides.length;
+                        switchSlide(nextIdx);
+                    }, 3500);
+                });
+            });
         }
     }
 
@@ -1296,7 +1703,7 @@ document.addEventListener('DOMContentLoaded', () => {
             activateItem(targetItem);
             stopAutoRotation();
             if (resumeTimeout) clearTimeout(resumeTimeout);
-            
+
             // 사용자가 조작을 멈추고 8초가 지나면 자동 순환을 다시 시작함
             resumeTimeout = setTimeout(() => {
                 startAutoRotation();
@@ -1547,7 +1954,7 @@ document.addEventListener('DOMContentLoaded', () => {
             rootMargin: '-15% 0px -15% 0px', // 화면 상하단 15% 안쪽에 포커스되었을 때 활성화
             threshold: 0.1 // 10% 이상 요소가 화면에 보일 때
         });
-        
+
         ownerMsgObserver.observe(ownerMessageContainer);
     }
 
@@ -1599,7 +2006,7 @@ document.addEventListener('DOMContentLoaded', () => {
             duration: 0.6,
             ease: 'power2.out'
         }, '-=0.6')
-        .fromTo('.shorts-desc-item', 
+        .fromTo('.shorts-desc-item',
             { opacity: 0, y: 30 },
             { opacity: 1, y: 0, duration: 1.0, stagger: 0.25, ease: 'power2.out' },
             '-=0.5'
@@ -1632,7 +2039,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const inquirerEmailDomain = document.getElementById('inquirerEmailDomain');
 
     if (emailDomainSelect && inquirerEmailDomain) {
-        emailDomainSelect.addEventListener('change', function() {
+        emailDomainSelect.addEventListener('change', function () {
             const selectedVal = this.value;
             if (selectedVal === "") {
                 // 직접 입력 선택 시
@@ -1649,7 +2056,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // GSAP ScrollTrigger 문의하기 섹션 등장 애니메이션
     if (document.querySelector('.section-inquiry')) {
-        gsap.fromTo('.inquiry-header > *', 
+        gsap.fromTo('.inquiry-header > *',
             { opacity: 0, y: 30 },
             {
                 opacity: 1,
@@ -1679,7 +2086,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // 폼 유효성 검사 및 전송 연출
     const inquiryForm = document.getElementById('inquiryForm');
     if (inquiryForm) {
-        inquiryForm.addEventListener('submit', function(e) {
+        inquiryForm.addEventListener('submit', function (e) {
             e.preventDefault();
 
             // 필드 선택
@@ -1776,25 +2183,25 @@ document.addEventListener('DOMContentLoaded', () => {
                     },
                     body: JSON.stringify(formData)
                 })
-                .then(res => res.json())
-                .then(data => {
-                    if (data.success) {
-                        alert('성공적으로 창업 상담 신청이 접수되었습니다.\n담당자가 빠른 시일 내에 기재해주신 연락처로 연락드리겠습니다.');
-                        inquiryForm.reset();
-                        if (emailDomainInput) emailDomainInput.readOnly = false;
-                    } else {
-                        alert(data.message || '상담 신청 접수 중 오류가 발생했습니다.');
-                    }
-                })
-                .catch(err => {
-                    console.error('Submit Error:', err);
-                    alert('서버 전송 중 오류가 발생했습니다. 다시 시도해 주세요.');
-                })
-                .finally(() => {
-                    submitBtn.disabled = false;
-                    submitBtn.innerHTML = origBtnHtml;
-                    submitBtn.style.opacity = '1';
-                });
+                    .then(res => res.json())
+                    .then(data => {
+                        if (data.success) {
+                            alert('성공적으로 창업 상담 신청이 접수되었습니다.\n담당자가 빠른 시일 내에 기재해주신 연락처로 연락드리겠습니다.');
+                            inquiryForm.reset();
+                            if (emailDomainInput) emailDomainInput.readOnly = false;
+                        } else {
+                            alert(data.message || '상담 신청 접수 중 오류가 발생했습니다.');
+                        }
+                    })
+                    .catch(err => {
+                        console.error('Submit Error:', err);
+                        alert('서버 전송 중 오류가 발생했습니다. 다시 시도해 주세요.');
+                    })
+                    .finally(() => {
+                        submitBtn.disabled = false;
+                        submitBtn.innerHTML = origBtnHtml;
+                        submitBtn.style.opacity = '1';
+                    });
             }
         });
     }
@@ -1870,7 +2277,7 @@ document.addEventListener('DOMContentLoaded', () => {
             title.addEventListener('click', () => {
                 const parentLi = title.parentElement;
                 const submenu = parentLi.querySelector('.mobile-submenu');
-                
+
                 // 기존 활성화된 서브메뉴가 있다면 닫아주기 (선택 사항)
                 const alreadyOpenSubmenu = document.querySelector('.mobile-menu-links .has-submenu.open');
                 if (alreadyOpenSubmenu && alreadyOpenSubmenu !== parentLi) {
@@ -2065,7 +2472,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // ==========================================================================
     const storyTracks = document.querySelectorAll('.story-track');
     const storyBgs = document.querySelectorAll('.story-bg');
-    
+
     if (storyTracks.length > 0 && storyBgs.length > 0) {
         storyTracks.forEach((track, idx) => {
             // 1. 스크롤 휠 진행에 맞춰 배경 이미지 교차 디졸브 (Fade Cross)
@@ -2082,17 +2489,16 @@ document.addEventListener('DOMContentLoaded', () => {
                     }
                 }
             });
-            
             // 2. 각 트랙 텍스트 단락들의 순차적 페이드인 (stagger 패럴랙스 모션)
             const fadeElements = track.querySelectorAll('.font-fade, .story-chapter, .story-title, .story-line, .story-desc, .outro-btn-wrap');
             if (fadeElements.length > 0) {
                 gsap.fromTo(fadeElements,
                     { opacity: 0, y: 40 },
                     {
-                        opacity: 1, 
-                        y: 0, 
-                        duration: 1.1, 
-                        stagger: 0.14, 
+                        opacity: 1,
+                        y: 0,
+                        duration: 1.1,
+                        stagger: 0.14,
                         ease: 'power3.out',
                         scrollTrigger: {
                             trigger: track,
@@ -2113,7 +2519,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const commPanels = document.querySelectorAll('.comm-panel');
 
     if (commSection && commTabBtns.length > 0) {
-        
+
         // 1. 탭 전환 기능 (동적 URL 동기화 및 GSAP 등장 모션 연계)
         const switchCommTab = (targetTab) => {
             commTabBtns.forEach(btn => btn.classList.remove('active'));
@@ -2128,7 +2534,7 @@ document.addEventListener('DOMContentLoaded', () => {
             if (activeBtn) activeBtn.classList.add('active');
             if (activePanel) {
                 activePanel.classList.add('active');
-                
+
                 // 패널 페이드인 등장 애니메이션
                 gsap.fromTo(activePanel,
                     { opacity: 0, y: 15 },
@@ -2171,7 +2577,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             });
         });
-        
+
         // 초기 로드 시 활성화된 FAQ가 있다면 높이 설정 보장
         const activeFaq = document.querySelector('.faq-item.active');
         if (activeFaq) {
@@ -2204,14 +2610,14 @@ document.addEventListener('DOMContentLoaded', () => {
         if (commVoiceModalOverlay) commVoiceModalOverlay.addEventListener('click', closeVoiceModal);
 
         if (commVoiceForm) {
-            commVoiceForm.addEventListener('submit', function(e) {
+            commVoiceForm.addEventListener('submit', function (e) {
                 e.preventDefault();
                 const submitBtn = this.querySelector('.btn-comm-submit');
                 const origBtnHtml = submitBtn.innerHTML;
-                
+
                 submitBtn.disabled = true;
                 submitBtn.innerHTML = `<span>접수 중입니다...</span>`;
-                
+
                 setTimeout(() => {
                     alert('불편/불만 사항이 비밀글로 안전하게 접수되었습니다.');
                     commVoiceForm.reset();
@@ -2247,14 +2653,14 @@ document.addEventListener('DOMContentLoaded', () => {
         if (commInquiryModalOverlay) commInquiryModalOverlay.addEventListener('click', closeInquiryModal);
 
         if (commInquiryForm) {
-            commInquiryForm.addEventListener('submit', function(e) {
+            commInquiryForm.addEventListener('submit', function (e) {
                 e.preventDefault();
                 const submitBtn = this.querySelector('.btn-comm-submit');
                 const origBtnHtml = submitBtn.innerHTML;
-                
+
                 submitBtn.disabled = true;
                 submitBtn.innerHTML = `<span>접수 중입니다...</span>`;
-                
+
                 setTimeout(() => {
                     alert('가맹/제휴 문의사항이 비밀글로 안전하게 접수되었습니다.');
                     commInquiryForm.reset();
@@ -2264,6 +2670,34 @@ document.addEventListener('DOMContentLoaded', () => {
                 }, 1500);
             });
         }
+
+        // 5. 브랜드 철학 섹션 (section-philosophy) 스크롤 락 및 드래그 충돌 원천 배제 (CSS 무한 롤러 지원)
+        const sectionPhilo = document.querySelector('.section-philosophy');
+        if (sectionPhilo) {
+            const viewport = sectionPhilo.querySelector('.philo-carousel-viewport');
+
+            // 시각적 피드백: 섹션이 뷰포트에 도달했을 때 슬라이더 전체가 슥 떠오르는 1회성 GSAP 페이드인 연출 (Pin 없음!)
+            if (viewport) {
+                try {
+                    gsap.fromTo(viewport,
+                        { opacity: 0, y: 40 },
+                        {
+                            opacity: 1,
+                            y: 0,
+                            duration: 0.8,
+                            ease: "power2.out",
+                            scrollTrigger: {
+                                trigger: sectionPhilo,
+                                start: "top 80%",
+                                toggleActions: "play none none none"
+                            }
+                        }
+                    );
+                } catch (err) {
+                    console.warn("Philosophy reveal GSAP failed:", err);
+                }
+            }
+        }
     }
 
 });
@@ -2271,5 +2705,12 @@ document.addEventListener('DOMContentLoaded', () => {
 // 모든 리소스(이미지 등) 로드 완료 시 ScrollTrigger 위치를 재계산하여 레이아웃 시프트로 인한 좌표 왜곡 해결
 window.addEventListener('load', () => {
     ScrollTrigger.refresh();
-});
 
+    // 지연 렌더링에 대응하기 위한 시차 재조정 루프
+    setTimeout(() => {
+        ScrollTrigger.refresh();
+    }, 300);
+    setTimeout(() => {
+        ScrollTrigger.refresh();
+    }, 800);
+});
