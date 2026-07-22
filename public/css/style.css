@@ -119,17 +119,18 @@ header {
     left: 0;
     width: 100%;
     z-index: 1000;
-    background: rgba(255, 255, 255, 0.95);
+    background: #ffffff !important;
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
-    border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.08) !important;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05) !important;
     transition: var(--transition);
 }
 
 header.scrolled {
-    background: rgba(255, 255, 255, 0.98);
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
-    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+    background: #ffffff !important;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08) !important;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.08) !important;
 }
 
 nav {
@@ -165,14 +166,14 @@ nav {
 
 .nav-links a {
     text-decoration: none;
-    color: rgba(10, 10, 10, 0.8);
-    font-weight: 600;
+    color: #111111 !important;
+    font-weight: 700;
     font-size: 16px;
     transition: var(--transition);
 }
 
 .nav-links li:hover>a {
-    color: var(--color-gold);
+    color: #0056b3 !important;
 }
 
 /* Header CTA Button (둥근 형태 가맹문의 버튼) */
@@ -8198,17 +8199,21 @@ footer {
    ========================================================================== */
 @media (max-width: 768px) {
     .reveal-section {
-        height: 100vh !important;
+        height: auto !important;
+        min-height: 100vh !important;
         overflow: hidden !important;
         background-color: #00182e !important;
+        will-change: transform;
+        transform: translateZ(0);
     }
 
     .reveal-inner {
-        height: 100% !important;
+        height: auto !important;
+        min-height: 100vh !important;
     }
 
     .reveal-overlay {
-        display: block !important;
+        display: none !important;
     }
 
     .shorts-container {
@@ -10863,6 +10868,10 @@ footer {
    모바일 전용 반응형 스타일 (max-width: 767px)
    ========================================================================== */
 @media (max-width: 767px) {
+    .fillet-center-line {
+        display: none !important;
+    }
+
     .ranking-decor-img-wrap {
         width: 454px !important;
         max-width: 120vw !important;

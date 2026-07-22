@@ -407,7 +407,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const pinTimeline = gsap.timeline({
                 scrollTrigger: {
                     trigger: sectionProblems,
-                    start: 'top top',
+                    start: 'top+=100px top', // 스크롤이 100px 더 진행되어 섹션 콘텐츠가 화면 더 아래쪽 깊숙이 안착했을 때 멈춤 고정
                     end: scrollDistance, // 고정되어 스크롤할 총 거리 (모바일은 좀 더 기민하게)
                     pin: true,
                     scrub: 0.5,
@@ -921,7 +921,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 ease: 'power3.out'
             }, '-=0.6');
 
-        // 3.5) 각 시간 숫자의 롤러 회전만 독자적으로 스크롤에 연동 (충돌방지 분리 설계)
+        // 3.5) 각 시간 숫자의 롤러 회전: 스크롤 진입 시 1회만 촤르륵 롤링되다 목표 시간으로 깔끔하게 세팅 완료
         hoursCards.forEach((card, cardIdx) => {
             const lists = card.querySelectorAll('.ticker-number-list');
             lists.forEach((list, idx) => {
@@ -932,11 +932,14 @@ document.addEventListener('DOMContentLoaded', () => {
                     { y: 0 },
                     {
                         y: targetY,
+                        duration: 1.6,
+                        delay: cardIdx * 0.15 + idx * 0.08, // 카드 및 자리수별 미세 엇박자 롤링 쾌감
+                        ease: 'power3.out',
                         scrollTrigger: {
-                            trigger: '.section-hours', // 부모 섹션 전체를 트리거로 고정하여 연산 꼬임 방지
-                            start: 'top 85%', // 섹션이 화면 아래 85%에 진입할 때 롤링 시작
-                            end: 'bottom 15%', // 섹션이 화면 위 15%로 나갈 때까지 점진적으로 롤링
-                            scrub: 1.5 // 스크롤에 자연스럽게 동기화되어 회전
+                            trigger: '.section-hours',
+                            start: 'top 75%',
+                            toggleActions: 'play none none none',
+                            once: true
                         }
                     }
                 );
@@ -1958,59 +1961,71 @@ document.addEventListener('DOMContentLoaded', () => {
         ownerMsgObserver.observe(ownerMessageContainer);
     }
 
-    // 서클 마스크 리빌 & 숏츠 컨텐츠 순차 페이드 타임라인 정의
-    const revealTimeline = gsap.timeline({
-        scrollTrigger: {
-            trigger: '.reveal-section',
-            start: 'top top',
-            end: '+=200%', // 스크롤바 높이를 강제로 약 2배 넓혀 고정시간(Pinned) 확보
-            scrub: 1,      // 스크롤바 이동 속도와 애니메이션 프레임을 1:1로 정밀 정합(부드러운 스크럽)
-            pin: true,     // 마스크가 완전히 다 넓어질 때까지 뷰포트를 화면에 고정시킴
-            anticipatePin: 1
-        }
-    });
+    // 서클 마스크 리빌 & 숏츠 컨텐츠 순차 페이드 타임라인 정의 (모바일 성능 모드 분기)
+    const revealElem = document.querySelector('.reveal-section');
+    if (revealElem) {
+        const isMobileDevice = window.innerWidth <= 768;
 
-    revealTimeline
-        // 1. 위에 덮인 이미지의 마스크 원을 화면 밖(150% 크기)으로 확장하여 내부 숏츠 노출
-        .to('.reveal-overlay', {
-            clipPath: 'circle(150% at 50% 50%)',
-            duration: 2,
-            ease: 'none'
-        })
-        // 2. 마스크가 팽창함과 동시에 내부 숏츠 래퍼 드러내기 및 활성화
-        .to('.shorts-container', {
-            opacity: 1,
-            pointerEvents: 'auto', // 완전 등장 시 비디오 클릭 가능하도록 처리
-            duration: 1,
-            ease: 'power2.out'
-        }, '-=1') // 전체 타임라인상 마스크가 거의 다 커져가는 시점(-1초)에 겹침 시작
-        // 3. 숏츠 비디오 카드들이 위에서 아래로 미끄러지며 정렬 (Stagger)
-        .to('.shorts-card', {
-            opacity: 1,
-            y: 0,
-            duration: 1.2,
-            stagger: 0.15,
-            ease: 'expo.out'
-        }, '-=0.5')
-        // 4. 우측 정보 타이틀과 텍스트들이 엇박자로 솟아나며 등장 (모션 효과 개선)
-        .to('.shorts-title', {
-            opacity: 1,
-            x: 0,
-            y: 0,
-            duration: 1.2,
-            ease: 'power3.out'
-        }, '-=0.8')
-        .to('.shorts-metrics', {
-            opacity: 1,
-            x: 0,
-            duration: 0.6,
-            ease: 'power2.out'
-        }, '-=0.6')
-        .fromTo('.shorts-desc-item',
-            { opacity: 0, y: 30 },
-            { opacity: 1, y: 0, duration: 1.0, stagger: 0.25, ease: 'power2.out' },
-            '-=0.5'
-        );
+        if (isMobileDevice) {
+            // 모바일: CPU/GPU 프레임 드롭을 유발하는 heavy clipPath/pin 스크롤을 경량화 처리하여 모바일 스크롤 버벅거림 100% 해결
+            gsap.set('.reveal-overlay', { clipPath: 'circle(150% at 50% 50%)' });
+            gsap.set('.shorts-container', { opacity: 1, pointerEvents: 'auto' });
+            gsap.set('.shorts-card', { opacity: 1, y: 0 });
+            gsap.set('.shorts-title', { opacity: 1, x: 0, y: 0 });
+            gsap.set('.shorts-metrics', { opacity: 1, x: 0 });
+            gsap.set('.shorts-desc-item', { opacity: 1, y: 0 });
+        } else {
+            // 데스크톱: 시네마틱 clipPath & Pin 타임라인 적용
+            const revealTimeline = gsap.timeline({
+                scrollTrigger: {
+                    trigger: '.reveal-section',
+                    start: 'top top',
+                    end: '+=200%',
+                    scrub: 1,
+                    pin: true,
+                    anticipatePin: 1
+                }
+            });
+
+            revealTimeline
+                .to('.reveal-overlay', {
+                    clipPath: 'circle(150% at 50% 50%)',
+                    duration: 2,
+                    ease: 'none'
+                })
+                .to('.shorts-container', {
+                    opacity: 1,
+                    pointerEvents: 'auto',
+                    duration: 1,
+                    ease: 'power2.out'
+                }, '-=1')
+                .to('.shorts-card', {
+                    opacity: 1,
+                    y: 0,
+                    duration: 1.2,
+                    stagger: 0.15,
+                    ease: 'expo.out'
+                }, '-=0.5')
+                .to('.shorts-title', {
+                    opacity: 1,
+                    x: 0,
+                    y: 0,
+                    duration: 1.2,
+                    ease: 'power3.out'
+                }, '-=0.8')
+                .to('.shorts-metrics', {
+                    opacity: 1,
+                    x: 0,
+                    duration: 0.6,
+                    ease: 'power2.out'
+                }, '-=0.6')
+                .fromTo('.shorts-desc-item',
+                    { opacity: 0, y: 30 },
+                    { opacity: 1, y: 0, duration: 1.0, stagger: 0.25, ease: 'power2.out' },
+                    '-=0.5'
+                );
+        }
+    }
     // 매장현황 바로가기 섹션 (.section-store-shortcut) GSAP ScrollTrigger 진입 모션
     const sectionStoreShortcut = document.querySelector('.section-store-shortcut');
     const shortcutContent = document.querySelector('.shortcut-content');
