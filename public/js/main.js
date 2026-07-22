@@ -2364,42 +2364,13 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // 하단 고정 퀵 문의바 스크롤 감지 및 닫기 제어 (Session Storage 연동 및 비동기 AJAX 전송 지원)
+    // 하단 고정 퀵 문의바 (Sticky Quick Contact Bar)
     const stickyQuickBar = document.getElementById('stickyQuickBar');
-    const btnQuickClose = document.getElementById('btnQuickClose');
     const quickBarForm = document.getElementById('quickBarForm');
     const quickAgree = document.getElementById('quickAgree');
 
     if (stickyQuickBar) {
-        // 브라우저 세션 동안 사용자가 명시적으로 닫았는지 확인
-        const isClosed = sessionStorage.getItem('quickBarClosed');
-
-        // 스크롤 위치 감지하여 퀵바 표시 상태 업데이트
-        const handleScroll = () => {
-            if (isClosed === 'true') {
-                stickyQuickBar.classList.add('is-hidden');
-                return;
-            }
-
-            // 300px 이상 스크롤 시 퀵바 노출
-            if (window.scrollY > 300) {
-                stickyQuickBar.classList.remove('is-hidden');
-            } else {
-                stickyQuickBar.classList.add('is-hidden');
-            }
-        };
-
-        window.addEventListener('scroll', handleScroll);
-        handleScroll(); // 초기 스크롤 위치 보정
-
-        // 닫기 버튼 클릭 처리
-        if (btnQuickClose) {
-            btnQuickClose.addEventListener('click', (e) => {
-                e.preventDefault();
-                stickyQuickBar.classList.add('is-hidden');
-                sessionStorage.setItem('quickBarClosed', 'true');
-            });
-        }
+        stickyQuickBar.classList.remove('is-hidden');
 
         // 폼 비동기 전송 처리
         if (quickBarForm) {
