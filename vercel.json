@@ -7,7 +7,26 @@
     }
   ],
   "routes": [
-    { "handle": "filesystem" },
+    {
+      "src": "/video/(.*)",
+      "dest": "/public/video/$1"
+    },
+    {
+      "src": "/images/(.*)",
+      "dest": "/public/images/$1"
+    },
+    {
+      "src": "/css/(.*)",
+      "dest": "/public/css/$1"
+    },
+    {
+      "src": "/js/(.*)",
+      "dest": "/public/js/$1"
+    },
+    {
+      "src": "/favicon.(.*)",
+      "dest": "/public/favicon.$1"
+    },
     {
       "src": "/(.*)",
       "dest": "app.js"
