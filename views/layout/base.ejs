@@ -46,6 +46,9 @@
     <link rel="preconnect" href="https://cdn.jsdelivr.net">
     <link rel="preconnect" href="https://cdnjs.cloudflare.com">
 
+    <!-- 히어로 포스터 이미지 사전 로딩 (0.01초 최우선 visual 렌더링) -->
+    <link rel="preload" as="image" href="/images/main_dish.webp" type="image/webp">
+
     <!-- Web Fonts 병렬 직접 로딩 (CSS @import 워터폴 병목 제거) -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anton&family=Noto+Sans+KR:wght@300;400;500;700;900&family=Outfit:wght@300;400;600;800&display=swap">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css">

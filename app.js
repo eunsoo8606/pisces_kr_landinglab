@@ -26,6 +26,12 @@ const popupRouter = require('./routes/popup');
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
 
+// 동영상 미디어 전용 캐시 및 스트리밍 최적화
+app.use('/video', express.static(path.join(__dirname, 'public/video'), {
+    maxAge: '30d',
+    etag: true
+}));
+
 // 정적 파일 미들웨어 (HTTP 브라우저 캐싱 maxAge 및 ETag 활성화)
 app.use(express.static(path.join(__dirname, 'public'), {
     maxAge: '1d', // 24시간 캐싱으로 재방문 시 로딩 속도 즉시 전송
