@@ -1,11 +1,15 @@
 // 환경변수(.env) 로드
 require('dotenv').config();
 
+const compression = require('compression');
 const express = require('express');
 const path = require('path');
 const cookieParser = require('cookie-parser');
 const app = express();
 const PORT = process.env.PORT || 3000;
+
+// Gzip/Brotli 응답 압축 미들웨어 (HTML, CSS, JS 전송 용량 70~80% 감소)
+app.use(compression());
 
 // DB 연결 풀 임포트 (접속 로그 미들웨어용)
 const db = require('./db/database');
@@ -22,8 +26,11 @@ const popupRouter = require('./routes/popup');
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
 
-// 정적 파일 미들웨어
-app.use(express.static(path.join(__dirname, 'public')));
+// 정적 파일 미들웨어 (HTTP 브라우저 캐싱 maxAge 및 ETag 활성화)
+app.use(express.static(path.join(__dirname, 'public'), {
+    maxAge: '1d', // 24시간 캐싱으로 재방문 시 로딩 속도 즉시 전송
+    etag: true
+}));
 
 // 요청 본문 파서 및 쿠키 파서 미들웨어
 app.use(express.urlencoded({ extended: true }));

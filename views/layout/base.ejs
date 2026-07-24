@@ -40,12 +40,22 @@
     <meta name="twitter:description" content="<%= locals.metaDescription || '칼 없는 주방, 주방장 없는 횟집. 물고기자리에서 성공적인 프리미엄 숙성회 프랜차이즈 창업을 시작하세요.' %>">
     <meta name="twitter:image" content="<%= baseUrl %>/images/logo/meta-logo.webp">
 
+    <!-- 외부 도메인 DNS/TLS 프리커넥트 (네트워크 핸드셰이크 지연 0ms화) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://cdn.jsdelivr.net">
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com">
+
+    <!-- Web Fonts 병렬 직접 로딩 (CSS @import 워터폴 병목 제거) -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anton&family=Noto+Sans+KR:wght@300;400;500;700;900&family=Outfit:wght@300;400;600;800&display=swap">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css">
+
     <link rel="stylesheet" href="/css/style.css?v=12.4">
-    <!--GSAP for animations -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
-    <!-- Lenis for smooth scrolling -->
-    <script src="https://unpkg.com/@studio-freight/lenis@1.0.33/dist/lenis.min.js"></script>
+
+    <!-- Non-blocking 외부 라이브러리 스크립트 (defer 로딩으로 HTML 렌더링 블로킹 100% 해제) -->
+    <script defer src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script defer src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <script defer src="https://unpkg.com/@studio-freight/lenis@1.0.33/dist/lenis.min.js"></script>
 </head>
 
 <body>

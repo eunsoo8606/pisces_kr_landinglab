@@ -884,7 +884,7 @@
 
                 <!-- 중앙 원형의 '좌측 반' (이미지) -->
                 <div class="circle-half circle-half-left">
-                    <video autoplay loop muted playsinline class="circle-video-half" width="300">
+                    <video autoplay loop muted playsinline preload="none" class="circle-video-half" width="300">
                         <source src="/video/left-mugogijari.mp4" type="video/mp4">
                     </video>
                     <div class="circle-inner-shadow"></div>
@@ -966,7 +966,7 @@
 
                 <!-- 중앙 원형의 '우측 반' (동영상) -->
                 <div class="circle-half circle-half-right">
-                    <video autoplay loop muted playsinline class="circle-video-half">
+                    <video autoplay loop muted playsinline preload="none" class="circle-video-half">
                         <source src="/video/sec_3.mp4" type="video/mp4">
                     </video>
                     <div class="circle-inner-shadow"></div>
@@ -981,6 +981,10 @@
 
     <!-- 여덟 번째 섹션: 월별 일일 최고 매출 랭킹보드 -->
     <section class="section-ranking">
+        <!-- 좌측 상단 매장 전경 데코 배치 -->
+        <div class="ranking-decor-store-wrap">
+            <img src="/images/store2.png" alt="물고기자리 매장 전경" class="ranking-decor-store-img">
+        </div>
         <!-- 우측 상단 숙성회 세트 프리미엄 데코 배치 -->
         <div class="ranking-decor-img-wrap">
             <img src="/images/sashimi-set.png" alt="물고기자리 프리미엄 모둠 숙성회 세트" class="ranking-decor-img">
@@ -989,7 +993,7 @@
             <!-- 상단 헤더 영역 -->
             <div class="ranking-header">
                 <span class="ranking-subtitle">매월 일일 최고 매출 생산</span>
-                <h2 class="ranking-title">다양한 상권에서 최상의 매출</h2>
+                <h2 class="ranking-title">다양한 상권에서 <span class="highlight">최상의 매출</span></h2>
             </div>
 
             <!-- 2025년 드롭다운 및 월별 수평 탭 -->
@@ -1348,7 +1352,7 @@
                 <div class="hours-card-float-wrap">
                     <div class="hours-card card-active">
                         <div class="card-bg-img">
-                            <video autoplay loop muted playsinline>
+                            <video autoplay loop muted playsinline preload="none">
                                 <source src="/video/sec_3.mp4" type="video/mp4">
                             </video>
                         </div>
@@ -1397,9 +1401,10 @@
                     </div>
                     <h2 class="menu-headline">
                         <span class="menu-headline-sm">명품 숙성회를 더욱 찬란하게</span>
-                        미식을 완성하는 일품 요리
+                        미식을 완성하는 <br class="mobile-br">일품 요리
                     </h2>
-                    <p class="menu-sub">물고기자리가 선사하는 저녁은 단순히 회를 먹는 시간을 넘어, 입안 가득 펼쳐지는 화려하고 푸짐한 미식의 축제입니다.</p>
+                    <p class="menu-sub">매일 새벽 가장 신선한 횟감을 엄선하고 <br class="mobile-br">정성스럽게 숙성시켜,그 정직한 시간을 지나 오늘도 고객의 식탁
+                        위에 정갈하게 올립니다.</p>
                 </div>
 
                 <!-- 가로형 탭 네비게이션 -->
