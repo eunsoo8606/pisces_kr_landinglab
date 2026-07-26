@@ -277,7 +277,7 @@ document.addEventListener('DOMContentLoaded', () => {
             // GSAP로 초기 대기 위치를 디바이스별 오프셋에 맞춰 동적 세팅
             gsap.set(infoCardsLeft, { x: -cardXOffset });
             gsap.set(infoCardsRight, { x: cardXOffset });
-            gsap.set(scrollFork, { x: forkTranslateX, y: forkTranslateY });
+            gsap.set(scrollFork, { xPercent: -50, x: forkTranslateX, y: forkTranslateY });
 
             const heroScrollTl = gsap.timeline({
                 scrollTrigger: {
@@ -300,8 +300,9 @@ document.addEventListener('DOMContentLoaded', () => {
                     duration: 1,
                     ease: 'power2.inOut'
                 })
-                // B) 우측 상단 젓가락 이미지가 대각선 방향으로 내려오며 페이드인
+                // B) 젓가락 이미지가 대각선 방향으로 내려오며 정중앙에 페이드인
                 .to(scrollFork, {
+                    xPercent: -50,
                     x: 0,
                     y: 0,
                     opacity: 1,

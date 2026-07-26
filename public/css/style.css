@@ -2042,7 +2042,7 @@ main {
 }
 
 .cost-note.return {
-    color: #4ecdc4 !important;
+    color: #0056b3 !important;
     font-weight: 600;
 }
 
@@ -2085,7 +2085,7 @@ main {
 .total-unit {
     font-size: 18px;
     font-weight: 600;
-    color: rgba(0, 242, 254, 0.75);
+    color: #0056b3;
     margin-left: 4px;
 }
 
@@ -7491,7 +7491,6 @@ footer {
     z-index: 1;
 }
 
-/* 폼 타이틀 및 헤더 */
 .inquiry-header {
     text-align: center;
     margin-bottom: 70px;
@@ -7501,7 +7500,7 @@ footer {
     font-family: 'Outfit', sans-serif;
     font-size: 14px;
     font-weight: 700;
-    color: #00a8cc;
+    color: #0056b3;
     letter-spacing: 3px;
     display: block;
     margin-bottom: 15px;
@@ -13065,7 +13064,7 @@ footer {
     .hero-scroll-fork {
         width: 320px !important;
         top: 20% !important;
-        right: auto !important;
+        right: 30% !important;
         left: 50% !important;
         transform: translateX(-50%) translate(20px, -20px) !important;
         /* 중앙 배치 및 대기 오프셋 */
