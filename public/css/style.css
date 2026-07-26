@@ -8866,7 +8866,7 @@ footer {
 }
 
 .story-text-block {
-    max-width: 580px;
+    max-width: 606px;
     color: #ffffff;
     font-family: 'Noto Serif KR', serif;
     background: rgba(0, 0, 0, 0.4);
@@ -9150,7 +9150,7 @@ footer {
     left: 0;
     width: 100%;
     height: 100%;
-    background: linear-gradient(to bottom, rgba(0, 0, 0, 0.7) 0%, rgba(0, 0, 0, 0.5) 70%, #000000 100%);
+    background: linear-gradient(to bottom, rgba(0, 0, 0, 0.75) 0%, rgba(0, 0, 0, 0.4) 60%, #ffffff 100%);
     z-index: 2;
 }
 
@@ -9183,13 +9183,13 @@ footer {
 
 .comm-hero-desc {
     font-size: 18px;
-    color: rgba(255, 255, 255, 0.7);
+    color: rgba(255, 255, 255, 0.85);
     line-height: 1.6;
     word-break: keep-all;
 }
 
 .comm-page-content {
-    background-color: #000000;
+    background-color: #ffffff;
     padding: 80px 0 120px;
     min-height: 600px;
 }
@@ -9211,18 +9211,17 @@ footer {
 .comm-tabs {
     display: flex;
     gap: 10px;
-    background: rgba(255, 255, 255, 0.02);
-    border: 1px solid rgba(255, 255, 255, 0.05);
+    background: #f1f5f9;
+    border: 1px solid #e2e8f0;
     padding: 6px;
     border-radius: 50px;
-    backdrop-filter: blur(10px);
     height: auto;
 }
 
 .comm-tab-btn {
     background: none;
     border: none;
-    color: rgba(255, 255, 255, 0.6);
+    color: #475569;
     padding: 14px 28px;
     font-size: 15px;
     font-weight: 600;
@@ -9233,15 +9232,15 @@ footer {
 }
 
 .comm-tab-btn:hover {
-    color: #ffffff;
-    background: rgba(255, 255, 255, 0.04);
+    color: #0f172a;
+    background: rgba(0, 0, 0, 0.04);
 }
 
 .comm-tab-btn.active {
     background: #0056b3;
     /* 포인트 로열 블루 */
     color: #ffffff;
-    box-shadow: 0 8px 20px rgba(0, 86, 179, 0.3);
+    box-shadow: 0 8px 20px rgba(0, 86, 179, 0.25);
 }
 
 /* 탭 패널 전환 공통 */
@@ -9261,31 +9260,33 @@ footer {
 .board-table-wrap {
     width: 100%;
     overflow-x: auto;
-    background: rgba(255, 255, 255, 0.01);
-    border: 1px solid rgba(255, 255, 255, 0.04);
-    border-radius: 12px;
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    box-shadow: 0 4px 25px rgba(0, 0, 0, 0.03);
+    border-radius: 14px;
 }
 
 .board-table {
     width: 100%;
     border-collapse: collapse;
     text-align: left;
-    color: rgba(255, 255, 255, 0.7);
+    color: #334155;
     font-family: 'Noto Serif KR', serif;
 }
 
 .board-table th,
 .board-table td {
     padding: 20px 24px;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+    border-bottom: 1px solid #f1f5f9;
 }
 
 .board-table th {
-    background: rgba(255, 255, 255, 0.02);
+    background: #f8fafc;
     font-weight: 700;
-    color: #ffffff;
+    color: #0f172a;
     font-size: 15px;
     letter-spacing: 1px;
+    border-bottom: 1px solid #e2e8f0;
 }
 
 .board-table td {
@@ -9297,15 +9298,14 @@ footer {
 }
 
 .board-table tbody tr:hover {
-    background: rgba(0, 86, 179, 0.03);
-    /* 호버 시 딥 블루 딤드 광채 */
+    background: #f8fafc;
 }
 
 .board-table td a {
-    color: rgba(255, 255, 255, 0.85);
+    color: #0f172a;
     text-decoration: none;
     transition: color 0.2s ease;
-    font-weight: 500;
+    font-weight: 600;
 }
 
 .board-table tbody tr:hover td a {
@@ -9326,17 +9326,17 @@ footer {
 .col-date {
     width: 15%;
     text-align: center;
-    color: rgba(255, 255, 255, 0.4);
+    color: #64748b;
 }
 
 .col-views {
     width: 15%;
     text-align: center;
-    color: rgba(255, 255, 255, 0.4);
+    color: #64748b;
 }
 
 .notice-pinned {
-    background: rgba(0, 86, 179, 0.015);
+    background: #f0f7ff;
 }
 
 .badge-pin {
@@ -9362,16 +9362,17 @@ footer {
 }
 
 .faq-item {
-    background: rgba(255, 255, 255, 0.01);
-    border: 1px solid rgba(255, 255, 255, 0.04);
-    border-radius: 10px;
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
     overflow: hidden;
     transition: all 0.3s ease;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.02);
 }
 
 .faq-item:hover {
-    border-color: rgba(0, 86, 179, 0.3);
-    box-shadow: 0 10px 25px rgba(0, 86, 179, 0.04);
+    border-color: #93c5fd;
+    box-shadow: 0 8px 25px rgba(0, 86, 179, 0.08);
 }
 
 .faq-question {
@@ -9383,7 +9384,7 @@ footer {
     padding: 24px;
     text-align: left;
     cursor: pointer;
-    color: #ffffff;
+    color: #0f172a;
     font-size: 17px;
     font-weight: 700;
     transition: background 0.3s ease;
@@ -9405,7 +9406,7 @@ footer {
 
 .faq-arrow-icon {
     font-size: 20px;
-    color: rgba(255, 255, 255, 0.3);
+    color: #94a3b8;
     margin-left: 15px;
     transition: transform 0.35s cubic-bezier(0.165, 0.84, 0.44, 1);
     line-height: 1;
@@ -9417,23 +9418,23 @@ footer {
 }
 
 .faq-item.active {
-    background: rgba(0, 86, 179, 0.01);
-    border-color: rgba(0, 86, 179, 0.3);
+    background: #ffffff;
+    border-color: #3b82f6;
 }
 
 .faq-answer {
     max-height: 0;
     overflow: hidden;
     transition: max-height 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
-    background: rgba(0, 0, 0, 0.2);
+    background: #f8fafc;
 }
 
 .faq-answer-inner {
     padding: 24px;
     font-size: 15px;
-    color: rgba(255, 255, 255, 0.65);
+    color: #334155;
     line-height: 1.8;
-    border-top: 1px solid rgba(255, 255, 255, 0.03);
+    border-top: 1px solid #e2e8f0;
     word-break: keep-all;
     font-family: 'Noto Serif KR', serif;
 }
@@ -9448,20 +9449,21 @@ footer {
 }
 
 .voice-card {
-    background: rgba(255, 255, 255, 0.01);
-    border: 1px solid rgba(255, 255, 255, 0.03);
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
     border-radius: 12px;
     padding: 35px 28px;
     transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
     display: flex;
     flex-direction: column;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
 }
 
 .voice-card:hover {
     transform: translateY(-6px);
-    border-color: rgba(0, 86, 179, 0.25);
-    background: rgba(255, 255, 255, 0.02);
-    box-shadow: 0 15px 35px rgba(0, 86, 179, 0.05);
+    border-color: #93c5fd;
+    background: #ffffff;
+    box-shadow: 0 15px 35px rgba(0, 86, 179, 0.08);
 }
 
 .voice-card-header {
@@ -9474,7 +9476,7 @@ footer {
 .voice-author {
     font-size: 14px;
     font-weight: 700;
-    color: rgba(255, 255, 255, 0.85);
+    color: #0f172a;
     font-family: 'Noto Serif KR', serif;
 }
 
@@ -9488,14 +9490,14 @@ footer {
 .voice-title {
     font-size: 18px;
     font-weight: 700;
-    color: #ffffff;
+    color: #0f172a;
     margin-bottom: 15px;
     font-family: 'Noto Serif KR', serif;
 }
 
 .voice-content {
     font-size: 14.5px;
-    color: rgba(255, 255, 255, 0.6);
+    color: #475569;
     line-height: 1.75;
     margin-bottom: 25px;
     flex: 1;
@@ -9505,8 +9507,8 @@ footer {
 
 .voice-date {
     font-size: 12px;
-    color: rgba(255, 255, 255, 0.35);
-    border-top: 1px solid rgba(255, 255, 255, 0.04);
+    color: #94a3b8;
+    border-top: 1px solid #f1f5f9;
     padding-top: 15px;
 }
 
@@ -9516,12 +9518,11 @@ footer {
 .comm-inquiry-box {
     max-width: 800px;
     margin: 0 auto;
-    background: rgba(255, 255, 255, 0.01);
-    border: 1px solid rgba(255, 255, 255, 0.03);
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
     border-radius: 16px;
     padding: 50px;
-    backdrop-filter: blur(10px);
-    box-shadow: 0 30px 65px rgba(0, 0, 0, 0.8);
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.05);
 }
 
 .inquiry-intro {
@@ -9532,14 +9533,14 @@ footer {
 .inquiry-intro .box-title {
     font-size: 28px;
     font-weight: 800;
-    color: #ffffff;
+    color: #0f172a;
     margin-bottom: 12px;
     font-family: 'Noto Serif KR', serif;
 }
 
 .inquiry-intro .box-desc {
     font-size: 15px;
-    color: rgba(255, 255, 255, 0.55);
+    color: #64748b;
     line-height: 1.6;
     word-break: keep-all;
 }
@@ -9571,7 +9572,7 @@ footer {
 .form-label {
     font-size: 14px;
     font-weight: 700;
-    color: rgba(255, 255, 255, 0.8);
+    color: #334155;
     display: flex;
     align-items: center;
 }
@@ -9587,12 +9588,12 @@ footer {
 }
 
 .comm-inquiry-form .form-control {
-    background: rgba(255, 255, 255, 0.02);
-    border: 1px solid rgba(255, 255, 255, 0.08);
+    background: #f8fafc;
+    border: 1px solid #cbd5e1;
     border-radius: 8px;
     height: 48px;
     padding: 0 16px;
-    color: #ffffff;
+    color: #0f172a;
     font-size: 14px;
     transition: all 0.3s ease;
     outline: none;
@@ -9600,8 +9601,8 @@ footer {
 
 .comm-inquiry-form .select-control {
     cursor: pointer;
-    background-color: #0b1a30;
-    /* 옵션 드롭다운용 다크 브라우저 호환 */
+    background-color: #ffffff;
+    color: #0f172a;
 }
 
 .comm-inquiry-form .text-area {
@@ -9614,8 +9615,8 @@ footer {
 .comm-inquiry-form .form-control:focus {
     border-color: #0056b3;
     /* 포커스 시 로열 블루 */
-    background: rgba(0, 86, 179, 0.02);
-    box-shadow: 0 0 10px rgba(0, 86, 179, 0.15);
+    background: #ffffff;
+    box-shadow: 0 0 0 3px rgba(0, 86, 179, 0.1);
 }
 
 .form-agreement-wrap {
@@ -9637,7 +9638,7 @@ footer {
 .checkbox-box {
     width: 18px;
     height: 18px;
-    border: 1px solid rgba(255, 255, 255, 0.2);
+    border: 1px solid #cbd5e1;
     border-radius: 4px;
     position: relative;
     transition: all 0.2s ease;
@@ -9662,12 +9663,12 @@ footer {
 
 .agreement-text {
     font-size: 13.5px;
-    color: rgba(255, 255, 255, 0.5);
+    color: #64748b;
     transition: color 0.2s ease;
 }
 
 .agreement-label:hover .agreement-text {
-    color: rgba(255, 255, 255, 0.8);
+    color: #0f172a;
 }
 
 .form-btn-submit-wrap {
@@ -9695,9 +9696,9 @@ footer {
 }
 
 .btn-comm-submit:hover {
-    background: #ffffff;
-    color: #000000;
-    box-shadow: 0 8px 25px rgba(255, 255, 255, 0.2);
+    background: #004494;
+    color: #ffffff;
+    box-shadow: 0 8px 25px rgba(0, 86, 179, 0.3);
     transform: translateY(-2px);
 }
 
@@ -12765,7 +12766,7 @@ footer {
 .hero-scroll-fork {
     position: absolute;
     top: 8%;
-    right: 37%;
+    right: 15%;
     width: 620px;
     height: auto;
     transform: translate(60px, -60px);

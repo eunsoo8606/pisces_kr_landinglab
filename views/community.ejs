@@ -1,9 +1,14 @@
 <%- include('layout/base', { title: '커뮤니티 | 물고기자리 - 프리미엄 숙성회', branding: 'PISCES since 2002' }) %>
 
     <style>
-        /* 데스크톱 모바일 컨트롤 숨김 */
-        .mobile-comm-controls {
-            display: none;
+        /* 데스크톱 기본 환경 (768px 초과) : 모바일 전용 요소 숨김 및 데스크톱 테이블 표시 */
+        .mobile-comm-controls,
+        .mobile-board-card-list {
+            display: none !important;
+        }
+
+        .desktop-only-table {
+            display: block !important;
         }
 
         /* 사용자 커뮤니티 모바일 최적화 스타일 */
@@ -33,7 +38,7 @@
             }
             
             .mobile-comm-controls {
-                display: flex;
+                display: flex !important;
                 flex-direction: column;
                 gap: 12px;
                 width: 100%;
@@ -55,9 +60,9 @@
                 padding: 12px 10px !important;
                 font-size: 13.5px !important;
                 font-weight: 700 !important;
-                color: rgba(255, 255, 255, 0.7) !important;
-                background: rgba(255, 255, 255, 0.02) !important;
-                border: 1px solid rgba(255, 255, 255, 0.08) !important;
+                color: #475569 !important;
+                background: #f8fafc !important;
+                border: 1px solid #cbd5e1 !important;
                 border-radius: 10px !important;
                 text-align: center !important;
                 cursor: pointer !important;
@@ -84,9 +89,9 @@
                 width: 100%;
                 padding: 13px 50px 13px 18px;
                 font-size: 14px;
-                color: #ffffff;
-                background: rgba(255, 255, 255, 0.02);
-                border: 1px solid rgba(255, 255, 255, 0.08);
+                color: #0f172a;
+                background: #ffffff;
+                border: 1px solid #cbd5e1;
                 border-radius: 12px;
                 outline: none;
                 box-sizing: border-box;
@@ -94,8 +99,8 @@
             }
             
             .comm-mobile-search:focus {
-                border-color: rgba(49, 78, 141, 0.6);
-                background-color: rgba(255, 255, 255, 0.05);
+                border-color: rgba(49, 78, 141, 0.8);
+                background-color: #ffffff;
                 box-shadow: 0 0 10px rgba(49, 78, 141, 0.15);
             }
             
@@ -106,7 +111,7 @@
                 transform: translateY(-50%);
                 background: none;
                 border: none;
-                color: rgba(74, 108, 179, 0.8);
+                color: #475569;
                 cursor: pointer;
                 padding: 10px 14px;
                 display: flex;
@@ -121,17 +126,10 @@
             }
             
             .btn-comm-search:hover {
-                color: #00a8cc;
+                color: #0056b3;
             }
 
             /* 3. 모바일 전용 독립 디브 카드 목록 레이아웃 (테이블 가로 뚫림/비대칭 완전 예방) */
-            .desktop-only-table {
-                display: block;
-            }
-            .mobile-board-card-list {
-                display: none;
-            }
-
             .desktop-only-table {
                 display: none !important;
             }
@@ -146,8 +144,8 @@
             }
             
             .mobile-comm-card {
-                background: rgba(255, 255, 255, 0.02) !important;
-                border: 1.5px solid rgba(255, 255, 255, 0.04) !important;
+                background: #ffffff !important;
+                border: 1px solid #e2e8f0 !important;
                 border-radius: 14px !important;
                 padding: 16px 15px !important;
                 box-sizing: border-box !important;
@@ -156,23 +154,25 @@
                 flex-direction: column;
                 gap: 8px;
                 position: relative !important;
-                transition: transform 0.2s ease, background 0.2s ease;
+                transition: transform 0.2s ease, background 0.2s ease, box-shadow 0.2s ease;
+                box-shadow: 0 2px 10px rgba(0,0,0,0.03) !important;
                 margin-left: 0 !important;
                 margin-right: 0 !important;
             }
             
             .mobile-comm-card:hover {
-                background: rgba(255, 255, 255, 0.04) !important;
+                background: #f8fafc !important;
+                box-shadow: 0 4px 15px rgba(0,0,0,0.06) !important;
             }
             
             /* 필독 공지 카드 강조 */
             .mobile-comm-card.notice-pinned {
-                border: 1.5px solid rgba(49, 78, 141, 0.4) !important;
-                background: rgba(49, 78, 141, 0.04) !important;
+                border: 1.5px solid #bfdbfe !important;
+                background: #f0f7ff !important;
             }
             
             .mobile-comm-card.notice-pinned:hover {
-                background: rgba(49, 78, 141, 0.08) !important;
+                background: #e0f2fe !important;
             }
             
             .card-meta-top {
@@ -184,7 +184,7 @@
             .card-num-badge {
                 font-size: 11px !important;
                 font-weight: 800 !important;
-                color: rgba(74, 108, 179, 0.9) !important;
+                color: #0056b3 !important;
             }
             
             .badge-pin {
@@ -200,14 +200,14 @@
                 margin: 0 !important;
                 font-size: 15px !important;
                 font-weight: 700 !important;
-                color: #ffffff !important;
+                color: #0f172a !important;
                 line-height: 1.4 !important;
                 text-align: left !important;
                 word-break: break-all !important;
             }
             
             .card-title a {
-                color: inherit !important;
+                color: #0f172a !important;
                 text-decoration: none !important;
             }
             
@@ -216,12 +216,12 @@
                 align-items: center !important;
                 gap: 10px !important;
                 font-size: 11.5px !important;
-                color: rgba(255, 255, 255, 0.4) !important;
+                color: #64748b !important;
                 margin-top: 2px !important;
             }
             
             .meta-separator {
-                color: rgba(255, 255, 255, 0.15) !important;
+                color: #cbd5e1 !important;
             }
             
             .card-status-wrap {
@@ -239,7 +239,7 @@
             .no-data-msg {
                 text-align: center !important;
                 padding: 40px 15px !important;
-                color: rgba(255, 255, 255, 0.4) !important;
+                color: #64748b !important;
                 font-size: 14px !important;
             }
 
@@ -250,6 +250,9 @@
                 font-size: 13.5px !important;
                 word-break: break-all !important;
                 text-align: left !important;
+                background: #f8fafc !important;
+                border: 1.5px solid #e2e8f0 !important;
+                color: #334155 !important;
             }
 
             /* 4. 접수 영역 헤더 및 모달 최적화 */
@@ -262,6 +265,7 @@
             .comm-list-title {
                 text-align: center !important;
                 font-size: 18px !important;
+                color: #0f172a !important;
             }
             .btn-open-voice-modal {
                 width: 100% !important;
@@ -278,14 +282,18 @@
                 padding: 24px 16px !important;
                 box-sizing: border-box !important;
                 border-radius: 16px !important;
+                background: #ffffff !important;
+                border: 1px solid #e2e8f0 !important;
             }
             .inquiry-intro .box-title {
                 font-size: 18px !important;
+                color: #0f172a !important;
             }
             .inquiry-intro .box-desc {
                 font-size: 12px !important;
                 line-height: 1.6 !important;
                 margin-top: 6px !important;
+                color: #64748b !important;
             }
 
             .comm-inquiry-form .form-row {
@@ -298,11 +306,15 @@
             }
             .comm-inquiry-form .form-label {
                 font-size: 13px !important;
+                color: #334155 !important;
             }
             .comm-inquiry-form .form-control {
                 padding: 10px 14px !important;
                 font-size: 13px !important;
                 border-radius: 8px !important;
+                background: #f8fafc !important;
+                border: 1px solid #cbd5e1 !important;
+                color: #0f172a !important;
             }
             .comm-inquiry-form .text-area {
                 height: 140px !important;
@@ -312,6 +324,7 @@
             }
             .agreement-text {
                 font-size: 12px !important;
+                color: #64748b !important;
             }
             .btn-comm-submit {
                 width: 100% !important;
