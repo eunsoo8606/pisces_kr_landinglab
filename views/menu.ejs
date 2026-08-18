@@ -19,7 +19,7 @@
     <section class="section-menu menu-page-content">
         <div class="menu-inner">
 
-            <!-- 상단 헤더 영역 -->
+            <!-- 상단 에디토리얼 헤더 영역 -->
             <div class="menu-header-wrap">
                 <div class="menu-editorial-title">
                     <div class="menu-editorial-top">
@@ -30,52 +30,126 @@
                         <span class="menu-headline-sm">명품 숙성회를 더욱 찬란하게</span>
                         미식을 완성하는 일품 요리
                     </h2>
-                    <p class="menu-sub">물고기자리가 선사하는 저녁은 단순히 회를 먹는 시간을 넘어, 입안 가득 펼쳐지는 화려하고 푸짐한 미식의 축제입니다.</p>
+                    <p class="menu-sub">매일 새벽 가장 신선한 횟감을 엄선하고 정성스럽게 숙성시켜, 정직한 시간 끝에 선사하는 물고기자리 메뉴 라인업입니다.</p>
                 </div>
 
-                <!-- 가로형 탭 네비게이션 (EJS 변수 activeTab 연동) -->
+                <!-- 가로형 3대 탭 네비게이션 -->
                 <nav class="menu-tabs" id="menuTabs">
-                    <button class="menu-tab-btn <%= activeTab === 'recommended' ? 'active' : '' %>" data-tab="recommended">추천메뉴</button>
-                    <button class="menu-tab-btn <%= activeTab === 'sashimi' ? 'active' : '' %>" data-tab="sashimi">숙성회</button>
-                    <button class="menu-tab-btn <%= activeTab === 'special' ? 'active' : '' %>" data-tab="special">특선메뉴</button>
-                    <button class="menu-tab-btn <%= activeTab === 'side' ? 'active' : '' %>" data-tab="side">사이드</button>
-                    <button class="menu-tab-btn <%= activeTab === 'lunch' ? 'active' : '' %>" data-tab="lunch">점심특선</button>
-                    <button class="menu-tab-btn <%= activeTab === 'set' ? 'active' : '' %>" data-tab="set">세트메뉴</button>
+                    <button class="menu-tab-btn <%= (activeTab === 'course' || activeTab === 'recommended') ? 'active' : '' %>" data-tab="course">1인 코스</button>
+                    <button class="menu-tab-btn <%= activeTab === 'side' ? 'active' : '' %>" data-tab="side">사이드 메뉴</button>
+                    <button class="menu-tab-btn <%= activeTab === 'sake' ? 'active' : '' %>" data-tab="sake">사케 라인업</button>
                 </nav>
             </div>
 
-            <!-- 음식 이미지 쇼케이스 -->
+            <!-- 음식 이미지 쇼케이스 (실운영 DB 100% 동적 렌더링) -->
             <div class="menu-showcase">
                 <% 
-                    const categories = ['recommended', 'sashimi', 'special', 'side', 'lunch', 'set'];
+                    const safeMenuList = (typeof menuList !== 'undefined' && Array.isArray(menuList)) ? menuList : [];
+                    const recommendedList = safeMenuList.filter(m => m.category === 'recommended');
+                    const sashimiList = safeMenuList.filter(m => m.category === 'sashimi');
+                    const sideList = safeMenuList.filter(m => m.category === 'side');
+                    const sakeList = safeMenuList.filter(m => m.category === 'sake');
+
+                    // 추천 메인 코스 2종
+                    const mainCourseDb = recommendedList[0] || safeMenuList.find(m => m.name.includes('모둠 숙성회')) || { name: '모둠 숙성회 1인 코스', price: '42,000원', badge: 'SIGNATURE', image_url: '/images/foods/물고기자리 연출컷-1.jpg' };
+                    const winterCourseDb = recommendedList[1] || safeMenuList.find(m => m.name.includes('겨울')) || { name: '[겨울한정] 1인 코스', price: '52,000원', badge: 'WINTER LIMITED', image_url: '/images/foods/물고기자리 연출컷-5.jpg' };
+                    
+                    // 수직 스택 사이드 3종
+                    const sideMiniItems = (recommendedList.length >= 5) ? recommendedList.slice(2, 5) : (sideList.length > 0 ? sideList.slice(0, 3) : []);
                 %>
-                <% categories.forEach(cat => { %>
-                    <div class="menu-panel <%= activeTab === cat ? 'active' : '' %>" data-panel="<%= cat %>">
-                        <div class="menu-grid">
-                            <% 
-                                const filteredItems = menuList.filter(item => item.category === cat);
-                            %>
-                            <% if (filteredItems && filteredItems.length > 0) { %>
-                                <% filteredItems.forEach(item => { %>
-                                    <div class="menu-card <%= item.is_main === 1 ? 'main-card' : '' %>">
-                                        <img src="<%= item.image_url %>" alt="<%= item.name %>" onerror="this.src='/images/logo.webp'">
-                                        <div class="menu-card-info">
-                                            <% if (item.badge) { %>
-                                                <span class="card-category"><%= item.badge %></span>
-                                            <% } %>
-                                            <h3 class="card-name"><%= item.name %></h3>
-                                            <span class="card-price"><%= item.price %></span>
+
+                <!-- 1. 1인 코스 탭 (2대 메인 코스 벤토 카드 + 3개 사이드 미니 스택) -->
+                <div class="menu-panel <%= (activeTab === 'course' || activeTab === 'recommended') ? 'active' : '' %>" data-panel="course">
+                    <div class="menu-asymmetric-grid">
+                        
+                        <!-- Col 1: 메인 1인 코스 -->
+                        <div class="hero-big-card">
+                            <img src="<%= mainCourseDb.image_url %>" alt="<%= mainCourseDb.name %>" class="card-bg-img" onerror="this.src='/images/logo.webp'">
+                            <div class="hero-card-overlay"></div>
+                            <div class="menu-card-info">
+                                <span class="card-category signature"><%= mainCourseDb.badge || 'SIGNATURE' %></span>
+                                <h3 class="card-name"><%= mainCourseDb.name %></h3>
+                                <p class="card-desc">
+                                    도미, 광어, 점성어, 연어 등 최고급 원물을 24시간 저온 숙성. 야채죽, 멍게, 튀김, 닭강정, 생선구이, 해물라면/매운탕이 풍성하게 포함된 명품 코스.
+                                </p>
+                                <div class="card-sub-info">(미취학 아동 무료 / 초등학생 ₩ 19,900)</div>
+                                <div class="card-price-wrap">
+                                    <span class="price-val">₩ <%= mainCourseDb.price.replace('원', '').trim() %></span>
+                                    <span class="price-unit">/ 1인</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Col 2: [겨울한정] 대방어 1인 코스 -->
+                        <div class="hero-big-card winter-card">
+                            <img src="<%= winterCourseDb.image_url %>" alt="<%= winterCourseDb.name %>" class="card-bg-img" onerror="this.src='/images/logo.webp'">
+                            <div class="hero-card-overlay"></div>
+                            <div class="menu-card-info">
+                                <span class="card-category winter"><%= winterCourseDb.badge || 'WINTER LIMITED' %></span>
+                                <h3 class="card-name"><%= winterCourseDb.name %></h3>
+                                <p class="card-desc">
+                                    기름이 바짝 오른 10kg 이상 제철 대형 대방어를 추가로 구성하여 극상의 고소한 풍미를 선사하는 한정 특선 코스.
+                                </p>
+                                <div class="card-sub-info">(제철 최고급 대방어 특별 포함)</div>
+                                <div class="card-price-wrap">
+                                    <span class="price-val accent-red">₩ <%= winterCourseDb.price.replace('원', '').trim() %></span>
+                                    <span class="price-unit">/ 1인</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Col 3: 우측 3개 수직 미니 사이드 스택 -->
+                        <div class="menu-side-stack">
+                            <% sideMiniItems.forEach(item => { %>
+                                <div class="mini-card-item">
+                                    <img src="<%= item.image_url %>" alt="<%= item.name %>" class="mini-card-bg" onerror="this.src='/images/logo.webp'">
+                                    <div class="mini-card-overlay"></div>
+                                    <div class="mini-info">
+                                        <span class="mini-tag"><%= item.badge || 'SIDE' %></span>
+                                        <h4 class="mini-name"><%= item.name %></h4>
+                                        <div class="mini-price">
+                                            ₩ <%= item.price.replace('원', '').trim() %>
                                         </div>
                                     </div>
-                                <% }) %>
-                            <% } else { %>
-                                <div style="grid-column: 1 / -1; text-align: center; padding: 80px 20px; color: rgba(255, 255, 255, 0.4); font-size: 15px;">
-                                    등록된 메뉴 정보가 존재하지 않습니다.
                                 </div>
-                            <% } %>
+                            <% }); %>
                         </div>
+
                     </div>
-                <% }) %>
+                </div>
+
+                <!-- 2. 사이드 메뉴 탭 (DB 동적 렌더링) -->
+                <div class="menu-panel <%= activeTab === 'side' ? 'active' : '' %>" data-panel="side">
+                    <div class="menu-grid">
+                        <% sideList.forEach((item, idx) => { %>
+                            <div class="menu-card <%= idx === 0 ? 'main-card' : '' %>">
+                                <img src="<%= item.image_url %>" alt="<%= item.name %>" onerror="this.src='/images/logo.webp'">
+                                <div class="menu-card-info">
+                                    <span class="card-category"><%= item.badge || 'SIDE' %></span>
+                                    <h3 class="card-name"><%= item.name %></h3>
+                                    <span class="card-price"><%= item.price %></span>
+                                </div>
+                            </div>
+                        <% }); %>
+                    </div>
+                </div>
+
+                <!-- 3. 사케 라인업 탭 (DB 동적 렌더링) -->
+                <div class="menu-panel <%= activeTab === 'sake' ? 'active' : '' %>" data-panel="sake">
+                    <div class="menu-grid">
+                        <% sakeList.forEach((item, idx) => { %>
+                            <div class="menu-card <%= idx === 0 ? 'main-card' : '' %>">
+                                <img src="<%= item.image_url %>" alt="<%= item.name %>" onerror="this.src='/images/logo.webp'">
+                                <div class="menu-card-info">
+                                    <span class="card-category"><%= item.badge || 'SAKE' %></span>
+                                    <h3 class="card-name"><%= item.name %></h3>
+                                    <span class="card-price"><%= item.price %></span>
+                                </div>
+                            </div>
+                        <% }); %>
+                    </div>
+                </div>
+
             </div>
 
         </div>
