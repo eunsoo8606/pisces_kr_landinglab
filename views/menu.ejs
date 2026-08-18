@@ -58,11 +58,11 @@
                     const sideMiniItems = (recommendedList.length >= 5) ? recommendedList.slice(2, 5) : (sideList.length > 0 ? sideList.slice(0, 3) : []);
                 %>
 
-                <!-- 1. 메인메뉴 탭 (2대 메인 코스 벤토 카드 + 3개 사이드 미니 스택) -->
+                <!-- 1. 메인메뉴 탭 (2대 메인 코스 전용 듀오 렌더링) -->
                 <div class="menu-panel <%= (activeTab === 'main' || activeTab === 'course' || activeTab === 'recommended') ? 'active' : '' %>" data-panel="main">
-                    <div class="menu-asymmetric-grid">
+                    <div class="menu-main-duo-grid">
                         
-                        <!-- Col 1: 메인 1인 코스 -->
+                        <!-- Col 1: 모둠 숙성회 1인 코스 -->
                         <div class="hero-big-card">
                             <img src="<%= encodeURI(mainCourseDb.image_url) %>" alt="<%= mainCourseDb.name %>" class="card-bg-img" onerror="this.src='/images/logo.webp'">
                             <div class="hero-card-overlay"></div>
@@ -80,7 +80,7 @@
                             </div>
                         </div>
 
-                        <!-- Col 2: [겨울한정] 대방어 1인 코스 -->
+                        <!-- Col 2: [겨울한정] 1인 코스 -->
                         <div class="hero-big-card winter-card">
                             <img src="<%= encodeURI(winterCourseDb.image_url) %>" alt="<%= winterCourseDb.name %>" class="card-bg-img" onerror="this.src='/images/logo.webp'">
                             <div class="hero-card-overlay"></div>
@@ -96,23 +96,6 @@
                                     <span class="price-unit">/ 1인</span>
                                 </div>
                             </div>
-                        </div>
-
-                        <!-- Col 3: 우측 3개 수직 미니 사이드 스택 -->
-                        <div class="menu-side-stack">
-                            <% sideMiniItems.forEach(item => { %>
-                                <div class="mini-card-item">
-                                    <img src="<%= encodeURI(item.image_url) %>" alt="<%= item.name %>" class="mini-card-bg" onerror="this.src='/images/logo.webp'">
-                                    <div class="mini-card-overlay"></div>
-                                    <div class="mini-info">
-                                        <span class="mini-tag"><%= item.badge || 'SIDE' %></span>
-                                        <h4 class="mini-name"><%= item.name %></h4>
-                                        <div class="mini-price">
-                                            ₩ <%= item.price.replace('원', '').trim() %>
-                                        </div>
-                                    </div>
-                                </div>
-                            <% }); %>
                         </div>
 
                     </div>

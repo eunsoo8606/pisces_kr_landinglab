@@ -6583,45 +6583,34 @@ footer {
     position: relative;
 }
 
-/* 비대칭 에디토리얼 그리드: 4개 카드 꽉 채우기 (1.5fr - 1fr - 1.2fr) */
+/* 메뉴 그리드: 4열 자동 흐름 격자 레이아웃 (카드 겹침 원천 차단) */
 .menu-grid {
-    display: grid;
-    grid-template-columns: 1.5fr 1fr 1.2fr;
-    grid-template-rows: 255px 255px;
-    gap: 16px;
-    /* 카드 사이 간격을 넓혀 잡지 화보 느낌 강화 */
+    display: grid !important;
+    grid-template-columns: repeat(4, 1fr) !important;
+    grid-template-rows: auto !important;
+    grid-auto-rows: minmax(360px, auto) !important;
+    gap: 20px !important;
 }
 
 .menu-card {
-    position: relative;
-    overflow: hidden;
-    border-radius: 10px;
-    background: #1a1a1a;
-    cursor: pointer;
+    position: relative !important;
+    overflow: hidden !important;
+    border-radius: 12px !important;
+    background: #0f172a !important;
+    cursor: pointer !important;
+    grid-column: auto !important;
+    grid-row: auto !important;
+    min-height: 360px !important;
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
 }
 
-/* 첫 번째 카드 (메인): 좌측 2행 전체 차지 */
-.menu-card:nth-child(1) {
-    grid-column: 1;
-    grid-row: span 2;
-}
-
-/* 두 번째 카드: 중앙 상단 */
-.menu-card:nth-child(2) {
-    grid-column: 2;
-    grid-row: 1;
-}
-
-/* 세 번째 카드: 중앙 하단 */
-.menu-card:nth-child(3) {
-    grid-column: 2;
-    grid-row: 2;
-}
-
-/* 네 번째 카드: 우측 2행 전체 차지 */
+/* 고정 그리드 배치 리셋 (모든 카드가 자연스럽게 4열로 순차 정렬되도록 해제) */
+.menu-card:nth-child(1),
+.menu-card:nth-child(2),
+.menu-card:nth-child(3),
 .menu-card:nth-child(4) {
-    grid-column: 3;
-    grid-row: span 2;
+    grid-column: auto !important;
+    grid-row: auto !important;
 }
 
 .menu-card img {
@@ -6630,6 +6619,33 @@ footer {
     object-fit: cover;
     transition: transform 0.7s cubic-bezier(0.25, 1, 0.5, 1);
     display: block;
+}
+
+/* 사케 & 사이드 단품 전용: 균등 4열 격자 및 세로 박스 높이 적용 (그리드 충돌 겹침 100% 해제) */
+.menu-panel[data-panel="sake"] .menu-grid,
+.menu-panel[data-panel="side"] .menu-grid {
+    display: grid !important;
+    grid-template-columns: repeat(4, 1fr) !important;
+    grid-auto-rows: minmax(360px, auto) !important;
+    gap: 20px !important;
+}
+
+.menu-panel[data-panel="sake"] .menu-card,
+.menu-panel[data-panel="side"] .menu-card {
+    grid-column: auto !important;
+    grid-row: auto !important;
+    height: 380px !important;
+    min-height: 380px !important;
+    aspect-ratio: auto !important;
+}
+
+.menu-panel[data-panel="sake"] .menu-card img,
+.menu-panel[data-panel="side"] .menu-card img {
+    object-fit: cover !important;
+    width: 100% !important;
+    height: 100% !important;
+    padding: 0 !important;
+    filter: none !important;
 }
 
 .menu-card:hover img {
@@ -13365,6 +13381,15 @@ footer {
 /* ==========================================================================
    비대칭 벤토 그리드 (2대 대형 코스 + 3개 수직 미니 사이드)
    ========================================================================== */
+/* 메인메뉴 탭 전용: 2대 메인 코스 50:50 듀오 그리드 */
+.menu-main-duo-grid {
+    display: grid !important;
+    grid-template-columns: 1fr 1fr !important;
+    gap: 24px !important;
+    width: 100% !important;
+    min-height: 500px !important;
+}
+
 .menu-asymmetric-grid {
     display: grid !important;
     grid-template-columns: 1.15fr 1.15fr 0.95fr !important;
@@ -13625,7 +13650,8 @@ footer {
         border-radius: 30px !important;
     }
 
-    /* 비대칭 벤토 그리드: 모바일 1열 수직 카드 스택 전환 */
+    /* 비대칭 벤토 그리드 & 듀오 그리드: 모바일 1열 수직 카드 스택 전환 */
+    .menu-main-duo-grid,
     .menu-asymmetric-grid {
         grid-template-columns: 1fr !important;
         gap: 16px !important;
@@ -13706,6 +13732,30 @@ footer {
 
     .menu-card-info .card-price {
         font-size: 13px !important;
+    }
+
+    .menu-panel[data-panel="sake"] .menu-grid,
+    .menu-panel[data-panel="side"] .menu-grid {
+        grid-template-columns: repeat(2, 1fr) !important;
+        grid-auto-rows: minmax(220px, auto) !important;
+        gap: 12px !important;
+    }
+
+    .menu-panel[data-panel="sake"] .menu-card,
+    .menu-panel[data-panel="side"] .menu-card {
+        grid-column: auto !important;
+        grid-row: auto !important;
+        min-height: 220px !important;
+        height: 220px !important;
+        aspect-ratio: auto !important;
+    }
+
+    .menu-panel[data-panel="sake"] .menu-card img,
+    .menu-panel[data-panel="side"] .menu-card img {
+        object-fit: cover !important;
+        width: 100% !important;
+        height: 100% !important;
+        padding: 0 !important;
     }
 }
 
