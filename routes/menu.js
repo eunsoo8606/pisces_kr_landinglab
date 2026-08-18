@@ -179,12 +179,12 @@ router.post('/api/menu', checkAuth, upload.single('image_file'), async (req, res
         if (req.file) {
             deleteOldImageFile(`/images/foods/${req.file.filename}`);
         }
-        res.status(500).json({ success: false, message: '서버 내부 DB 에러가 발생했습니다.' });
+        res.status(500).json({ success: false, message: 'DB 등록 에러: ' + (err.message || '서버 내부 DB 에러') });
     }
 });
 
-// 5. 메뉴 수정 API (PUT /api/menu/:id - multipart 대응)
-router.put('/api/menu/:id', checkAuth, upload.single('image_file'), async (req, res) => {
+// 5. 메뉴 수정 공통 처리 함수 (PUT & POST 모두 수용하여 운영서버 호환성 100% 보장)
+const handleUpdateMenu = async (req, res) => {
     const id = req.params.id;
     const { category, badge, name, price, is_main, sort_order } = req.body;
     let image_url = req.body.image_url || '';
@@ -197,11 +197,12 @@ router.put('/api/menu/:id', checkAuth, upload.single('image_file'), async (req, 
             oldImageUrl = rows[0].image_url;
         } else {
             if (req.file) deleteOldImageFile(`/images/foods/${req.file.filename}`);
-            return res.status(404).json({ success: false, message: '수정할 메뉴를 찾을 수 없습니다.' });
+            return res.status(404).json({ success: false, message: '수정할 메뉴를 찾을 수 없습니다. (ID: ' + id + ')' });
         }
     } catch (dbErr) {
+        console.error('❌ DB Error during pre-update menu check:', dbErr);
         if (req.file) deleteOldImageFile(`/images/foods/${req.file.filename}`);
-        return res.status(500).json({ success: false, message: '서버 DB 에러로 수정 전 조회를 실패했습니다.' });
+        return res.status(500).json({ success: false, message: 'DB 조회 에러: ' + (dbErr.message || '데이터베이스 오류') });
     }
 
     // 파일 새로 첨부한 경우 기존 텍스트 경로 덮어쓰기
@@ -218,7 +219,7 @@ router.put('/api/menu/:id', checkAuth, upload.single('image_file'), async (req, 
     }
     
     try {
-        const mainCard = is_main === 1 || is_main === '1' || is_main === 'true' ? 1 : 0;
+        const mainCard = (is_main === 1 || is_main === '1' || is_main === 'true' || is_main === true) ? 1 : 0;
         const orderVal = parseInt(sort_order, 10) || 0;
         
         const [result] = await db.query(
@@ -240,11 +241,15 @@ router.put('/api/menu/:id', checkAuth, upload.single('image_file'), async (req, 
         
         res.json({ success: true, message: '메뉴가 성공적으로 수정되었습니다.' });
     } catch (err) {
-        console.error('❌ Failed to update menu:', err);
+        console.error('❌ Failed to update menu in DB:', err);
         if (req.file) deleteOldImageFile(`/images/foods/${req.file.filename}`);
-        res.status(500).json({ success: false, message: '서버 내부 DB 에러가 발생했습니다.' });
+        res.status(500).json({ success: false, message: 'DB 수정 에러: ' + (err.message || '서버 내부 DB 에러') });
     }
-});
+};
+
+// PUT /api/menu/:id 및 POST /api/menu/:id 두 요청 방식 모두 바인딩
+router.put('/api/menu/:id', checkAuth, upload.single('image_file'), handleUpdateMenu);
+router.post('/api/menu/:id', checkAuth, upload.single('image_file'), handleUpdateMenu);
 
 // 6. 메뉴 삭제 API (DELETE /api/menu/:id)
 router.delete('/api/menu/:id', checkAuth, async (req, res) => {

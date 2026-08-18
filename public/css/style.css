@@ -13339,3 +13339,218 @@ footer {
         z-index: 99998 !important;
     }
 }
+
+/* ==========================================================================
+   비대칭 벤토 그리드 (2대 대형 코스 + 3개 수직 미니 사이드)
+   ========================================================================== */
+.menu-asymmetric-grid {
+    display: grid !important;
+    grid-template-columns: 1.15fr 1.15fr 0.95fr !important;
+    gap: 20px !important;
+    width: 100% !important;
+    min-height: 520px !important;
+}
+
+.hero-big-card {
+    position: relative !important;
+    border-radius: 20px !important;
+    overflow: hidden !important;
+    background: #0f172a !important;
+    border: 1px solid rgba(255, 255, 255, 0.12) !important;
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3) !important;
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: flex-end !important;
+    padding: 30px 26px !important;
+    transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1) !important;
+    min-height: 480px !important;
+}
+
+.hero-big-card:hover {
+    transform: translateY(-8px) !important;
+    box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5) !important;
+    border-color: rgba(0, 168, 204, 0.4) !important;
+}
+
+.hero-big-card .card-bg-img {
+    position: absolute !important;
+    top: 0 !important;
+    left: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: cover !important;
+    transition: transform 0.6s ease !important;
+    z-index: 1 !important;
+}
+
+.hero-big-card:hover .card-bg-img {
+    transform: scale(1.06) !important;
+}
+
+.hero-card-overlay {
+    position: absolute !important;
+    top: 0 !important;
+    left: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+    background: linear-gradient(180deg, rgba(15, 23, 42, 0.15) 0%, rgba(15, 23, 42, 0.65) 45%, rgba(11, 19, 36, 0.95) 100%) !important;
+    z-index: 2 !important;
+}
+
+.hero-big-card .menu-card-info {
+    position: relative !important;
+    z-index: 3 !important;
+}
+
+.card-category.signature {
+    background: #00a8cc !important;
+    color: #ffffff !important;
+    font-size: 11px !important;
+    font-weight: 800 !important;
+    padding: 4px 10px !important;
+    border-radius: 4px !important;
+    letter-spacing: 1px !important;
+    display: inline-block !important;
+}
+
+.card-category.winter {
+    background: #ff3344 !important;
+    color: #ffffff !important;
+    font-size: 11px !important;
+    font-weight: 800 !important;
+    padding: 4px 10px !important;
+    border-radius: 4px !important;
+    letter-spacing: 1px !important;
+    display: inline-block !important;
+}
+
+.hero-big-card .card-name {
+    font-size: 26px !important;
+    font-weight: 800 !important;
+    color: #ffffff !important;
+    margin: 12px 0 8px 0 !important;
+    letter-spacing: -0.5px !important;
+}
+
+.hero-big-card .card-desc {
+    font-size: 13.5px !important;
+    color: rgba(255, 255, 255, 0.8) !important;
+    line-height: 1.6 !important;
+    margin-bottom: 10px !important;
+    word-break: keep-all !important;
+}
+
+.hero-big-card .card-sub-info {
+    font-size: 12.5px !important;
+    color: #00a8cc !important;
+    font-weight: 600 !important;
+    margin-bottom: 15px !important;
+}
+
+.hero-big-card.winter-card .card-sub-info {
+    color: #ff6b6b !important;
+}
+
+.hero-big-card .card-price-wrap {
+    display: flex !important;
+    align-items: baseline !important;
+    gap: 6px !important;
+}
+
+.hero-big-card .price-val {
+    font-size: 30px !important;
+    font-weight: 900 !important;
+    color: #00a8cc !important;
+}
+
+.hero-big-card .price-val.accent-red {
+    color: #ff5252 !important;
+}
+
+.hero-big-card .price-unit {
+    font-size: 13px !important;
+    color: rgba(255, 255, 255, 0.6) !important;
+}
+
+/* Col 3: 우측 3개 수직 미니 스택 */
+.menu-side-stack {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 14px !important;
+    height: 100% !important;
+}
+
+.mini-card-item {
+    flex: 1 !important;
+    display: flex !important;
+    align-items: center !important;
+    gap: 16px !important;
+    background: rgba(15, 23, 42, 0.85) !important;
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+    border-radius: 14px !important;
+    padding: 12px 16px !important;
+    backdrop-filter: blur(10px) !important;
+    transition: all 0.3s ease !important;
+}
+
+.mini-card-item:hover {
+    background: rgba(15, 23, 42, 0.98) !important;
+    border-color: rgba(0, 168, 204, 0.35) !important;
+    transform: translateX(6px) !important;
+}
+
+.mini-img-wrap {
+    width: 76px !important;
+    height: 76px !important;
+    border-radius: 10px !important;
+    overflow: hidden !important;
+    flex-shrink: 0 !important;
+}
+
+.mini-img-wrap img {
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: cover !important;
+    transition: transform 0.3s ease !important;
+}
+
+.mini-card-item:hover .mini-img-wrap img {
+    transform: scale(1.1) !important;
+}
+
+.mini-info {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 4px !important;
+}
+
+.mini-tag {
+    font-size: 10px !important;
+    font-weight: 800 !important;
+    color: #00a8cc !important;
+    letter-spacing: 1px !important;
+    text-transform: uppercase !important;
+}
+
+.mini-name {
+    font-size: 15.5px !important;
+    font-weight: 700 !important;
+    color: #ffffff !important;
+    margin: 0 !important;
+}
+
+.mini-price {
+    font-size: 14.5px !important;
+    font-weight: 800 !important;
+    color: #ffffff !important;
+}
+
+.mini-price .old-p {
+    font-size: 12px !important;
+    color: rgba(255, 255, 255, 0.4) !important;
+    margin-right: 6px !important;
+}
+
+.mini-price .sale-p {
+    color: #ff5252 !important;
+}

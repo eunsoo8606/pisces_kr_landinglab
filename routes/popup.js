@@ -147,8 +147,8 @@ router.post('/api/popup', checkAuth, upload.single('image_file'), async (req, re
     }
 });
 
-// 5. 팝업 수정 API (PUT /api/popup/:id)
-router.put('/api/popup/:id', checkAuth, upload.single('image_file'), async (req, res) => {
+// 5. 팝업 수정 공통 처리 함수 (PUT & POST 모두 지원)
+const handleUpdatePopup = async (req, res) => {
     const id = req.params.id;
     const { title, link_url, target, width, height, position_top, position_left, start_date, end_date, is_active } = req.body;
     let image_url = req.body.image_url || '';
@@ -163,8 +163,9 @@ router.put('/api/popup/:id', checkAuth, upload.single('image_file'), async (req,
             return res.status(404).json({ success: false, message: '수정할 팝업을 찾을 수 없습니다.' });
         }
     } catch (dbErr) {
+        console.error('❌ DB Error during pre-update popup check:', dbErr);
         if (req.file) deleteOldImageFile(`/images/popups/${req.file.filename}`);
-        return res.status(500).json({ success: false, message: '서버 DB 에러로 수정 전 조회를 실패했습니다.' });
+        return res.status(500).json({ success: false, message: 'DB 조회 에러: ' + (dbErr.message || '데이터베이스 오류') });
     }
 
     if (req.file) {
@@ -205,12 +206,15 @@ router.put('/api/popup/:id', checkAuth, upload.single('image_file'), async (req,
     } catch (err) {
         console.error('❌ Failed to update popup:', err);
         if (req.file) deleteOldImageFile(`/images/popups/${req.file.filename}`);
-        res.status(500).json({ success: false, message: '서버 내부 DB 에러가 발생했습니다.' });
+        res.status(500).json({ success: false, message: 'DB 수정 에러: ' + (err.message || '서버 내부 에러') });
     }
-});
+};
 
-// 6. 팝업 활성화 상태 토글 API (PUT /api/popup/toggle/:id)
-router.put('/api/popup/toggle/:id', checkAuth, async (req, res) => {
+router.put('/api/popup/:id', checkAuth, upload.single('image_file'), handleUpdatePopup);
+router.post('/api/popup/:id', checkAuth, upload.single('image_file'), handleUpdatePopup);
+
+// 6. 팝업 활성화 상태 토글 API (PUT & POST)
+const handleTogglePopup = async (req, res) => {
     const id = req.params.id;
     
     try {
@@ -227,9 +231,12 @@ router.put('/api/popup/toggle/:id', checkAuth, async (req, res) => {
         res.json({ success: true, is_active: updated[0].is_active, message: '활성화 상태가 정상 변경되었습니다.' });
     } catch (err) {
         console.error('❌ Failed to toggle popup state:', err);
-        res.status(500).json({ success: false, message: '서버 내부 DB 에러가 발생했습니다.' });
+        res.status(500).json({ success: false, message: 'DB 토글 에러: ' + (err.message || '서버 에러') });
     }
-});
+};
+
+router.put('/api/popup/toggle/:id', checkAuth, handleTogglePopup);
+router.post('/api/popup/toggle/:id', checkAuth, handleTogglePopup);
 
 // 7. 팝업 삭제 API (DELETE /api/popup/:id)
 router.delete('/api/popup/:id', checkAuth, async (req, res) => {

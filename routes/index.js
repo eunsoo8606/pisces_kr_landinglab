@@ -13,21 +13,26 @@ router.get('/', async (req, res) => {
                AND end_date >= NOW()`
         );
 
+        // DB에서 메뉴 데이터 조회
+        const [menuList] = await db.query('SELECT * FROM menus ORDER BY sort_order ASC, id ASC');
+
         res.render('index', {
             title: '물고기자리 - 프리미엄 숙성회',
             branding: 'PISCES since 2002',
             metaDescription: '칼 없는 주방, 주방장 없는 횟집! 물고기자리에서 성공적인 프리미엄 숙성회 프랜차이즈 창업을 시작하세요. 20여 년 of 노하우로 최상급 활선어 숙성회를 무한리필로 제공합니다.',
             metaKeywords: '물고기자리, 숙성회, 무한리필, 활어회, 프랜차이즈, 창업, 횟집, 소자본창업, 일식창업',
-            popups: popups
+            popups: popups,
+            menuList: menuList || []
         });
     } catch (err) {
-        console.error('❌ Failed to fetch active popups for landing page:', err);
+        console.error('❌ Failed to fetch active popups or menus for landing page:', err);
         res.render('index', {
             title: '물고기자리 - 프리미엄 숙성회',
             branding: 'PISCES since 2002',
             metaDescription: '칼 없는 주방, 주방장 없는 횟집! 물고기자리에서 성공적인 프리미엄 숙성회 프랜차이즈 창업을 시작하세요. 20여 년 of 노하우로 최상급 활선어 숙성회를 무한리필로 제공합니다.',
             metaKeywords: '물고기자리, 숙성회, 무한리필, 활어회, 프랜차이즈, 창업, 횟집, 소자본창업, 일식창업',
-            popups: []
+            popups: [],
+            menuList: []
         });
     }
 });

@@ -129,51 +129,17 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (heroDarkSection) {
         const salesWidget = document.querySelector('.hero-sales-widget');
-        const heroTimeline = gsap.timeline();
-
-        // 1) 좌측 타이틀 텍스트 순차 슬라이드 리빌
         const titleLines = document.querySelectorAll('.title-line');
-        if (titleLines.length > 0) {
-            heroTimeline.to(titleLines, {
-                y: 0,
-                duration: 1.1,
-                stagger: 0.12,
-                ease: 'power4.out'
-            });
-        }
-
-        // 2) 서브 공지 문구 페이드인
         const subNotice = document.querySelector('.hero-sub-notice');
-        if (subNotice) {
-            heroTimeline.to(subNotice, {
-                opacity: 1,
-                y: 0,
-                duration: 0.9,
-                ease: 'power3.out'
-            }, '-=0.8');
-        }
-
-        // 3) 매출 스탯 위젯 페이드인
-        if (salesWidget) {
-            heroTimeline.to(salesWidget, {
-                opacity: 1,
-                y: 0,
-                duration: 0.9,
-                ease: 'power3.out'
-            }, '-=0.7');
-        }
-
-        // 음식 솟구침 진입 비활성화
-
-        // 5) 매출 카운트업 및 지점명 순차 롤링 (기존 강점 계승)
         const branchNameEl = document.querySelector('.widget-branch-name');
         const branches = ['강남본점', '여의도점', '분당정자점', '마포염리점', '영등포점', '용산역점', '수지구청점', '목동점', '판교점', '잠실새내점'];
 
+        // 5) 매출 카운트업 및 지점명 순차 롤링 (매출 위젯 사용 시)
         if (revenueNumEl) {
             const countObj = { val: 60000000 };
             const targetVal = 98450000;
 
-            heroTimeline.to(countObj, {
+            gsap.to(countObj, {
                 val: targetVal,
                 duration: 2.2,
                 ease: 'power3.out',
@@ -253,10 +219,10 @@ document.addEventListener('DOMContentLoaded', () => {
                         }, 1450);
                     }, 1200);
                 }
-            }, '-=0.5');
+            });
         }
 
-        // 6) 스크롤 연동 텍스트 소거 & 우측 젓가락 및 하단 음식 등장 ScrollTrigger 연출 (반응형 최적화)
+        // 6) 스크롤 역전 연출: 첫 화면에 미디어/카드 완전 노출 ➡️ 스크롤 시 텍스트 타이틀 등장
         if (heroCenterContent) {
             const scrollFork = document.querySelector('.hero-scroll-fork');
             const scrollFood = document.querySelector('.hero-scroll-food');
@@ -265,113 +231,142 @@ document.addEventListener('DOMContentLoaded', () => {
             const infoCardsLeft = document.querySelectorAll('.hero-info-card.card-top-left, .hero-info-card.card-bottom-left');
             const infoCardsRight = document.querySelectorAll('.hero-info-card.card-top-right, .hero-info-card.card-bottom-right');
 
-            // 화면 크기별로 모션 거리 가변 조율
+            // 화면 크기별 오프셋
             const isMobile = window.innerWidth <= 768;
-            const textY = isMobile ? -40 : -120;
+            const textY = isMobile ? 30 : 60;
             const cardXOffset = isMobile ? 30 : 60;
-
-            // 스크롤 시 젓가락의 x, y 목표 좌표 (모바일은 좁으므로 가벼운 거리 이동)
             const forkTranslateX = isMobile ? 30 : 60;
             const forkTranslateY = isMobile ? -30 : -60;
 
-            // GSAP로 초기 대기 위치를 디바이스별 오프셋에 맞춰 동적 세팅
-            gsap.set(infoCardsLeft, { x: -cardXOffset });
-            gsap.set(infoCardsRight, { x: cardXOffset });
-            gsap.set(scrollFork, { xPercent: -50, x: forkTranslateX, y: forkTranslateY });
+            // [초기 세팅] 첫 화면(스크롤 0)에 젓가락, 음식, 카드를 완전히 노출(Opacity 1)로 설정
+            gsap.set(heroCenterContent, { opacity: 0, y: textY, scale: 0.96 });
+            if (titleLines.length > 0) gsap.set(titleLines, { y: '100%' });
+            if (subNotice) gsap.set(subNotice, { opacity: 0, y: 25 });
+            if (salesWidget) gsap.set(salesWidget, { opacity: 0, y: 30 });
 
+            gsap.set(scrollFork, { xPercent: -50, x: 0, y: 0, opacity: 1 });
+            gsap.set(scrollFood, { y: 0, opacity: 1 });
+            gsap.set(infoCardsLeft, { x: 0, opacity: 1 });
+            gsap.set(infoCardsRight, { x: 0, opacity: 1 });
+            gsap.set(mediaOverlay, { opacity: 0.85 });
+            if (mobileCenterText) gsap.set(mobileCenterText, { opacity: 1 });
+
+            // GSAP ScrollTrigger 역전 스크롤 타임라인
             const heroScrollTl = gsap.timeline({
                 scrollTrigger: {
                     trigger: heroDarkSection,
                     start: 'top top',
                     end: isMobile ? '+=550' : 'bottom top',
-                    scrub: 1.2, // 스크롤 댐핑 감도
-                    pin: true,  // 모바일에서도 고정 유지
-                    pinSpacing: true, // 다음 섹션이 미리 덮어 올라오지 않도록 핀스페이싱 유지
+                    scrub: 1.2,
+                    pin: true,
+                    pinSpacing: true,
                     invalidateOnRefresh: true
                 }
             });
 
             heroScrollTl
-                // A) 처음에 나온 중앙 텍스트가 서서히 페이드아웃 되며 위로 상승 소멸
-                .to(heroCenterContent, {
-                    opacity: 0,
-                    y: textY,
-                    scale: 0.96,
-                    duration: 1,
-                    ease: 'power2.inOut'
-                })
-                // B) 젓가락 이미지가 대각선 방향으로 내려오며 정중앙에 페이드인
+                // A) 스크롤을 내리기 시작하면 첫 화면의 젓가락, 음식, 좌우 카드들이 바깥으로 페이드아웃하며 소멸
                 .to(scrollFork, {
                     xPercent: -50,
-                    x: 0,
-                    y: 0,
-                    opacity: 1,
-                    duration: 1.3,
-                    ease: 'power2.out'
-                }, 0.1)
-                // C) 아래에서 메인 음식 접시 이미지가 위로 솟구치며 페이드인
+                    x: forkTranslateX,
+                    y: forkTranslateY,
+                    opacity: 0,
+                    duration: 1.2,
+                    ease: 'power2.in'
+                }, 0)
                 .to(scrollFood, {
-                    y: 0,
-                    opacity: 1,
-                    duration: 1.3,
-                    ease: 'power2.out'
-                }, 0.1)
-                // D) 좌측 설명 카드 2종 왼쪽에서 슬라이드인 하며 페이드인
+                    y: 80,
+                    opacity: 0,
+                    duration: 1.2,
+                    ease: 'power2.in'
+                }, 0)
                 .to(infoCardsLeft, {
-                    x: 0,
-                    opacity: 1,
+                    x: -cardXOffset,
+                    opacity: 0,
                     duration: 1.2,
-                    stagger: 0.15,
-                    ease: 'power2.out'
-                }, 0.25)
-                // E) 우측 설명 카드 2종 오른쪽에서 슬라이드인 하며 페이드인
+                    stagger: 0.1,
+                    ease: 'power2.in'
+                }, 0)
                 .to(infoCardsRight, {
-                    x: 0,
-                    opacity: 1,
+                    x: cardXOffset,
+                    opacity: 0,
                     duration: 1.2,
-                    stagger: 0.15,
-                    ease: 'power2.out'
-                }, 0.25)
-                // F) 하단 비네팅 페이드인
+                    stagger: 0.1,
+                    ease: 'power2.in'
+                }, 0)
                 .to(mediaOverlay, {
-                    opacity: 0.85,
+                    opacity: 0,
                     duration: 1.0
-                }, 0.2);
+                }, 0);
 
-            // 모바일 전용 정중앙 브랜드 카피 카드 페이드인 연동
             if (mobileCenterText) {
                 heroScrollTl.to(mobileCenterText, {
-                    opacity: 1,
-                    duration: 1.2,
-                    ease: 'power2.out'
-                }, 0.25);
+                    opacity: 0,
+                    duration: 1.0,
+                    ease: 'power2.in'
+                }, 0);
             }
 
-            // 요소들이 화면에 100% 다 배치되어 노출된 상태를 사용자가 완전히 감상할 수 있도록 홀딩 스크롤 구간 확보
+            // B) 기존 첫 화면 구성이었던 중앙 메인 타이틀 & 서브 문구 솟구쳐 등장
+            heroScrollTl.to(heroCenterContent, {
+                opacity: 1,
+                y: 0,
+                scale: 1,
+                duration: 1.2,
+                ease: 'power2.out'
+            }, 0.3);
+
+            if (titleLines.length > 0) {
+                heroScrollTl.to(titleLines, {
+                    y: 0,
+                    duration: 1.1,
+                    stagger: 0.12,
+                    ease: 'power4.out'
+                }, 0.4);
+            }
+
+            if (subNotice) {
+                heroScrollTl.to(subNotice, {
+                    opacity: 1,
+                    y: 0,
+                    duration: 0.9,
+                    ease: 'power3.out'
+                }, 0.6);
+            }
+
+            if (salesWidget) {
+                heroScrollTl.to(salesWidget, {
+                    opacity: 1,
+                    y: 0,
+                    duration: 0.9,
+                    ease: 'power3.out'
+                }, 0.7);
+            }
+
+            // 홀딩 구간 확보
             heroScrollTl.to({}, { duration: 0.6 });
 
             // 우측 상단 3대 강점 리스트 아이템 순차 색상 페이드 무한 루프
             const listTexts = document.querySelectorAll('.hero-list-item .item-text');
             if (listTexts.length > 0) {
-                // 초기 색상을 반투명 흰색으로 명시 세팅
                 gsap.set(listTexts, { color: 'rgba(255, 255, 255, 0.45)' });
 
                 const loopTl = gsap.timeline({ repeat: -1 });
                 listTexts.forEach((item, idx) => {
                     loopTl.to(item, {
-                        color: '#0056b3', // 로열 블루로 선명하게 강조 점화
-                        duration: 0.9,    // 0.9초 동안 부드럽게 점입
+                        color: '#0056b3',
+                        duration: 0.9,
                         ease: 'power2.out'
-                    }, idx * 1.3) // 1.3초 간격 순차 릴레이
+                    }, idx * 1.3)
                         .to(item, {
-                            color: 'rgba(255, 255, 255, 0.45)', // 다시 스르륵 은은한 흰색으로 페이드아웃
-                            duration: 0.9,    // 0.9초 동안 복원
+                            color: 'rgba(255, 255, 255, 0.45)',
+                            duration: 0.9,
                             ease: 'power2.in'
                         }, (idx * 1.3) + 0.9);
                 });
             }
 
-            // 젓가락 숙성회 이미지 둥실둥실(Floating) 상하 무한 모션 주입
+            // 젓가락 이미지 둥실둥실(Floating) 상하 무한 모션
             const forkImg = document.querySelector('.hero-scroll-fork img');
             if (forkImg) {
                 gsap.to(forkImg, {
@@ -2386,7 +2381,28 @@ document.addEventListener('DOMContentLoaded', () => {
     const quickAgree = document.getElementById('quickAgree');
 
     if (stickyQuickBar) {
-        stickyQuickBar.classList.remove('is-hidden');
+        // 기본 상태: 첫 히어로 섹션에서는 숨김
+        stickyQuickBar.classList.add('is-hidden');
+
+        // 두 번째 섹션 (.section-problems) 진입 시부터 하단 고정바 등장
+        const secondSection = document.querySelector('.section-problems');
+        if (secondSection) {
+            ScrollTrigger.create({
+                trigger: secondSection,
+                start: 'top 85%',
+                onEnter: () => stickyQuickBar.classList.remove('is-hidden'),
+                onLeaveBack: () => stickyQuickBar.classList.add('is-hidden')
+            });
+        } else {
+            // fallback: 스크롤 위치 기준
+            window.addEventListener('scroll', () => {
+                if (window.scrollY > window.innerHeight * 0.7) {
+                    stickyQuickBar.classList.remove('is-hidden');
+                } else {
+                    stickyQuickBar.classList.add('is-hidden');
+                }
+            });
+        }
 
         // 폼 비동기 전송 처리
         if (quickBarForm) {
@@ -2687,6 +2703,75 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
+    /* ==========================================================================
+       메뉴 모달 (사케 & 전체 단품) 열기/닫기 및 탭 조작
+       ========================================================================== */
+    const btnOpenMenuModal = document.getElementById('btnOpenMenuModal');
+    const btnCloseMenuModal = document.getElementById('btnCloseMenuModal');
+    const menuModalOverlay = document.getElementById('menuModalOverlay');
+
+    if (btnOpenMenuModal && menuModalOverlay) {
+        btnOpenMenuModal.addEventListener('click', () => {
+            menuModalOverlay.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        });
+    }
+
+    if (btnCloseMenuModal && menuModalOverlay) {
+        btnCloseMenuModal.addEventListener('click', () => {
+            menuModalOverlay.classList.remove('active');
+            document.body.style.overflow = '';
+        });
+    }
+
+    if (menuModalOverlay) {
+        menuModalOverlay.addEventListener('click', (e) => {
+            if (e.target === menuModalOverlay) {
+                menuModalOverlay.classList.remove('active');
+                document.body.style.overflow = '';
+            }
+        });
+    }
+
+    // 모달 내 탭 전환 (사케 라인업 / 전체 단품 메뉴)
+    const modalTabBtns = document.querySelectorAll('.modal-tab-btn');
+    const modalPanels = document.querySelectorAll('.modal-panel');
+
+    modalTabBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+            const targetId = btn.getAttribute('data-modaltab');
+
+            modalTabBtns.forEach(b => b.classList.remove('active'));
+            modalPanels.forEach(p => p.classList.remove('active'));
+
+            btn.classList.add('active');
+            const targetPanel = document.getElementById(targetId);
+            if (targetPanel) {
+                targetPanel.classList.add('active');
+            }
+        });
+    });
+
+    // 메인 메뉴 섹션 가로형 탭 전환
+    const mainTabBtns = document.querySelectorAll('#menuTabs .menu-tab-btn');
+    const mainPanels = document.querySelectorAll('.menu-showcase .menu-panel');
+
+    if (mainTabBtns.length > 0) {
+        mainTabBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                const targetTab = btn.getAttribute('data-tab');
+
+                mainTabBtns.forEach(b => b.classList.remove('active'));
+                mainPanels.forEach(p => p.classList.remove('active'));
+
+                btn.classList.add('active');
+                const targetPanel = document.querySelector(`.menu-showcase .menu-panel[data-panel="${targetTab}"]`);
+                if (targetPanel) {
+                    targetPanel.classList.add('active');
+                }
+            });
+        });
+    }
 });
 
 // 모든 리소스(이미지 등) 로드 완료 시 ScrollTrigger 위치를 재계산하여 레이아웃 시프트로 인한 좌표 왜곡 해결

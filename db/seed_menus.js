@@ -24,40 +24,36 @@ const indexes = [
 
 const seedData = [
     // 1. 추천메뉴 (recommended)
-    { category: 'recommended', badge: 'SIGNATURE', name: '모둠 숙성회', price: '시가', image_url: '/images/foods/물고기자리 연출컷-1.jpg', is_main: 1, sort_order: 1 },
-    { category: 'recommended', badge: 'POPULAR', name: '모둠 초밥', price: '28,000원', image_url: '/images/foods/초밥.jpg', is_main: 0, sort_order: 2 },
-    { category: 'recommended', badge: 'BEST', name: '생선 매운탕', price: '18,000원', image_url: '/images/foods/매운탕.jpg', is_main: 0, sort_order: 3 },
-    { category: 'recommended', badge: 'NEW', name: '셰프 특선 회', price: '시가', image_url: '/images/foods/물고기자리 연출컷-4.jpg', is_main: 0, sort_order: 4 },
+    { category: 'recommended', badge: 'SIGNATURE', name: '모둠 숙성회 1인 코스', price: '42,000원', image_url: '/images/foods/물고기자리 연출컷-1.jpg', is_main: 1, sort_order: 1 },
+    { category: 'recommended', badge: 'WINTER SPECIAL', name: '[겨울한정] 1인 코스', price: '52,000원', image_url: '/images/foods/물고기자리 연출컷-4.jpg', is_main: 0, sort_order: 2 },
+    { category: 'recommended', badge: 'BEST SAKE', name: '물고기자리 준마이', price: '40,000원', image_url: '/images/foods/메인횟집.jpg', is_main: 0, sort_order: 3 },
+    { category: 'recommended', badge: 'POPULAR', name: '도미 머리구이', price: '10,000원', image_url: '/images/foods/도미머리구이.jpg', is_main: 0, sort_order: 4 },
 
-    // 2. 숙성회 (sashimi)
-    { category: 'sashimi', badge: 'PREMIUM', name: '광어 숙성회', price: '시가', image_url: '/images/foods/물고기자리 연출컷-2.jpg', is_main: 1, sort_order: 1 },
-    { category: 'sashimi', badge: 'SEASON', name: '멍게', price: '15,000원', image_url: '/images/foods/멍게.jpg', is_main: 0, sort_order: 2 },
-    { category: 'sashimi', badge: 'FRESH', name: '참돔 숙성회', price: '시가', image_url: '/images/foods/물고기자리 연출컷-5.jpg', is_main: 0, sort_order: 3 },
-    { category: 'sashimi', badge: 'LIVE', name: '산낙지', price: '25,000원', image_url: '/images/foods/산낙지.jpg', is_main: 0, sort_order: 4 },
+    // 2. 숙성회 코스 (sashimi)
+    { category: 'sashimi', badge: 'MAIN COURSE', name: '모둠 숙성회 1인 코스', price: '42,000원', image_url: '/images/foods/물고기자리 연출컷-2.jpg', is_main: 1, sort_order: 1 },
+    { category: 'sashimi', badge: 'SEASON', name: '[겨울한정] 대방어 코스', price: '52,000원', image_url: '/images/foods/물고기자리 연출컷-5.jpg', is_main: 0, sort_order: 2 },
+    { category: 'sashimi', badge: 'FRESH', name: '산낙지 / 전복', price: '10,000원', image_url: '/images/foods/산낙지.jpg', is_main: 0, sort_order: 3 },
+    { category: 'sashimi', badge: 'FRESH', name: '싱싱한 멍게', price: '5,000원', image_url: '/images/foods/멍게.jpg', is_main: 0, sort_order: 4 },
 
-    // 3. 특선메뉴 (special)
-    { category: 'special', badge: "CHEF'S PICK", name: '도미 머리구이', price: '35,000원', image_url: '/images/foods/도미머리구이.jpg', is_main: 1, sort_order: 1 },
-    { category: 'special', badge: 'SPECIAL', name: '모둠 마끼', price: '22,000원', image_url: '/images/foods/마끼.jpg', is_main: 0, sort_order: 2 },
-    { category: 'special', badge: 'GRILLED', name: '마늘버섯구이', price: '16,000원', image_url: '/images/foods/마늘버섯구이.jpg', is_main: 0, sort_order: 3 },
-    { category: 'special', badge: 'LIMITED', name: '특선 코스', price: '시가', image_url: '/images/foods/물고기자리 연출컷-7.jpg', is_main: 0, sort_order: 4 },
+    // 3. 단품메뉴 (side)
+    { category: 'side', badge: "CHEF'S PICK", name: '도미 머리구이', price: '10,000원', image_url: '/images/foods/도미머리구이.jpg', is_main: 1, sort_order: 1 },
+    { category: 'side', badge: 'BEST SIDE', name: '새우튀김', price: '10,000원', image_url: '/images/foods/skidashe.webp', is_main: 0, sort_order: 2 },
+    { category: 'side', badge: 'SOUP', name: '서더리 매운탕', price: '10,000원', image_url: '/images/foods/매운탕.jpg', is_main: 0, sort_order: 3 },
+    { category: 'side', badge: 'NOODLE', name: '해물 얼큰 라면', price: '8,000원', image_url: '/images/foods/라면.jpg', is_main: 0, sort_order: 4 },
+    { category: 'side', badge: 'SNACK', name: '수제 닭강정', price: '3,000원', image_url: '/images/foods/닭강정.jpg', is_main: 0, sort_order: 5 },
+    { category: 'side', badge: 'SIDE', name: '마늘 버섯구이', price: '3,000원', image_url: '/images/foods/마늘버섯구이.jpg', is_main: 0, sort_order: 6 },
+    { category: 'side', badge: 'KIDS', name: '바삭한 돈까스', price: '5,000원', image_url: '/images/foods/돈가스.jpg', is_main: 0, sort_order: 7 },
+    { category: 'side', badge: 'ADD-ON', name: '초밥밥', price: '3,000원', image_url: '/images/foods/초밥.jpg', is_main: 0, sort_order: 8 },
 
-    // 4. 사이드 (side)
-    { category: 'side', badge: 'SIDE', name: '모둠 튀김', price: '18,000원', image_url: '/images/foods/skidashe.webp', is_main: 1, sort_order: 1 },
-    { category: 'side', badge: 'HOT', name: '닭강정', price: '16,000원', image_url: '/images/foods/닭강정.jpg', is_main: 0, sort_order: 2 },
-    { category: 'side', badge: 'KIDS', name: '새우 가스', price: '14,000원', image_url: '/images/foods/새우가스.jpg', is_main: 0, sort_order: 3 },
-    { category: 'side', badge: 'NOODLE', name: '볶음 우동', price: '12,000원', image_url: '/images/foods/볶음우동.jpg', is_main: 0, sort_order: 4 },
-
-    // 5. 점심특선 (lunch)
-    { category: 'lunch', badge: 'LUNCH', name: '점심 특선 A코스', price: '30,000원', image_url: '/images/foods/물고기자리 연출컷-10.jpg', is_main: 1, sort_order: 1 },
-    { category: 'lunch', badge: 'SIMPLE', name: '점심 라면 세트', price: '10,000원', image_url: '/images/foods/라면.jpg', is_main: 0, sort_order: 2 },
-    { category: 'lunch', badge: 'LUNCH', name: '점심 돈가스', price: '13,000원', image_url: '/images/foods/돈가스.jpg', is_main: 0, sort_order: 3 },
-    { category: 'lunch', badge: 'LUNCH', name: '점심 특선 B코스', price: '38,000원', image_url: '/images/foods/물고기자리 연출컷-11.jpg', is_main: 0, sort_order: 4 },
-
-    // 6. 세트메뉴 (set)
-    { category: 'set', badge: 'SET A', name: '2인 프리미엄 세트', price: '98,000원', image_url: '/images/foods/물고기자리 연출컷-12.jpg', is_main: 1, sort_order: 1 },
-    { category: 'set', badge: 'SET B', name: '4인 가족 세트', price: '178,000원', image_url: '/images/foods/물고기자리 연출컷-3.jpg', is_main: 0, sort_order: 2 },
-    { category: 'set', badge: 'SET C', name: '비즈니스 세트', price: '협의', image_url: '/images/foods/물고기자리 연출컷-6.jpg', is_main: 0, sort_order: 3 },
-    { category: 'set', badge: 'SET D', name: '파티 풀코스', price: '협의', image_url: '/images/foods/물고기자리 연출컷-9.jpg', is_main: 0, sort_order: 4 }
+    // 4. 사케 라인업 (sake)
+    { category: 'sake', badge: 'PREMIUM SAKE', name: '쿠보타 만쥬', price: '240,000원', image_url: '/images/foods/menu12.webp', is_main: 1, sort_order: 1 },
+    { category: 'sake', badge: 'LUXURY', name: '닷사이 준마이다이긴죠39', price: '130,000원', image_url: '/images/foods/물고기자리 연출컷-12.jpg', is_main: 0, sort_order: 2 },
+    { category: 'sake', badge: 'LIMITED', name: '쿠보타 준마이다이긴죠', price: '110,000원', image_url: '/images/foods/물고기자리 연출컷-3.jpg', is_main: 0, sort_order: 3 },
+    { category: 'sake', badge: 'BEST', name: '쿠보타 센쥬', price: '90,000원', image_url: '/images/foods/물고기자리 연출컷-6.jpg', is_main: 0, sort_order: 4 },
+    { category: 'sake', badge: 'RECOMMEND', name: '사쿠라 준마이', price: '65,000원', image_url: '/images/foods/물고기자리 연출컷-7.jpg', is_main: 0, sort_order: 5 },
+    { category: 'sake', badge: 'TRADITIONAL', name: '가모츠루 혼조조 가라구치', price: '55,000원', image_url: '/images/foods/물고기자리 연출컷-8.jpg', is_main: 0, sort_order: 6 },
+    { category: 'sake', badge: 'SPECIAL SALE', name: '물고기자리 준마이', price: '40,000원', image_url: '/images/foods/메인횟집.jpg', is_main: 0, sort_order: 7 },
+    { category: 'sake', badge: 'AWARD', name: '송죽매 준마이 750', price: '37,000원', image_url: '/images/foods/물고기자리 연출컷-9.jpg', is_main: 0, sort_order: 8 }
 ];
 
 async function main() {

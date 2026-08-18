@@ -1411,243 +1411,323 @@
                 <!-- 가로형 탭 네비게이션 -->
                 <nav class="menu-tabs" id="menuTabs">
                     <button class="menu-tab-btn active" data-tab="recommended">추천메뉴</button>
-                    <button class="menu-tab-btn" data-tab="sashimi">숙성회</button>
-                    <button class="menu-tab-btn" data-tab="special">특선메뉴</button>
-                    <button class="menu-tab-btn" data-tab="side">사이드</button>
-                    <button class="menu-tab-btn" data-tab="lunch">점심특선</button>
-                    <button class="menu-tab-btn" data-tab="set">세트메뉴</button>
+                    <button class="menu-tab-btn" data-tab="sashimi">숙성회 코스</button>
+                    <button class="menu-tab-btn" data-tab="side">단품메뉴</button>
+                    <button class="menu-tab-btn" data-tab="sake">사케 라인업</button>
                 </nav>
             </div>
 
-            <!-- 음식 이미지 쇼케이스 -->
+            <!-- 음식 이미지 쇼케이스 (실운영 DB 100% 동적 렌더링) -->
             <div class="menu-showcase">
 
-                <!-- 추천메뉴 -->
+                <%
+                    const safeMenuList = (typeof menuList !== 'undefined' && Array.isArray(menuList)) ? menuList : [];
+                    const recommendedList = safeMenuList.filter(m => m.category === 'recommended');
+                    const sashimiList = safeMenuList.filter(m => m.category === 'sashimi');
+                    const sideList = safeMenuList.filter(m => m.category === 'side');
+                    const sakeList = safeMenuList.filter(m => m.category === 'sake');
+                %>
+
+                <!-- 1. 추천메뉴 (2대 대형 코스 + 3개 수직 미니 사이드 벤토 그리드) -->
                 <div class="menu-panel active" data-panel="recommended">
-                    <div class="menu-grid">
-                        <div class="menu-card main-card">
-                            <img src="/images/foods/물고기자리 연출컷-1.webp" alt="추천메뉴 대표">
-                            <div class="menu-card-info">
-                                <span class="card-category">SIGNATURE</span>
-                                <h3 class="card-name">모둠 숙성회</h3>
-                                <p class="card-desc"
-                                    style="font-size: 13px; color: rgba(255, 255, 255, 0.7); line-height: 1.55; margin: 8px 0 12px 0; font-family: 'Pretendard', sans-serif; word-break: keep-all;">
-                                    도미의 담백함, 점성어의 쫄깃함, 광어의 깔끔함, 연어의 풍부함. 황금 비율로 완성한 프리미엄 숙성회 한 판.</p>
-                                <span class="card-price">1인 / 39,000원</span>
+                    <div class="menu-asymmetric-grid">
+                        
+                        <% if (recommendedList.length > 0) { %>
+                            <% const mainCourseDb = recommendedList[0]; %>
+                            <!-- Col 1: 메인 1번 대형 카드 -->
+                            <div class="hero-big-card">
+                                <img src="<%= mainCourseDb.image_url.replace('.jpg', '.webp') %>" alt="<%= mainCourseDb.name %>" class="card-bg-img">
+                                <div class="hero-card-overlay"></div>
+                                <div class="menu-card-info">
+                                    <span class="card-category signature"><%= mainCourseDb.badge || 'SIGNATURE' %></span>
+                                    <h3 class="card-name"><%= mainCourseDb.name %></h3>
+                                    <p class="card-desc">
+                                        도미, 광어, 점성어, 연어 등 최고급 원물을 24시간 저온 숙성. 야채죽, 멍게, 튀김, 닭강정, 생선구이, 해물라면/매운탕 포함 무한리필 코스.
+                                    </p>
+                                    <div class="card-sub-info">(미취학 아동 무료 / 초등학생 ₩ 19,900)</div>
+                                    <div class="card-price-wrap">
+                                        <span class="price-val">₩ <%= mainCourseDb.price.replace('원', '').trim() %></span>
+                                        <span class="price-unit">/ 1인 (무한리필)</span>
+                                    </div>
+                                </div>
                             </div>
-                        </div>
-                        <div class="menu-card">
-                            <img src="/images/foods/초밥.webp" alt="초밥">
-                            <div class="menu-card-info">
-                                <span class="card-category">POPULAR</span>
-                                <h3 class="card-name">모둠 초밥</h3>
-                                <span class="card-price">28,000원</span>
+                        <% } %>
+
+                        <% if (recommendedList.length > 1) { %>
+                            <% const winterCourseDb = recommendedList[1]; %>
+                            <!-- Col 2: 메인 2번 대형 카드 -->
+                            <div class="hero-big-card winter-card">
+                                <img src="<%= winterCourseDb.image_url.replace('.jpg', '.webp') %>" alt="<%= winterCourseDb.name %>" class="card-bg-img">
+                                <div class="hero-card-overlay"></div>
+                                <div class="menu-card-info">
+                                    <span class="card-category winter"><%= winterCourseDb.badge || 'WINTER LIMITED' %></span>
+                                    <h3 class="card-name"><%= winterCourseDb.name %></h3>
+                                    <p class="card-desc">
+                                        기름이 바짝 오른 10kg 이상 제철 대형 대방어를 추가로 구성하여 극상의 고소한 풍미를 선사하는 한정 무한리필 코스.
+                                    </p>
+                                    <div class="card-sub-info">(제철 최고급 대방어 특별 포함)</div>
+                                    <div class="card-price-wrap">
+                                        <span class="price-val accent-red">₩ <%= winterCourseDb.price.replace('원', '').trim() %></span>
+                                        <span class="price-unit">/ 1인 (무한리필)</span>
+                                    </div>
+                                </div>
                             </div>
+                        <% } %>
+
+                        <!-- Col 3: 우측 미니 카드 수직 스택 (나머지 DB 데이터 동적 바인딩) -->
+                        <div class="menu-side-stack">
+                            <% 
+                                const miniItems = recommendedList.slice(2); 
+                                miniItems.forEach(item => {
+                            %>
+                                <div class="mini-card-item">
+                                    <div class="mini-img-wrap">
+                                        <img src="<%= item.image_url.replace('.jpg', '.webp') %>" alt="<%= item.name %>">
+                                    </div>
+                                    <div class="mini-info">
+                                        <span class="mini-tag"><%= item.badge || 'POPULAR' %></span>
+                                        <h4 class="mini-name"><%= item.name %></h4>
+                                        <div class="mini-price">
+                                            <% if (item.price.includes('58,000') || item.name.includes('준마이')) { %>
+                                                <s class="old-p">₩ 58,000</s>
+                                                <span class="sale-p">₩ <%= item.price.replace('원', '').trim() %></span>
+                                            <% } else { %>
+                                                ₩ <%= item.price.replace('원', '').trim() %>
+                                            <% } %>
+                                        </div>
+                                    </div>
+                                </div>
+                            <% }); %>
                         </div>
-                        <div class="menu-card">
-                            <img src="/images/foods/매운탕.webp" alt="매운탕">
-                            <div class="menu-card-info">
-                                <span class="card-category">BEST</span>
-                                <h3 class="card-name">생선 매운탕</h3>
-                                <span class="card-price">18,000원</span>
-                            </div>
-                        </div>
-                        <div class="menu-card">
-                            <img src="/images/foods/물고기자리 연출컷-4.webp" alt="연출컷">
-                            <div class="menu-card-info">
-                                <span class="card-category">NEW</span>
-                                <h3 class="card-name">셰프 특선 회</h3>
-                                <span class="card-price">시가</span>
-                            </div>
-                        </div>
+
                     </div>
                 </div>
 
-                <!-- 숙성회 -->
+                <!-- 2. 숙성회 코스 (DB 동적 렌더링) -->
+                <div class="menu-panel" data-panel="sashimi">
+                    <div class="menu-grid">
+                        <% sashimiList.forEach((item, idx) => { %>
+                            <div class="menu-card <%= idx === 0 ? 'main-card' : '' %>">
+                                <img src="<%= item.image_url.replace('.jpg', '.webp') %>" alt="<%= item.name %>">
+                                <div class="menu-card-info">
+                                    <span class="card-category"><%= item.badge || 'PREMIUM' %></span>
+                                    <h3 class="card-name"><%= item.name %></h3>
+                                    <span class="card-price"><%= item.price %></span>
+                                </div>
+                            </div>
+                        <% }); %>
+                    </div>
+                </div>
+
+                <!-- 3. 단품메뉴 (DB 동적 렌더링) -->
+                <div class="menu-panel" data-panel="side">
+                    <div class="menu-grid">
+                        <% sideList.forEach((item, idx) => { %>
+                            <div class="menu-card <%= idx === 0 ? 'main-card' : '' %>">
+                                <img src="<%= item.image_url.replace('.jpg', '.webp') %>" alt="<%= item.name %>">
+                                <div class="menu-card-info">
+                                    <span class="card-category"><%= item.badge || 'SIDE' %></span>
+                                    <h3 class="card-name"><%= item.name %></h3>
+                                    <span class="card-price"><%= item.price %></span>
+                                </div>
+                            </div>
+                        <% }); %>
+                    </div>
+                </div>
+
+                <!-- 4. 사케 라인업 (DB 동적 렌더링) -->
+                <div class="menu-panel" data-panel="sake">
+                    <div class="menu-grid">
+                        <% sakeList.forEach((item, idx) => { %>
+                            <div class="menu-card <%= idx === 0 ? 'main-card' : '' %>">
+                                <img src="<%= item.image_url.replace('.jpg', '.webp') %>" alt="<%= item.name %>">
+                                <div class="menu-card-info">
+                                    <span class="card-category"><%= item.badge || 'SAKE' %></span>
+                                    <h3 class="card-name"><%= item.name %></h3>
+                                    <span class="card-price"><%= item.price %></span>
+                                </div>
+                            </div>
+                        <% }); %>
+                    </div>
+                </div>
+
+                <!-- 2. 숙성회 코스 -->
                 <div class="menu-panel" data-panel="sashimi">
                     <div class="menu-grid">
                         <div class="menu-card main-card">
-                            <img src="/images/foods/물고기자리 연출컷-2.webp" alt="숙성회">
+                            <img src="/images/foods/물고기자리 연출컷-2.webp" alt="1인 코스">
                             <div class="menu-card-info">
-                                <span class="card-category">PREMIUM</span>
-                                <h3 class="card-name">광어 숙성회</h3>
-                                <span class="card-price">시가</span>
+                                <span class="card-category">MAIN COURSE</span>
+                                <h3 class="card-name">모둠 숙성회 1인 코스</h3>
+                                <p class="card-desc" style="font-size: 13px; color: rgba(255, 255, 255, 0.7); line-height: 1.55; margin: 8px 0 12px 0;">
+                                    (미취학 아동 무료 / 초등학생 19,900원) 무제한 숙성회와 10여 가지 곁들임 요리 일체 제공</p>
+                                <span class="card-price">42,000원</span>
                             </div>
                         </div>
                         <div class="menu-card">
-                            <img src="/images/foods/멍게.webp" alt="멍게">
+                            <img src="/images/foods/물고기자리 연출컷-5.webp" alt="겨울한정 대방어 코스">
                             <div class="menu-card-info">
                                 <span class="card-category">SEASON</span>
-                                <h3 class="card-name">멍게</h3>
-                                <span class="card-price">15,000원</span>
-                            </div>
-                        </div>
-                        <div class="menu-card">
-                            <img src="/images/foods/물고기자리 연출컷-5.webp" alt="숙성회2">
-                            <div class="menu-card-info">
-                                <span class="card-category">FRESH</span>
-                                <h3 class="card-name">참돔 숙성회</h3>
-                                <span class="card-price">시가</span>
+                                <h3 class="card-name">[겨울한정] 대방어 코스</h3>
+                                <span class="card-price" style="color: #ff5252;">52,000원</span>
                             </div>
                         </div>
                         <div class="menu-card">
                             <img src="/images/foods/산낙지.webp" alt="산낙지">
                             <div class="menu-card-info">
-                                <span class="card-category">LIVE</span>
-                                <h3 class="card-name">산낙지</h3>
-                                <span class="card-price">25,000원</span>
+                                <span class="card-category">FRESH</span>
+                                <h3 class="card-name">산낙지 / 전복</h3>
+                                <span class="card-price">10,000원</span>
+                            </div>
+                        </div>
+                        <div class="menu-card">
+                            <img src="/images/foods/멍게.webp" alt="멍게">
+                            <div class="menu-card-info">
+                                <span class="card-category">FRESH</span>
+                                <h3 class="card-name">싱싱한 멍게</h3>
+                                <span class="card-price">5,000원</span>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <!-- 특선메뉴 -->
-                <div class="menu-panel" data-panel="special">
-                    <div class="menu-grid">
-                        <div class="menu-card main-card">
-                            <img src="/images/foods/도미머리구이.webp" alt="도미머리구이">
-                            <div class="menu-card-info">
-                                <span class="card-category">CHEF'S PICK</span>
-                                <h3 class="card-name">도미 머리구이</h3>
-                                <span class="card-price">35,000원</span>
-                            </div>
-                        </div>
-                        <div class="menu-card">
-                            <img src="/images/foods/마끼.webp" alt="마끼">
-                            <div class="menu-card-info">
-                                <span class="card-category">SPECIAL</span>
-                                <h3 class="card-name">모둠 마끼</h3>
-                                <span class="card-price">22,000원</span>
-                            </div>
-                        </div>
-                        <div class="menu-card">
-                            <img src="/images/foods/마늘버섯구이.webp" alt="마늘버섯구이">
-                            <div class="menu-card-info">
-                                <span class="card-category">GRILLED</span>
-                                <h3 class="card-name">마늘버섯구이</h3>
-                                <span class="card-price">16,000원</span>
-                            </div>
-                        </div>
-                        <div class="menu-card">
-                            <img src="/images/foods/물고기자리 연출컷-7.webp" alt="연출컷7">
-                            <div class="menu-card-info">
-                                <span class="card-category">LIMITED</span>
-                                <h3 class="card-name">특선 코스</h3>
-                                <span class="card-price">시가</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- 사이드 -->
+                <!-- 3. 단품메뉴 -->
                 <div class="menu-panel" data-panel="side">
                     <div class="menu-grid">
                         <div class="menu-card main-card">
-                            <img src="/images/foods/skidashe.webp" alt="모듬튀김">
+                            <img src="/images/foods/도미머리구이.webp" alt="도미 머리구이">
                             <div class="menu-card-info">
-                                <span class="card-category">SIDE</span>
-                                <h3 class="card-name">모둠 튀김</h3>
-                                <span class="card-price">18,000원</span>
+                                <span class="card-category">CHEF'S PICK</span>
+                                <h3 class="card-name">도미 머리구이</h3>
+                                <span class="card-price">10,000원</span>
+                            </div>
+                        </div>
+                        <div class="menu-card">
+                            <img src="/images/foods/skidashe.webp" alt="새우튀김">
+                            <div class="menu-card-info">
+                                <span class="card-category">BEST SIDE</span>
+                                <h3 class="card-name">새우튀김</h3>
+                                <span class="card-price">10,000원</span>
+                            </div>
+                        </div>
+                        <div class="menu-card">
+                            <img src="/images/foods/매운탕.webp" alt="매운탕">
+                            <div class="menu-card-info">
+                                <span class="card-category">SOUP</span>
+                                <h3 class="card-name">서더리 매운탕</h3>
+                                <span class="card-price">10,000원</span>
+                            </div>
+                        </div>
+                        <div class="menu-card">
+                            <img src="/images/foods/라면.webp" alt="해물라면">
+                            <div class="menu-card-info">
+                                <span class="card-category">NOODLE</span>
+                                <h3 class="card-name">해물 얼큰 라면</h3>
+                                <span class="card-price">8,000원</span>
                             </div>
                         </div>
                         <div class="menu-card">
                             <img src="/images/foods/닭강정.webp" alt="닭강정">
                             <div class="menu-card-info">
-                                <span class="card-category">HOT</span>
-                                <h3 class="card-name">닭강정</h3>
-                                <span class="card-price">16,000원</span>
+                                <span class="card-category">SNACK</span>
+                                <h3 class="card-name">수제 닭강정</h3>
+                                <span class="card-price">3,000원</span>
                             </div>
                         </div>
                         <div class="menu-card">
-                            <img src="/images/foods/새우가스.webp" alt="새우가스">
+                            <img src="/images/foods/마늘버섯구이.webp" alt="마늘버섯구이">
+                            <div class="menu-card-info">
+                                <span class="card-category">SIDE</span>
+                                <h3 class="card-name">마늘 버섯구이</h3>
+                                <span class="card-price">3,000원</span>
+                            </div>
+                        </div>
+                        <div class="menu-card">
+                            <img src="/images/foods/돈가스.webp" alt="돈까스">
                             <div class="menu-card-info">
                                 <span class="card-category">KIDS</span>
-                                <h3 class="card-name">새우 가스</h3>
-                                <span class="card-price">14,000원</span>
+                                <h3 class="card-name">바삭한 돈까스</h3>
+                                <span class="card-price">5,000원</span>
                             </div>
                         </div>
                         <div class="menu-card">
-                            <img src="/images/foods/볶음우동.webp" alt="볶음우동">
+                            <img src="/images/foods/초밥.webp" alt="초밥밥">
                             <div class="menu-card-info">
-                                <span class="card-category">NOODLE</span>
-                                <h3 class="card-name">볶음 우동</h3>
-                                <span class="card-price">12,000원</span>
+                                <span class="card-category">ADD-ON</span>
+                                <h3 class="card-name">초밥밥</h3>
+                                <span class="card-price">3,000원</span>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <!-- 점심특선 -->
-                <div class="menu-panel" data-panel="lunch">
+                <!-- 4. 사케 라인업 -->
+                <div class="menu-panel" data-panel="sake">
                     <div class="menu-grid">
                         <div class="menu-card main-card">
-                            <img src="/images/foods/물고기자리 연출컷-10.webp" alt="점심특선">
+                            <img src="/images/foods/menu12.webp" alt="쿠보타 만쥬">
                             <div class="menu-card-info">
-                                <span class="card-category">LUNCH</span>
-                                <h3 class="card-name">점심 특선 A코스</h3>
-                                <span class="card-price">30,000원</span>
+                                <span class="card-category">PREMIUM SAKE</span>
+                                <h3 class="card-name">쿠보타 만쥬 (720ml / 15%)</h3>
+                                <p class="card-desc" style="font-size: 12.5px; color: rgba(255, 255, 255, 0.7); line-height: 1.5; margin: 6px 0 10px 0;">
+                                    쿠보타 브랜드의 최고봉. 부드러운 향기와 깊은 맛의 최고급 사케</p>
+                                <span class="card-price">240,000원</span>
                             </div>
                         </div>
                         <div class="menu-card">
-                            <img src="/images/foods/라면.webp" alt="라면">
+                            <img src="/images/foods/물고기자리 연출컷-12.webp" alt="닷사이 준마이다이긴죠39">
                             <div class="menu-card-info">
-                                <span class="card-category">SIMPLE</span>
-                                <h3 class="card-name">점심 라면 세트</h3>
-                                <span class="card-price">10,000원</span>
+                                <span class="card-category">LUXURY</span>
+                                <h3 class="card-name">닷사이 준마이다이긴죠39</h3>
+                                <span class="card-price">130,000원</span>
                             </div>
                         </div>
                         <div class="menu-card">
-                            <img src="/images/foods/돈가스.webp" alt="돈가스">
+                            <img src="/images/foods/물고기자리 연출컷-3.webp" alt="쿠보타 준마이다이긴죠">
                             <div class="menu-card-info">
-                                <span class="card-category">LUNCH</span>
-                                <h3 class="card-name">점심 돈가스</h3>
-                                <span class="card-price">13,000원</span>
+                                <span class="card-category">LIMITED</span>
+                                <h3 class="card-name">쿠보타 준마이다이긴죠</h3>
+                                <span class="card-price">110,000원</span>
                             </div>
                         </div>
                         <div class="menu-card">
-                            <img src="/images/foods/물고기자리 연출컷-11.webp" alt="점심2">
+                            <img src="/images/foods/물고기자리 연출컷-6.webp" alt="쿠보타 센쥬">
                             <div class="menu-card-info">
-                                <span class="card-category">LUNCH</span>
-                                <h3 class="card-name">점심 특선 B코스</h3>
-                                <span class="card-price">38,000원</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- 세트메뉴 -->
-                <div class="menu-panel" data-panel="set">
-                    <div class="menu-grid">
-                        <div class="menu-card main-card">
-                            <img src="/images/foods/물고기자리 연출컷-12.webp" alt="세트">
-                            <div class="menu-card-info">
-                                <span class="card-category">SET A</span>
-                                <h3 class="card-name">2인 프리미엄 세트</h3>
-                                <span class="card-price">98,000원</span>
+                                <span class="card-category">BEST</span>
+                                <h3 class="card-name">쿠보타 센쥬 (720ml / 15%)</h3>
+                                <span class="card-price">90,000원</span>
                             </div>
                         </div>
                         <div class="menu-card">
-                            <img src="/images/foods/물고기자리 연출컷-3.webp" alt="세트2">
+                            <img src="/images/foods/물고기자리 연출컷-7.webp" alt="사쿠라 준마이">
                             <div class="menu-card-info">
-                                <span class="card-category">SET B</span>
-                                <h3 class="card-name">4인 가족 세트</h3>
-                                <span class="card-price">178,000원</span>
+                                <span class="card-category">RECOMMEND</span>
+                                <h3 class="card-name">사쿠라 준마이 (720ml / 15%)</h3>
+                                <span class="card-price">65,000원</span>
                             </div>
                         </div>
                         <div class="menu-card">
-                            <img src="/images/foods/물고기자리 연출컷-6.webp" alt="세트3">
+                            <img src="/images/foods/물고기자리 연출컷-8.webp" alt="가모츠루 혼조조">
                             <div class="menu-card-info">
-                                <span class="card-category">SET C</span>
-                                <h3 class="card-name">비즈니스 세트</h3>
-                                <span class="card-price">협의</span>
+                                <span class="card-category">TRADITIONAL</span>
+                                <h3 class="card-name">가모츠루 혼조조 가라구치</h3>
+                                <span class="card-price">55,000원</span>
                             </div>
                         </div>
                         <div class="menu-card">
-                            <img src="/images/foods/물고기자리 연출컷-9.webp" alt="세트4">
+                            <img src="/images/foods/메인횟집.webp" alt="물고기자리 준마이">
                             <div class="menu-card-info">
-                                <span class="card-category">SET D</span>
-                                <h3 class="card-name">파티 풀코스</h3>
-                                <span class="card-price">협의</span>
+                                <span class="card-category">SPECIAL SALE</span>
+                                <h3 class="card-name">물고기자리 준마이 (시그니처)</h3>
+                                <span class="card-price" style="color: #ff5252;"><s style="color: rgba(255,255,255,0.4); font-size: 13px;">58,000원</s> 40,000원</span>
+                            </div>
+                        </div>
+                        <div class="menu-card">
+                            <img src="/images/foods/물고기자리 연출컷-9.webp" alt="송죽매 준마이 750">
+                            <div class="menu-card-info">
+                                <span class="card-category">AWARD</span>
+                                <h3 class="card-name">송죽매 준마이 750</h3>
+                                <span class="card-price">37,000원</span>
                             </div>
                         </div>
                     </div>

@@ -757,7 +757,7 @@
 
             const id = '<%= menuItem ? menuItem.id : "" %>';
             const url = action === 'write' ? '/api/menu' : `/api/menu/${id}`;
-            const method = action === 'write' ? 'POST' : 'PUT';
+            const method = action === 'write' ? 'POST' : 'POST'; // 운영 서버 프록시/CORS 이슈 방지를 위한 POST 통일
 
             try {
                 // IMPORTANT: FormData를 전송할 때는 headers에 'Content-Type'을 세팅하지 않습니다. (브라우저가 경계 필드를 자동 생성하도록 놔둬야 함)
@@ -767,15 +767,15 @@
                 });
 
                 const data = await response.json();
-                if (data.success) {
-                    alert(data.message || '저장되었습니다.');
+                if (response.ok && data.success) {
+                    alert(data.message || '성공적으로 저장되었습니다.');
                     location.href = '/console/menu';
                 } else {
-                    alert(data.message || '저장에 실패했습니다.');
+                    alert(data.message || `저장에 실패했습니다. (상태 코드: ${response.status})`);
                 }
             } catch (err) {
                 console.error('Save error:', err);
-                alert('서버 통신 에러가 발생하여 저장하지 못했습니다.');
+                alert('서버 통신 중 에러가 발생했습니다: ' + err.message);
             }
         }
 
