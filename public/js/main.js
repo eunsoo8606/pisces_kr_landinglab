@@ -1790,13 +1790,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (menuSection && menuTabBtns.length > 0) {
 
-        // 탭 전환: 카드들이 순차 페이드인 (탄력적 back.out 모션 적용)
+        // 탭 전환: 비활성화 패널 감춤 및 활성화 패널 명확 렌더링
         const switchMenuTab = (targetTab) => {
             menuTabBtns.forEach(btn => btn.classList.remove('active'));
             menuPanels.forEach(panel => {
                 panel.classList.remove('active');
+                panel.style.display = 'none';
                 gsap.killTweensOf(panel);
-                gsap.killTweensOf(panel.querySelectorAll('.menu-card'));
+                gsap.killTweensOf(panel.querySelectorAll('.menu-card, .mini-card-item, .hero-big-card'));
             });
 
             const activeBtn = document.querySelector(`.menu-tab-btn[data-tab="${targetTab}"]`);
@@ -1805,19 +1806,22 @@ document.addEventListener('DOMContentLoaded', () => {
             if (activeBtn) activeBtn.classList.add('active');
             if (activePanel) {
                 activePanel.classList.add('active');
-                const cards = activePanel.querySelectorAll('.menu-card');
+                activePanel.style.display = 'block';
+                const cards = activePanel.querySelectorAll('.menu-card, .hero-big-card, .mini-card-item');
 
                 // 패널 페이드인
                 gsap.fromTo(activePanel,
                     { opacity: 0 },
-                    { opacity: 1, duration: 0.35, ease: 'power2.out' }
+                    { opacity: 1, duration: 0.3, ease: 'power2.out' }
                 );
 
-                // 개별 카드 순차적 탄성 점프 효과
-                gsap.fromTo(cards,
-                    { opacity: 0, y: 35, scale: 0.95 },
-                    { opacity: 1, y: 0, scale: 1, duration: 0.65, stagger: 0.08, ease: 'back.out(1.3)' }
-                );
+                // 개별 카드 순차적 진입 효과
+                if (cards.length > 0) {
+                    gsap.fromTo(cards,
+                        { opacity: 0, y: 25, scale: 0.98 },
+                        { opacity: 1, y: 0, scale: 1, duration: 0.5, stagger: 0.06, ease: 'power2.out' }
+                    );
+                }
             }
 
             // 현재 페이지가 독립 메뉴 소개 페이지(/menu)인 경우 브라우저 URL 동기화 (history.pushState)

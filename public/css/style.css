@@ -6571,19 +6571,15 @@ footer {
     min-height: 540px;
 }
 
-/* 패널 전환: GSAP과의 충돌 방지를 위해 CSS transition 제거 */
+/* 패널 전환: 비활성화 패널 완전히 숨김으로 겹침 현상 원천 차단 */
 .menu-panel {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
+    display: none !important;
     opacity: 0;
-    pointer-events: none;
 }
 
 .menu-panel.active {
+    display: block !important;
     opacity: 1;
-    pointer-events: auto;
     position: relative;
 }
 
