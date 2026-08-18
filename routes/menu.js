@@ -6,28 +6,14 @@ const { checkAuth } = require('./auth');
 const multer = require('multer');
 const path = require('path');
 const fs = require('fs');
+const { put, del } = require('@vercel/blob');
 
-// 저장 디렉토리 존재 확인 및 생성 (public/images/foods)
-const uploadDir = path.join(__dirname, '../public/images/foods');
-if (!fs.existsSync(uploadDir)) {
-    fs.mkdirSync(uploadDir, { recursive: true });
-}
-
-// Multer 스토리지 구성
-const storage = multer.diskStorage({
-    destination: (req, file, cb) => {
-        cb(null, uploadDir);
-    },
-    filename: (req, file, cb) => {
-        // 한글 파일명 깨짐 방지 및 고유성 확보를 위해 타임스탬프 + 난수 조합
-        const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1e9);
-        cb(null, uniqueSuffix + path.extname(file.originalname));
-    }
-});
+// Vercel Serverless 호환을 위한 Multer 메모리 스토리지 구성
+const storage = multer.memoryStorage();
 
 // 파일 필터 (이미지만 허용)
 const fileFilter = (req, file, cb) => {
-    if (file.mimetype.startsWith('image/')) {
+    if (file.mimetype && file.mimetype.startsWith('image/')) {
         cb(null, true);
     } else {
         cb(new Error('이미지 파일만 업로드할 수 있습니다.'), false);
@@ -40,23 +26,64 @@ const upload = multer({
     limits: { fileSize: 10 * 1024 * 1024 } // 10MB 제한
 });
 
-// 기존 업로드된 이미지 파일 삭제 헬퍼 함수
-const deleteOldImageFile = (imageUrl) => {
+// Vercel Blob 및 로컬 하이브리드 파일 업로드 헬퍼 함수
+async function saveUploadedFile(file, folderName = 'foods') {
+    if (!file) return '';
+
+    // 1. Vercel Blob Token이 환경변수에 지정되어 있는 경우 -> Vercel Blob 영구 고속 CDN 저장
+    if (process.env.BLOB_READ_WRITE_TOKEN) {
+        try {
+            const ext = path.extname(file.originalname) || '.jpg';
+            const blobPath = `${folderName}/${Date.now()}-${Math.round(Math.random() * 1e9)}${ext}`;
+            const blob = await put(blobPath, file.buffer, {
+                access: 'public',
+                token: process.env.BLOB_READ_WRITE_TOKEN
+            });
+            console.log('✅ Successfully uploaded image to Vercel Blob:', blob.url);
+            return blob.url;
+        } catch (blobErr) {
+            console.error('❌ Vercel Blob upload failed, fallbacking:', blobErr);
+        }
+    }
+
+    // 2. Token이 없거나 로컬 개발인 경우 Fallback
+    const ext = path.extname(file.originalname) || '.jpg';
+    const filename = `${Date.now()}-${Math.round(Math.random() * 1e9)}${ext}`;
+    const localDir = path.join(__dirname, `../public/images/${folderName}`);
+    if (!fs.existsSync(localDir)) {
+        fs.mkdirSync(localDir, { recursive: true });
+    }
+    const localPath = path.join(localDir, filename);
+    fs.writeFileSync(localPath, file.buffer);
+    return `/images/${folderName}/${filename}`;
+}
+
+// 기존 업로드된 이미지 파일 삭제 헬퍼 함수 (Vercel Blob / 로컬 경로 자동 지원)
+async function deleteOldImageFile(imageUrl) {
     if (!imageUrl) return;
-    // 시드 이미지(예: '물고기자리 연출컷-1.jpg', '초밥.jpg' 등)는 삭제하지 않고,
-    // multer로 업로드한 타임스탬프 조합 파일명(예: 1718273948291-382918392.jpg)만 타겟팅하여 삭제합니다.
+
+    // Vercel Blob 스토리지 파일인 경우
+    if (imageUrl.includes('vercel-storage.com')) {
+        try {
+            await del(imageUrl, { token: process.env.BLOB_READ_WRITE_TOKEN });
+            console.log('✅ Deleted file from Vercel Blob:', imageUrl);
+        } catch (err) {
+            console.error('❌ Failed to delete file from Vercel Blob:', err.message);
+        }
+        return;
+    }
+
+    // 로컬 디스크 파일인 경우
     const isUploadFile = /\/\d+-\d+\.[a-zA-Z0-9]+$/.test(imageUrl);
     if (isUploadFile) {
         const filePath = path.join(__dirname, '../public', imageUrl);
-        fs.unlink(filePath, (err) => {
-            if (err) {
-                console.error('❌ Failed to delete old image file:', filePath, err.message);
-            } else {
-                console.log('✅ Deleted old image file:', filePath);
-            }
-        });
+        if (fs.existsSync(filePath)) {
+            fs.unlink(filePath, (err) => {
+                if (err) console.error('❌ Failed to delete old local image file:', filePath, err.message);
+            });
+        }
     }
-};
+}
 
 // 카테고리 매핑 한글 라벨
 const categoryLabels = {
@@ -147,7 +174,7 @@ router.get('/console/menu/edit/:id', checkAuth, async (req, res) => {
     }
 });
 
-// 4. 메뉴 생성 API (POST /api/menu - multipart 대응)
+// 4. 메뉴 생성 API (POST /api/menu - Vercel Blob 연동)
 router.post('/api/menu', checkAuth, upload.single('image_file'), async (req, res) => {
     const { category, badge, name, price, is_main, sort_order } = req.body;
     
@@ -156,14 +183,12 @@ router.post('/api/menu', checkAuth, upload.single('image_file'), async (req, res
         return res.status(400).json({ success: false, message: '메뉴 이미지 파일을 업로드해 주세요.' });
     }
     
-    const image_url = `/images/foods/${req.file.filename}`;
-    
     if (!category || !name || !price) {
-        deleteOldImageFile(image_url);
         return res.status(400).json({ success: false, message: '카테고리, 메뉴명, 가격은 필수 입력 항목입니다.' });
     }
     
     try {
+        const image_url = await saveUploadedFile(req.file, 'foods');
         const mainCard = is_main === 1 || is_main === '1' || is_main === 'true' ? 1 : 0;
         const orderVal = parseInt(sort_order, 10) || 0;
         
@@ -176,45 +201,38 @@ router.post('/api/menu', checkAuth, upload.single('image_file'), async (req, res
         res.json({ success: true, message: '성공적으로 등록되었습니다.' });
     } catch (err) {
         console.error('❌ Failed to insert menu:', err);
-        if (req.file) {
-            deleteOldImageFile(`/images/foods/${req.file.filename}`);
-        }
         res.status(500).json({ success: false, message: 'DB 등록 에러: ' + (err.message || '서버 내부 DB 에러') });
     }
 });
 
-// 5. 메뉴 수정 공통 처리 함수 (PUT & POST 모두 수용하여 운영서버 호환성 100% 보장)
+// 5. 메뉴 수정 공통 처리 함수 (Vercel Blob 지원)
 const handleUpdateMenu = async (req, res) => {
     const id = req.params.id;
     const { category, badge, name, price, is_main, sort_order } = req.body;
     let image_url = req.body.image_url || '';
 
-    // 기존 메뉴 정보 조회 (이미지 삭제 및 유효성용)
+    // 기존 메뉴 정보 조회
     let oldImageUrl = '';
     try {
         const [rows] = await db.query('SELECT image_url FROM menus WHERE id = ? LIMIT 1', [id]);
         if (rows.length > 0) {
             oldImageUrl = rows[0].image_url;
         } else {
-            if (req.file) deleteOldImageFile(`/images/foods/${req.file.filename}`);
             return res.status(404).json({ success: false, message: '수정할 메뉴를 찾을 수 없습니다. (ID: ' + id + ')' });
         }
     } catch (dbErr) {
         console.error('❌ DB Error during pre-update menu check:', dbErr);
-        if (req.file) deleteOldImageFile(`/images/foods/${req.file.filename}`);
         return res.status(500).json({ success: false, message: 'DB 조회 에러: ' + (dbErr.message || '데이터베이스 오류') });
     }
 
-    // 파일 새로 첨부한 경우 기존 텍스트 경로 덮어쓰기
+    // 파일 새로 첨부한 경우 Vercel Blob / 로컬 스토리지 업로드
     if (req.file) {
-        image_url = `/images/foods/${req.file.filename}`;
+        image_url = await saveUploadedFile(req.file, 'foods');
     } else if (!image_url) {
-        // 파일도 없고 텍스트 경로도 없다면 기존 경로를 유지
         image_url = oldImageUrl;
     }
     
     if (!category || !name || !price || !image_url) {
-        if (req.file) deleteOldImageFile(`/images/foods/${req.file.filename}`);
         return res.status(400).json({ success: false, message: '카테고리, 메뉴명, 가격, 이미지는 필수 입력 항목입니다.' });
     }
     
@@ -230,19 +248,17 @@ const handleUpdateMenu = async (req, res) => {
         );
         
         if (result.affectedRows === 0) {
-            if (req.file) deleteOldImageFile(`/images/foods/${req.file.filename}`);
             return res.status(404).json({ success: false, message: '수정할 메뉴를 찾을 수 없습니다.' });
         }
 
-        // 이미지 파일이 성공적으로 교체되었고, 기존 이미지가 사용자 업로드 파일인 경우에만 이전 물리 파일 삭제
+        // 이미지 파일이 새 파일로 변경된 경우 기존 파일 삭제
         if (req.file && oldImageUrl && oldImageUrl !== image_url) {
-            deleteOldImageFile(oldImageUrl);
+            await deleteOldImageFile(oldImageUrl);
         }
         
         res.json({ success: true, message: '메뉴가 성공적으로 수정되었습니다.' });
     } catch (err) {
         console.error('❌ Failed to update menu in DB:', err);
-        if (req.file) deleteOldImageFile(`/images/foods/${req.file.filename}`);
         res.status(500).json({ success: false, message: 'DB 수정 에러: ' + (err.message || '서버 내부 DB 에러') });
     }
 };

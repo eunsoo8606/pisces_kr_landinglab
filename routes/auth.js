@@ -21,11 +21,17 @@ const loginLimiter = rateLimit({
     legacyHeaders: false,
 });
 
-// JWT 검증 미들웨어 함수
+// JWT 검증 미들웨어 함수 (API 요청 시 JSON 401 응답, 일반 뷰 요청 시 HTML Script 응답 분기)
 function checkAuth(req, res, next) {
     const token = req.cookies.admin_token;
+    const isApiRequest = req.xhr || 
+                         req.path.startsWith('/api/') || 
+                         (req.headers.accept && req.headers.accept.includes('application/json'));
 
     if (!token) {
+        if (isApiRequest) {
+            return res.status(401).json({ success: false, code: 'UNAUTHORIZED', message: '로그인이 필요합니다. 다시 로그인해 주세요.' });
+        }
         return res.send("<script>alert('로그인이 필요한 관리자 전용 페이지입니다.'); location.href='/console/login';</script>");
     }
 
@@ -37,6 +43,9 @@ function checkAuth(req, res, next) {
     } catch (err) {
         console.error('⚠️ JWT verification failed:', err.message);
         res.clearCookie('admin_token');
+        if (isApiRequest) {
+            return res.status(401).json({ success: false, code: 'SESSION_EXPIRED', message: '로그인 세션이 만료되었습니다. 다시 로그인해 주세요.' });
+        }
         return res.send("<script>alert('로그인 세션이 만료되었습니다. 다시 로그인 해주세요.'); location.href='/console/login';</script>");
     }
 }

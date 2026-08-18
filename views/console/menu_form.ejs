@@ -766,10 +766,27 @@
                     body: formData
                 });
 
+                const contentType = response.headers.get('content-type') || '';
+                
+                // 만약 JSON이 아닌 HTML 응답이 리턴된 경우 (로그인 세션 만료 리다이렉트 등)
+                if (!contentType.includes('application/json')) {
+                    if (response.status === 401) {
+                        alert('로그인 세션이 만료되었습니다. 로그인 페이지로 이동합니다.');
+                        location.href = '/console/login';
+                        return;
+                    }
+                    alert(`서버 응답 오류 (상태 코드: ${response.status}). 세션이 만료되었을 수 있으니 다시 로그인해 주세요.`);
+                    location.href = '/console/login';
+                    return;
+                }
+
                 const data = await response.json();
                 if (response.ok && data.success) {
                     alert(data.message || '성공적으로 저장되었습니다.');
                     location.href = '/console/menu';
+                } else if (response.status === 401) {
+                    alert(data.message || '로그인 세션이 만료되었습니다. 로그인 페이지로 이동합니다.');
+                    location.href = '/console/login';
                 } else {
                     alert(data.message || `저장에 실패했습니다. (상태 코드: ${response.status})`);
                 }

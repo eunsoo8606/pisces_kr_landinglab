@@ -6,28 +6,14 @@ const { checkAuth } = require('./auth');
 const multer = require('multer');
 const path = require('path');
 const fs = require('fs');
+const { put, del } = require('@vercel/blob');
 
-// 저장 디렉토리 존재 확인 및 생성 (public/images/popups)
-const uploadDir = path.join(__dirname, '../public/images/popups');
-if (!fs.existsSync(uploadDir)) {
-    fs.mkdirSync(uploadDir, { recursive: true });
-}
-
-// Multer 스토리지 구성
-const storage = multer.diskStorage({
-    destination: (req, file, cb) => {
-        cb(null, uploadDir);
-    },
-    filename: (req, file, cb) => {
-        // 한글 파일명 깨짐 방지 및 고유성 확보를 위해 타임스탬프 + 난수 조합
-        const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1e9);
-        cb(null, uniqueSuffix + path.extname(file.originalname));
-    }
-});
+// Vercel Serverless 대응 메모리 스토리지
+const storage = multer.memoryStorage();
 
 // 파일 필터 (이미지만 허용)
 const fileFilter = (req, file, cb) => {
-    if (file.mimetype.startsWith('image/')) {
+    if (file.mimetype && file.mimetype.startsWith('image/')) {
         cb(null, true);
     } else {
         cb(new Error('이미지 파일만 업로드할 수 있습니다.'), false);
@@ -40,21 +26,62 @@ const upload = multer({
     limits: { fileSize: 10 * 1024 * 1024 } // 10MB 제한
 });
 
-// 기존 업로드된 이미지 파일 삭제 헬퍼 함수
-const deleteOldImageFile = (imageUrl) => {
+// Vercel Blob 및 로컬 하이브리드 파일 업로드 헬퍼 함수
+async function saveUploadedFile(file, folderName = 'popups') {
+    if (!file) return '';
+
+    // 1. Vercel Blob Token이 환경변수에 지정되어 있는 경우 -> Vercel Blob 영구 저장
+    if (process.env.BLOB_READ_WRITE_TOKEN) {
+        try {
+            const ext = path.extname(file.originalname) || '.jpg';
+            const blobPath = `${folderName}/${Date.now()}-${Math.round(Math.random() * 1e9)}${ext}`;
+            const blob = await put(blobPath, file.buffer, {
+                access: 'public',
+                token: process.env.BLOB_READ_WRITE_TOKEN
+            });
+            console.log('✅ Successfully uploaded popup to Vercel Blob:', blob.url);
+            return blob.url;
+        } catch (blobErr) {
+            console.error('❌ Vercel Blob popup upload failed, fallbacking:', blobErr);
+        }
+    }
+
+    // 2. Token이 없거나 로컬 개발인 경우 Fallback
+    const ext = path.extname(file.originalname) || '.jpg';
+    const filename = `${Date.now()}-${Math.round(Math.random() * 1e9)}${ext}`;
+    const localDir = path.join(__dirname, `../public/images/${folderName}`);
+    if (!fs.existsSync(localDir)) {
+        fs.mkdirSync(localDir, { recursive: true });
+    }
+    const localPath = path.join(localDir, filename);
+    fs.writeFileSync(localPath, file.buffer);
+    return `/images/${folderName}/${filename}`;
+}
+
+// 기존 업로드된 이미지 파일 삭제 헬퍼 함수 (Vercel Blob / 로컬 지원)
+async function deleteOldImageFile(imageUrl) {
     if (!imageUrl) return;
+
+    if (imageUrl.includes('vercel-storage.com')) {
+        try {
+            await del(imageUrl, { token: process.env.BLOB_READ_WRITE_TOKEN });
+            console.log('✅ Deleted popup file from Vercel Blob:', imageUrl);
+        } catch (err) {
+            console.error('❌ Failed to delete popup from Vercel Blob:', err.message);
+        }
+        return;
+    }
+
     const isUploadFile = /\/\d+-\d+\.[a-zA-Z0-9]+$/.test(imageUrl);
     if (isUploadFile) {
         const filePath = path.join(__dirname, '../public', imageUrl);
-        fs.unlink(filePath, (err) => {
-            if (err) {
-                console.error('❌ Failed to delete old popup image file:', filePath, err.message);
-            } else {
-                console.log('✅ Deleted old popup image file:', filePath);
-            }
-        });
+        if (fs.existsSync(filePath)) {
+            fs.unlink(filePath, (err) => {
+                if (err) console.error('❌ Failed to delete old popup file:', filePath, err.message);
+            });
+        }
     }
-};
+}
 
 // 1. 관리자 팝업 목록 조회
 router.get('/console/popup', checkAuth, async (req, res) => {
@@ -109,7 +136,7 @@ router.get('/console/popup/edit/:id', checkAuth, async (req, res) => {
     }
 });
 
-// 4. 팝업 생성 API (POST /api/popup)
+// 4. 팝업 생성 API (POST /api/popup - Vercel Blob 연동)
 router.post('/api/popup', checkAuth, upload.single('image_file'), async (req, res) => {
     const { title, link_url, target, width, height, position_top, position_left, start_date, end_date, is_active } = req.body;
     
@@ -117,14 +144,12 @@ router.post('/api/popup', checkAuth, upload.single('image_file'), async (req, re
         return res.status(400).json({ success: false, message: '팝업 이미지 파일을 업로드해 주세요.' });
     }
     
-    const image_url = `/images/popups/${req.file.filename}`;
-    
     if (!title || !start_date || !end_date) {
-        deleteOldImageFile(image_url);
         return res.status(400).json({ success: false, message: '팝업 제목, 노출 시작일, 노출 종료일은 필수 입력 항목입니다.' });
     }
     
     try {
+        const image_url = await saveUploadedFile(req.file, 'popups');
         const activeVal = is_active === 1 || is_active === '1' || is_active === 'true' ? 1 : 0;
         const widthVal = parseInt(width, 10) || 400;
         const heightVal = parseInt(height, 10) || 500;
@@ -140,14 +165,11 @@ router.post('/api/popup', checkAuth, upload.single('image_file'), async (req, re
         res.json({ success: true, message: '성공적으로 등록되었습니다.' });
     } catch (err) {
         console.error('❌ Failed to insert popup:', err);
-        if (req.file) {
-            deleteOldImageFile(`/images/popups/${req.file.filename}`);
-        }
-        res.status(500).json({ success: false, message: '서버 내부 DB 에러가 발생했습니다.' });
+        res.status(500).json({ success: false, message: 'DB 등록 에러: ' + (err.message || '서버 에러') });
     }
 });
 
-// 5. 팝업 수정 공통 처리 함수 (PUT & POST 모두 지원)
+// 5. 팝업 수정 공통 처리 함수 (Vercel Blob 지원)
 const handleUpdatePopup = async (req, res) => {
     const id = req.params.id;
     const { title, link_url, target, width, height, position_top, position_left, start_date, end_date, is_active } = req.body;
@@ -159,23 +181,20 @@ const handleUpdatePopup = async (req, res) => {
         if (rows.length > 0) {
             oldImageUrl = rows[0].image_url;
         } else {
-            if (req.file) deleteOldImageFile(`/images/popups/${req.file.filename}`);
             return res.status(404).json({ success: false, message: '수정할 팝업을 찾을 수 없습니다.' });
         }
     } catch (dbErr) {
         console.error('❌ DB Error during pre-update popup check:', dbErr);
-        if (req.file) deleteOldImageFile(`/images/popups/${req.file.filename}`);
         return res.status(500).json({ success: false, message: 'DB 조회 에러: ' + (dbErr.message || '데이터베이스 오류') });
     }
 
     if (req.file) {
-        image_url = `/images/popups/${req.file.filename}`;
+        image_url = await saveUploadedFile(req.file, 'popups');
     } else if (!image_url) {
         image_url = oldImageUrl;
     }
     
     if (!title || !image_url || !start_date || !end_date) {
-        if (req.file) deleteOldImageFile(`/images/popups/${req.file.filename}`);
         return res.status(400).json({ success: false, message: '팝업 제목, 이미지, 노출 시작일, 노출 종료일은 필수 입력 항목입니다.' });
     }
     
@@ -194,18 +213,16 @@ const handleUpdatePopup = async (req, res) => {
         );
         
         if (result.affectedRows === 0) {
-            if (req.file) deleteOldImageFile(`/images/popups/${req.file.filename}`);
             return res.status(404).json({ success: false, message: '수정할 팝업을 찾을 수 없습니다.' });
         }
 
         if (req.file && oldImageUrl && oldImageUrl !== image_url) {
-            deleteOldImageFile(oldImageUrl);
+            await deleteOldImageFile(oldImageUrl);
         }
         
         res.json({ success: true, message: '팝업 정보가 성공적으로 수정되었습니다.' });
     } catch (err) {
         console.error('❌ Failed to update popup:', err);
-        if (req.file) deleteOldImageFile(`/images/popups/${req.file.filename}`);
         res.status(500).json({ success: false, message: 'DB 수정 에러: ' + (err.message || '서버 내부 에러') });
     }
 };
