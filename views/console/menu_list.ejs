@@ -873,9 +873,9 @@
                         <div class="filter-inputs">
                             <select name="category" class="select-control">
                                 <option value="">전체 카테고리</option>
-                                <% Object.keys(categoryLabels).forEach(key => { %>
-                                    <option value="<%= key %>" <%= categoryFilter === key ? 'selected' : '' %>><%= categoryLabels[key] %></option>
-                                <% }) %>
+                                <option value="recommended" <%= (categoryFilter === 'recommended' || categoryFilter === 'main') ? 'selected' : '' %>>메인메뉴</option>
+                                <option value="side" <%= categoryFilter === 'side' ? 'selected' : '' %>>사이드</option>
+                                <option value="sake" <%= categoryFilter === 'sake' ? 'selected' : '' %>>사케</option>
                             </select>
                         </div>
                     </div>

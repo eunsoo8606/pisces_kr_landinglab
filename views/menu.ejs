@@ -35,9 +35,9 @@
 
                 <!-- 가로형 3대 탭 네비게이션 -->
                 <nav class="menu-tabs" id="menuTabs">
-                    <button class="menu-tab-btn <%= (activeTab === 'course' || activeTab === 'recommended') ? 'active' : '' %>" data-tab="course">1인 코스</button>
-                    <button class="menu-tab-btn <%= activeTab === 'side' ? 'active' : '' %>" data-tab="side">사이드 메뉴</button>
-                    <button class="menu-tab-btn <%= activeTab === 'sake' ? 'active' : '' %>" data-tab="sake">사케 라인업</button>
+                    <button class="menu-tab-btn <%= (activeTab === 'main' || activeTab === 'course' || activeTab === 'recommended') ? 'active' : '' %>" data-tab="main">메인메뉴</button>
+                    <button class="menu-tab-btn <%= activeTab === 'side' ? 'active' : '' %>" data-tab="side">사이드</button>
+                    <button class="menu-tab-btn <%= activeTab === 'sake' ? 'active' : '' %>" data-tab="sake">사케</button>
                 </nav>
             </div>
 
@@ -58,13 +58,13 @@
                     const sideMiniItems = (recommendedList.length >= 5) ? recommendedList.slice(2, 5) : (sideList.length > 0 ? sideList.slice(0, 3) : []);
                 %>
 
-                <!-- 1. 1인 코스 탭 (2대 메인 코스 벤토 카드 + 3개 사이드 미니 스택) -->
-                <div class="menu-panel <%= (activeTab === 'course' || activeTab === 'recommended') ? 'active' : '' %>" data-panel="course">
+                <!-- 1. 메인메뉴 탭 (2대 메인 코스 벤토 카드 + 3개 사이드 미니 스택) -->
+                <div class="menu-panel <%= (activeTab === 'main' || activeTab === 'course' || activeTab === 'recommended') ? 'active' : '' %>" data-panel="main">
                     <div class="menu-asymmetric-grid">
                         
                         <!-- Col 1: 메인 1인 코스 -->
                         <div class="hero-big-card">
-                            <img src="<%= mainCourseDb.image_url %>" alt="<%= mainCourseDb.name %>" class="card-bg-img" onerror="this.src='/images/logo.webp'">
+                            <img src="<%= encodeURI(mainCourseDb.image_url) %>" alt="<%= mainCourseDb.name %>" class="card-bg-img" onerror="this.src='/images/logo.webp'">
                             <div class="hero-card-overlay"></div>
                             <div class="menu-card-info">
                                 <span class="card-category signature"><%= mainCourseDb.badge || 'SIGNATURE' %></span>
@@ -82,7 +82,7 @@
 
                         <!-- Col 2: [겨울한정] 대방어 1인 코스 -->
                         <div class="hero-big-card winter-card">
-                            <img src="<%= winterCourseDb.image_url %>" alt="<%= winterCourseDb.name %>" class="card-bg-img" onerror="this.src='/images/logo.webp'">
+                            <img src="<%= encodeURI(winterCourseDb.image_url) %>" alt="<%= winterCourseDb.name %>" class="card-bg-img" onerror="this.src='/images/logo.webp'">
                             <div class="hero-card-overlay"></div>
                             <div class="menu-card-info">
                                 <span class="card-category winter"><%= winterCourseDb.badge || 'WINTER LIMITED' %></span>
@@ -102,7 +102,7 @@
                         <div class="menu-side-stack">
                             <% sideMiniItems.forEach(item => { %>
                                 <div class="mini-card-item">
-                                    <img src="<%= item.image_url %>" alt="<%= item.name %>" class="mini-card-bg" onerror="this.src='/images/logo.webp'">
+                                    <img src="<%= encodeURI(item.image_url) %>" alt="<%= item.name %>" class="mini-card-bg" onerror="this.src='/images/logo.webp'">
                                     <div class="mini-card-overlay"></div>
                                     <div class="mini-info">
                                         <span class="mini-tag"><%= item.badge || 'SIDE' %></span>
@@ -123,7 +123,7 @@
                     <div class="menu-grid">
                         <% sideList.forEach((item, idx) => { %>
                             <div class="menu-card <%= idx === 0 ? 'main-card' : '' %>">
-                                <img src="<%= item.image_url %>" alt="<%= item.name %>" onerror="this.src='/images/logo.webp'">
+                                <img src="<%= encodeURI(item.image_url) %>" alt="<%= item.name %>" onerror="this.src='/images/logo.webp'">
                                 <div class="menu-card-info">
                                     <span class="card-category"><%= item.badge || 'SIDE' %></span>
                                     <h3 class="card-name"><%= item.name %></h3>
@@ -139,7 +139,7 @@
                     <div class="menu-grid">
                         <% sakeList.forEach((item, idx) => { %>
                             <div class="menu-card <%= idx === 0 ? 'main-card' : '' %>">
-                                <img src="<%= item.image_url %>" alt="<%= item.name %>" onerror="this.src='/images/logo.webp'">
+                                <img src="<%= encodeURI(item.image_url) %>" alt="<%= item.name %>" onerror="this.src='/images/logo.webp'">
                                 <div class="menu-card-info">
                                     <span class="card-category"><%= item.badge || 'SAKE' %></span>
                                     <h3 class="card-name"><%= item.name %></h3>

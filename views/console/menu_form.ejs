@@ -594,9 +594,9 @@
                             <label class="form-label" for="category">카테고리 <span class="required">*</span></label>
                             <select id="category" name="category" class="form-control" required>
                                 <option value="" disabled <%= !menuItem ? 'selected' : '' %>>선택해 주세요</option>
-                                <% Object.keys(categoryLabels).forEach(key => { %>
-                                    <option value="<%= key %>" <%= (menuItem && menuItem.category === key) ? 'selected' : '' %>><%= categoryLabels[key] %></option>
-                                <% }) %>
+                                <option value="recommended" <%= (menuItem && (menuItem.category === 'recommended' || menuItem.category === 'main' || menuItem.category === 'sashimi')) ? 'selected' : '' %>>메인메뉴</option>
+                                <option value="side" <%= (menuItem && menuItem.category === 'side') ? 'selected' : '' %>>사이드</option>
+                                <option value="sake" <%= (menuItem && menuItem.category === 'sake') ? 'selected' : '' %>>사케</option>
                             </select>
                         </div>
 

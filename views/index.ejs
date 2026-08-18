@@ -1445,7 +1445,7 @@
 
                             <!-- Col 1: 메인 1인 코스 (대형) -->
                             <div class="hero-big-card">
-                                <img src="<%= mainCourseDb.image_url %>" alt="<%= mainCourseDb.name %>" class="card-bg-img" onerror="this.src='/images/logo.webp'">
+                                <img src="<%= encodeURI(mainCourseDb.image_url) %>" alt="<%= mainCourseDb.name %>" class="card-bg-img" onerror="this.src='/images/logo.webp'">
                                 <div class="hero-card-overlay"></div>
                                 <div class="menu-card-info">
                                     <span class="card-category signature"><%= mainCourseDb.badge || 'SIGNATURE' %></span>
@@ -1463,7 +1463,7 @@
 
                             <!-- Col 2: [겨울한정] 대방어 1인 코스 (대형) -->
                             <div class="hero-big-card winter-card">
-                                <img src="<%= winterCourseDb.image_url %>" alt="<%= winterCourseDb.name %>" class="card-bg-img" onerror="this.src='/images/logo.webp'">
+                                <img src="<%= encodeURI(winterCourseDb.image_url) %>" alt="<%= winterCourseDb.name %>" class="card-bg-img" onerror="this.src='/images/logo.webp'">
                                 <div class="hero-card-overlay"></div>
                                 <div class="menu-card-info">
                                     <span class="card-category winter"><%= winterCourseDb.badge || 'WINTER LIMITED' %></span>
@@ -1483,7 +1483,7 @@
                             <div class="menu-side-stack">
                                 <% sideMiniItems.forEach(item => { %>
                                     <div class="mini-card-item">
-                                        <img src="<%= item.image_url %>" alt="<%= item.name %>" class="mini-card-bg" onerror="this.src='/images/logo.webp'">
+                                        <img src="<%= encodeURI(item.image_url) %>" alt="<%= item.name %>" class="mini-card-bg" onerror="this.src='/images/logo.webp'">
                                         <div class="mini-card-overlay"></div>
                                         <div class="mini-info">
                                             <span class="mini-tag"><%= item.badge || 'SIDE' %></span>
@@ -1499,71 +1499,7 @@
                         </div>
                     </div>
 
-                    <!-- 2. 숙성회 코스 (DB 동적 렌더링) -->
-                    <div class="menu-panel" data-panel="sashimi">
-                        <div class="menu-grid">
-                            <% sashimiList.forEach((item, idx)=> { %>
-                                <div class="menu-card <%= idx === 0 ? 'main-card' : '' %>">
-                                    <img src="<%= item.image_url.replace('.jpg', '.webp') %>" alt="<%= item.name %>">
-                                    <div class="menu-card-info">
-                                        <span class="card-category">
-                                            <%= item.badge || 'PREMIUM' %>
-                                        </span>
-                                        <h3 class="card-name">
-                                            <%= item.name %>
-                                        </h3>
-                                        <span class="card-price">
-                                            <%= item.price %>
-                                        </span>
-                                    </div>
-                                </div>
-                                <% }); %>
-                        </div>
-                    </div>
 
-                    <!-- 3. 단품메뉴 (DB 동적 렌더링) -->
-                    <div class="menu-panel" data-panel="side">
-                        <div class="menu-grid">
-                            <% sideList.forEach((item, idx)=> { %>
-                                <div class="menu-card <%= idx === 0 ? 'main-card' : '' %>">
-                                    <img src="<%= item.image_url.replace('.jpg', '.webp') %>" alt="<%= item.name %>">
-                                    <div class="menu-card-info">
-                                        <span class="card-category">
-                                            <%= item.badge || 'SIDE' %>
-                                        </span>
-                                        <h3 class="card-name">
-                                            <%= item.name %>
-                                        </h3>
-                                        <span class="card-price">
-                                            <%= item.price %>
-                                        </span>
-                                    </div>
-                                </div>
-                                <% }); %>
-                        </div>
-                    </div>
-
-                    <!-- 4. 사케 라인업 (DB 동적 렌더링) -->
-                    <div class="menu-panel" data-panel="sake">
-                        <div class="menu-grid">
-                            <% sakeList.forEach((item, idx)=> { %>
-                                <div class="menu-card <%= idx === 0 ? 'main-card' : '' %>">
-                                    <img src="<%= item.image_url.replace('.jpg', '.webp') %>" alt="<%= item.name %>">
-                                    <div class="menu-card-info">
-                                        <span class="card-category">
-                                            <%= item.badge || 'SAKE' %>
-                                        </span>
-                                        <h3 class="card-name">
-                                            <%= item.name %>
-                                        </h3>
-                                        <span class="card-price">
-                                            <%= item.price %>
-                                        </span>
-                                    </div>
-                                </div>
-                                <% }); %>
-                        </div>
-                    </div>
 
                     <!-- 2. 숙성회 코스 -->
                     <div class="menu-panel" data-panel="sashimi">

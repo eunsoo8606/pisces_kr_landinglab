@@ -42,15 +42,16 @@ router.get(['/menu', '/menu/:category'], async (req, res) => {
     const categoryParam = req.params.category || 'recommend';
     
     const categoryMap = {
-        'course': 'course',
-        'recommend': 'course',
-        'recommended': 'course',
-        'sashimi': 'course',
+        'main': 'main',
+        'course': 'main',
+        'recommend': 'main',
+        'recommended': 'main',
+        'sashimi': 'main',
         'side': 'side',
         'sake': 'sake'
     };
     
-    const activeTab = categoryMap[categoryParam] || 'course';
+    const activeTab = categoryMap[categoryParam] || 'main';
     
     try {
         const [menuList] = await db.query('SELECT * FROM menus ORDER BY sort_order ASC, id ASC');

@@ -1851,32 +1851,40 @@ document.addEventListener('DOMContentLoaded', () => {
                 scrollTrigger: { trigger: menuSection, start: 'top 75%', toggleActions: 'play none none none' }
             }
         );
-        gsap.fromTo(menuSection.querySelector('.menu-tabs'),
-            { opacity: 0, x: 45 },
-            {
-                opacity: 1, x: 0, duration: 0.95, ease: 'power3.out',
-                scrollTrigger: { trigger: menuSection, start: 'top 75%', toggleActions: 'play none none none' }
-            }
-        );
+        const menuTabsEl = menuSection.querySelector('.menu-tabs');
+        if (menuTabsEl) {
+            gsap.fromTo(menuTabsEl,
+                { opacity: 0, x: 45 },
+                {
+                    opacity: 1, x: 0, duration: 0.95, ease: 'power3.out',
+                    scrollTrigger: { trigger: menuSection, start: 'top 75%', toggleActions: 'play none none none' }
+                }
+            );
+        }
 
         // 그리드 카드들 순차적 튕김 모션
-        const initCards = menuSection.querySelectorAll('.menu-panel.active .menu-card');
-        gsap.fromTo(initCards,
-            { opacity: 0, y: 35, scale: 0.95 },
-            {
-                opacity: 1, y: 0, scale: 1, duration: 0.75, stagger: 0.09, ease: 'back.out(1.3)',
-                scrollTrigger: { trigger: menuSection, start: 'top 60%', toggleActions: 'play none none none' }
-            }
-        );
+        const initCards = menuSection.querySelectorAll('.menu-panel.active .menu-card, .menu-panel.active .hero-big-card, .menu-panel.active .mini-card-item');
+        if (initCards && initCards.length > 0) {
+            gsap.fromTo(initCards,
+                { opacity: 0, y: 35, scale: 0.95 },
+                {
+                    opacity: 1, y: 0, scale: 1, duration: 0.75, stagger: 0.09, ease: 'back.out(1.3)',
+                    scrollTrigger: { trigger: menuSection, start: 'top 60%', toggleActions: 'play none none none' }
+                }
+            );
+        }
 
         // 하단 더보기 버튼 페이드 업 진입
-        gsap.fromTo(menuSection.querySelector('.menu-more-action'),
-            { opacity: 0, y: 25 },
-            {
-                opacity: 1, y: 0, duration: 0.85, ease: 'power2.out',
-                scrollTrigger: { trigger: menuSection, start: 'top 80%', toggleActions: 'play none none none' }
-            }
-        );
+        const menuMoreBtn = menuSection.querySelector('.menu-more-action');
+        if (menuMoreBtn) {
+            gsap.fromTo(menuMoreBtn,
+                { opacity: 0, y: 25 },
+                {
+                    opacity: 1, y: 0, duration: 0.85, ease: 'power2.out',
+                    scrollTrigger: { trigger: menuSection, start: 'top 80%', toggleActions: 'play none none none' }
+                }
+            );
+        }
     }
 
     const storeItems = document.querySelectorAll('.store-item');
@@ -1929,16 +1937,18 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // 3. 스크롤 진입 시 좌측 날개(Left Wing) 대칭 슬라이딩 애니메이션 (원래의 안전한 기본 모션 복구)
-    gsap.from('.sales-dashboard .left-wing', {
-        xPercent: -20,
-        opacity: 0,
-        duration: 1.5,
-        ease: 'power3.out',
-        scrollTrigger: {
-            trigger: '.sales-dashboard',
-            start: 'top 80%'
-        }
-    });
+    if (document.querySelector('.sales-dashboard .left-wing')) {
+        gsap.from('.sales-dashboard .left-wing', {
+            xPercent: -20,
+            opacity: 0,
+            duration: 1.5,
+            ease: 'power3.out',
+            scrollTrigger: {
+                trigger: '.sales-dashboard',
+                start: 'top 80%'
+            }
+        });
+    }
 
     // ※ ScrollTrigger가 Lenis 가상 스크롤러 및 모바일 스크롤 바운싱과 꼬여 작동하지 않던 현상을 해결하기 위해,
     // 브라우저 순수 내장 API인 IntersectionObserver를 활용하여 100% 안정적인 양방향 focused 클래스 토글을 구현합니다.

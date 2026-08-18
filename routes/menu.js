@@ -85,14 +85,13 @@ async function deleteOldImageFile(imageUrl) {
     }
 }
 
-// 카테고리 매핑 한글 라벨
+// 카테고리 매핑 한글 라벨 (메인메뉴, 사이드, 사케 3대 카테고리)
 const categoryLabels = {
-    'recommended': '추천메뉴',
-    'sashimi': '숙성회',
-    'special': '특선메뉴',
+    'recommended': '메인메뉴',
+    'main': '메인메뉴',
+    'sashimi': '메인메뉴',
     'side': '사이드',
-    'lunch': '점심특선',
-    'set': '세트메뉴'
+    'sake': '사케'
 };
 
 // 1. 관리자 메뉴 목록 조회
