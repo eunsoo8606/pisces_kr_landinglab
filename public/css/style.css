@@ -5677,11 +5677,12 @@ footer {
     }
 
     .cost-table tbody td.cost-amount {
-        font-family: 'Outfit', sans-serif !important;
-        font-size: 24px !important;
+        font-family: 'Outfit', 'Pretendard', sans-serif !important;
+        font-size: 22px !important;
         font-weight: 800 !important;
-        color: #0056b3 !important;
+        color: #00d2ff !important;
         margin-bottom: 10px !important;
+        text-shadow: 0 2px 8px rgba(0, 210, 255, 0.25) !important;
     }
 
     .cost-table tbody td:nth-child(3) {
