@@ -108,6 +108,22 @@ async function fetchCountryInfo(ip) {
     return { country: 'Unknown', country_code: 'XX' };
 }
 
+// 봇/크롤러(Bot, Spider, Crawler 등) User-Agent 필터링 헬퍼 함수
+function isBotUserAgent(ua) {
+    if (!ua) return true; // User-Agent 헤더가 비어있으면 자동화 스크립트로 간주하여 무시
+    const botPattern = /bot|crawl|spider|slurp|facebookexternalhit|meta-externalagent|twitterbot|pinterest|whatsapp|telegrambot|discordbot|curl|wget|python|postman|axios|fetch|lighthouse|inspect|checker|scan|search|headless|phantom|selenium/i;
+    return botPattern.test(ua);
+}
+
+// 로컬 개발/사설망 IP 필터링 헬퍼 함수
+function isLocalIp(ip) {
+    if (!ip) return true;
+    const clean = ip.replace(/^::ffff:/, '').trim();
+    if (clean === '::1' || clean === '127.0.0.1' || clean === 'localhost' || clean === '0.0.0.0') return true;
+    if (clean.startsWith('192.168.') || clean.startsWith('10.') || /^172\.(1[6-9]|2[0-9]|3[0-1])\./.test(clean)) return true;
+    return false;
+}
+
 // 전역 방문자 퍼스널 로그(visitor_logs) 수집 미들웨어
 app.use((req, res, next) => {
     // 정적 자원 요청(css, js, 이미지 등)은 로그 대상에서 필터링
@@ -125,13 +141,18 @@ app.use((req, res, next) => {
 
     const ip = req.headers['x-forwarded-for'] || req.socket.remoteAddress || '';
     const cleanIp = ip.split(',')[0].trim(); // 프록시 IP 처리
+    const userAgent = req.headers['user-agent'] || '';
 
-    // 로컬 IP(IPv4 루프백, IPv6 루프백, 사설망 IP 대역 등)로 접근 시 DB 저장을 제외하고 진행
-    if (!cleanIp || cleanIp === '::1' || cleanIp === '127.0.0.1' || cleanIp.startsWith('192.168.') || cleanIp.startsWith('10.')) {
+    // 1. 로컬 IP(IPv4 루프백, IPv6 루프백, 사설망 IP 대역 등) 차단
+    if (isLocalIp(cleanIp)) {
         return next();
     }
 
-    const userAgent = req.headers['user-agent'] || '';
+    // 2. 검색엔진 크롤러 및 각종 자동화 봇(Bot) 차단
+    if (isBotUserAgent(userAgent)) {
+        return next();
+    }
+
     const referer = req.headers['referer'] || '';
     const requestedUrl = req.originalUrl || '';
 

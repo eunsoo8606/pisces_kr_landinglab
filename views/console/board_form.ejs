@@ -479,9 +479,9 @@
 <body>
     <!-- 모바일 전용 헤더 -->
     <div class="mobile-header">
-        <div style="display: flex; align-items: center; gap: 10px;">
-            <button class="mobile-menu-btn" id="btnToggleMenu" aria-label="메뉴 열기">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <div style="display: flex; align-items: center; gap: 12px;">
+            <button class="mobile-menu-btn" id="btnToggleMenu" aria-label="메뉴 열기" style="display: flex; align-items: center; justify-content: center; width: 40px; height: 40px; background: #f1f5f9; border: 1px solid #cbd5e1; border-radius: 10px; color: #0f172a; cursor: pointer;">
+                <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="#0f172a" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
                     <line x1="3" y1="12" x2="21" y2="12"></line>
                     <line x1="3" y1="6" x2="21" y2="6"></line>
                     <line x1="3" y1="18" x2="21" y2="18"></line>
@@ -610,7 +610,7 @@
                             <label for="content" class="form-label">
                                 <%= category === 'notice' ? '공지 내용' : 'FAQ 답변' %>
                             </label>
-                            <textarea id="content" class="form-control" style="height: 300px; resize: vertical;" placeholder="내용을 입력하세요." required><%= board ? board.content : '' %></textarea>
+                            <textarea id="content" class="form-control" style="height: 300px; resize: vertical;" placeholder="내용을 입력하세요."><%= board ? board.content : '' %></textarea>
                         </div>
 
                         <% if (category === 'notice') { %>
@@ -743,9 +743,16 @@
 
             // 1. 공지사항/FAQ인 경우
             if (category === 'notice' || category === 'faq') {
-                payload.title = document.getElementById('title').value;
-                // 에디터 데이터 우선 가져오기, 없을 시 textarea 백업
-                payload.content = contentEditor ? contentEditor.getData() : document.getElementById('content').value;
+                const titleVal = document.getElementById('title').value.trim();
+                const contentVal = contentEditor ? contentEditor.getData() : document.getElementById('content').value;
+
+                if (!titleVal || !contentVal || !contentVal.trim() || contentVal === '<p>&nbsp;</p>') {
+                    alert('제목과 내용을 모두 작성해 주세요.');
+                    return;
+                }
+
+                payload.title = titleVal;
+                payload.content = contentVal;
                 
                 const pinCheck = document.getElementById('is_pinned');
                 if (pinCheck) {
