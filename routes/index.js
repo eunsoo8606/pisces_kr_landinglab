@@ -70,57 +70,45 @@ router.get(['/menu', '/menu/:category'], async (req, res) => {
     }
 });
 
-// 3. 가맹점 현황 라우트
-router.get(['/stores', '/brand/stores'], (req, res) => {
-    // DB 테이블 생성 전 제공되는 임시 가맹점 데이터 샘플
-    const sampleStores = [
-        {
-            name: '물고기자리 본점 (정자점)',
-            address: '경기도 성남시 분당구 성남대로331번길 3-3',
-            phone: '031-711-2234',
-            lat: 37.361543,
-            lng: 127.110292
-        },
-        {
-            name: '물고기자리 강남역점',
-            address: '서울특별시 강남구 테헤란로4길 46',
-            phone: '02-556-3345',
-            lat: 37.496521,
-            lng: 127.030588
-        },
-        {
-            name: '물고기자리 수원망포점',
-            address: '경기도 수원시 영통구 영통로 130-1',
-            phone: '031-205-4456',
-            lat: 37.243588,
-            lng: 127.058334
-        },
-        {
-            name: '물고기자리 인천송도점',
-            address: '인천광역시 연수구 컨벤시아대로 80',
-            phone: '032-831-5567',
-            lat: 37.393452,
-            lng: 126.652311
-        },
-        {
-            name: '물고기자리 일산대화점',
-            address: '경기도 고양시 일산서구 대화로 123',
-            phone: '031-921-6678',
-            lat: 37.675688,
-            lng: 126.748332
+// 3. 가맹점 현황 라우트 (DB 동적 연동)
+router.get(['/stores', '/brand/stores'], async (req, res) => {
+    try {
+        let stores = [];
+        try {
+            const [rows] = await db.query("SELECT name, address, phone, lat, lng FROM stores WHERE use_yn = 'Y' ORDER BY id ASC");
+            // lat, lng 숫자로 파싱
+            stores = rows.map(s => ({
+                ...s,
+                lat: parseFloat(s.lat),
+                lng: parseFloat(s.lng)
+            }));
+        } catch (dbErr) {
+            console.error('⚠️ DB store query fallback:', dbErr.message);
         }
-    ];
 
-    console.log("🔎 [DEBUG] Rendering stores/index, sampleStores length:", sampleStores.length);
+        // DB 조회가 비어있을 경우 예비 샘플
+        if (stores.length === 0) {
+            stores = [
+                { name: '물고기자리 본점 (정자점)', address: '경기도 성남시 분당구 성남대로331번길 3-3', phone: '031-711-2234', lat: 37.361543, lng: 127.110292 },
+                { name: '물고기자리 강남역점', address: '서울특별시 강남구 테헤란로4길 46', phone: '02-556-3345', lat: 37.496521, lng: 127.030588 },
+                { name: '물고기자리 수원망포점', address: '경기도 수원시 영통구 영통로 130-1', phone: '031-205-4456', lat: 37.243588, lng: 127.058334 },
+                { name: '물고기자리 인천송도점', address: '인천광역시 연수구 컨벤시아대로 80', phone: '032-831-5567', lat: 37.393452, lng: 126.652311 },
+                { name: '물고기자리 일산대화점', address: '경기도 고양시 일산서구 대화로 123', phone: '031-921-6678', lat: 37.675688, lng: 126.748332 }
+            ];
+        }
 
-    res.render('stores/index', {
-        title: '가맹점 현황 | 물고기자리 - 프리미엄 숙성회',
-        branding: 'PISCES since 2002',
-        storesData: sampleStores,
-        kakaoKey: process.env.KAKAO_MAP_JAVASCRIPT_KEY || '',
-        metaDescription: '물고기자리의 가맹점 현황을 소개합니다. 가까운 매장을 찾아 특별한 숙성회 맛을 경험해 보세요.',
-        metaKeywords: '물고기자리 매장, 가맹점 찾기, 물고기자리 지점, 숙성회 매장'
-    });
+        res.render('stores/index', {
+            title: '가맹점 현황 | 물고기자리 - 프리미엄 숙성회',
+            branding: 'PISCES since 2002',
+            storesData: stores,
+            kakaoKey: process.env.KAKAO_MAP_JAVASCRIPT_KEY || '',
+            metaDescription: '물고기자리의 가맹점 현황을 소개합니다. 가까운 매장을 찾아 특별한 숙성회 맛을 경험해 보세요.',
+            metaKeywords: '물고기자리 매장, 가맹점 찾기, 물고기자리 지점, 숙성회 매장'
+        });
+    } catch (err) {
+        console.error('❌ Error rendering stores page:', err);
+        res.status(500).send('가맹점 현황 페이지 로딩 중 오류가 발생했습니다.');
+    }
 });
 
 // 4. 가맹 관련 라우트 리다이렉션

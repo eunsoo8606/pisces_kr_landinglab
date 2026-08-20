@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= title %> | 물고기자리 관리자</title>
+    <link rel="icon" type="image/png" href="/images/logo.webp">
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Admin Dashboard CSS -->
+    <link rel="stylesheet" href="/css/admin-dashboard.css">
+
+    <style>
+        * { box-sizing: border-box; }
+        body { margin: 0; padding: 0; font-family: 'Noto Sans KR', sans-serif; background-color: #f8fafc; color: #0f172a; }
+        .dashboard-layout { display: flex; min-height: 100vh; }
+        .console-sidebar { width: 260px; background: #0f172a; color: #ffffff; padding: 30px 20px; flex-shrink: 0; display: flex; flex-direction: column; transition: all 0.3s ease; position: fixed; top: 0; bottom: 0; left: 0; z-index: 99; }
+        .sidebar-logo { display: flex; align-items: center; gap: 10px; padding-bottom: 30px; border-bottom: 1px solid rgba(255, 255, 255, 0.1); margin-bottom: 30px; }
+        .sidebar-logo img { height: 32px; width: auto; }
+        .sidebar-logo span { font-family: 'Outfit', sans-serif; font-size: 14px; font-weight: 700; color: #0284c7; letter-spacing: 1px; text-transform: uppercase; border: 1px solid rgba(2, 132, 199, 0.4); padding: 2px 6px; border-radius: 4px; background: rgba(2, 132, 199, 0.1); }
+        .sidebar-menu { display: flex; flex-direction: column; gap: 6px; }
+        .menu-item { display: flex; align-items: center; gap: 12px; padding: 12px 16px; color: #94a3b8; text-decoration: none; font-size: 14px; font-weight: 500; border-radius: 10px; transition: all 0.2s ease; }
+        .menu-item svg { width: 18px; height: 18px; flex-shrink: 0; }
+        .menu-item:hover { color: #ffffff; background: rgba(255, 255, 255, 0.05); }
+        .menu-item.active { color: #ffffff; background: #0284c7; font-weight: 700; box-shadow: 0 4px 12px rgba(2, 132, 199, 0.3); }
+        .menu-item.sub-item { padding-left: 24px; font-size: 13px; }
+        .console-main { flex: 1; margin-left: 260px; padding: 40px; background-color: #f8fafc; }
+        .main-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; border-bottom: 1px solid #e2e8f0; padding-bottom: 20px; }
+        .main-header-title h2 { font-size: 26px; font-weight: 800; margin: 0; color: #0f172a; letter-spacing: -0.5px; }
+        .main-header-title p { font-size: 13px; color: #64748b; margin: 6px 0 0 0; }
+        .header-profile-wrap { display: flex; align-items: center; gap: 15px; background: #ffffff; border: 1px solid #e2e8f0; padding: 8px 16px; border-radius: 12px; }
+        .header-profile-wrap .user-name { font-size: 13px; font-weight: 800; color: #0f172a; }
+        .header-profile-wrap .user-role { font-size: 10px; color: #64748b; }
+        .btn-logout { display: flex; align-items: center; gap: 6px; padding: 6px 12px; background: rgba(239, 68, 68, 0.06); border: 1px solid rgba(239, 68, 68, 0.15); color: #ef4444; font-size: 12px; font-weight: 700; border-radius: 8px; text-decoration: none; }
+
+        /* 폼 컨테이너 */
+        .board-form-container { background: #ffffff; border: 1px solid #e2e8f0; border-radius: 16px; padding: 32px; box-shadow: 0 4px 12px rgba(15, 23, 42, 0.015); max-width: 800px; margin: 0 auto; }
+        .form-group { margin-bottom: 24px; }
+        .form-label { display: flex; align-items: center; gap: 8px; font-size: 14px; font-weight: 700; color: #0f172a; margin-bottom: 8px; }
+        .form-input { width: 100%; padding: 12px 16px; font-size: 14px; border: 1px solid #cbd5e1; border-radius: 8px; background: #ffffff; transition: all 0.2s ease; outline: none; }
+        .form-input:focus { border-color: #0284c7; box-shadow: 0 0 0 3px rgba(2, 132, 199, 0.1); }
+        .form-input[readonly] { background: #f8fafc; color: #64748b; }
+        .btn-primary { padding: 12px 24px; background: #0284c7; color: #ffffff; border: none; border-radius: 8px; font-size: 14px; font-weight: 700; cursor: pointer; transition: all 0.2s ease; }
+        .btn-primary:hover { background: #0369a1; }
+        .btn-secondary { padding: 12px 24px; background: #f1f5f9; color: #475569; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 14px; font-weight: 700; cursor: pointer; transition: all 0.2s ease; text-decoration: none; display: inline-flex; align-items: center; gap: 6px; }
+        .btn-secondary:hover { background: #e2e8f0; color: #0f172a; }
+        .form-actions { display: flex; justify-content: flex-end; gap: 12px; margin-top: 32px; padding-top: 24px; border-top: 1px solid #e2e8f0; }
+
+        .mobile-header { display: none; padding: 15px 20px; background: #ffffff; border-bottom: 1px solid #e2e8f0; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 100; }
+        .mobile-menu-btn { background: none; border: none; color: #0f172a; cursor: pointer; padding: 5px; }
+        .sidebar-backdrop { display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0, 0, 0, 0.4); z-index: 98; }
+
+        @media (max-width: 992px) {
+            .console-sidebar { transform: translateX(-100%); }
+            .console-sidebar.open { transform: translateX(0); box-shadow: 10px 0 35px rgba(15, 23, 42, 0.1); }
+            .console-main { margin-left: 0; padding: 30px 20px; }
+            .mobile-header { display: flex; }
+            .main-header { display: none; }
+            .sidebar-backdrop.open { display: block; }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- 모바일 전용 헤더 -->
+    <div class="mobile-header">
+        <div style="display: flex; align-items: center; gap: 10px;">
+            <button class="mobile-menu-btn" id="btnToggleMenu" aria-label="메뉴 열기">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="3" y1="12" x2="21" y2="12"></line>
+                    <line x1="3" y1="6" x2="21" y2="6"></line>
+                    <line x1="3" y1="18" x2="21" y2="18"></line>
+                </svg>
+            </button>
+            <img src="/images/logo.webp" alt="물고기자리" style="height: 28px; width: auto;">
+        </div>
+        <span style="color: #0284c7; font-size: 11px; font-weight: bold; border: 1px solid rgba(2,132,199,0.3); padding: 1px 4px; border-radius: 4px; background: rgba(2,132,199,0.05);">console</span>
+    </div>
+
+    <!-- 모바일 사이드바 백드롭 -->
+    <div class="sidebar-backdrop" id="sidebarBackdrop"></div>
+
+    <div class="dashboard-layout">
+        <!-- 좌측 고정 사이드바 -->
+        <div class="console-sidebar" id="consoleSidebar">
+            <div class="sidebar-logo">
+                <img src="/images/logo.webp" alt="물고기자리 로고">
+                <span>console</span>
+            </div>
+            
+            <div class="sidebar-menu">
+                <!-- 1. 대쉬보드 -->
+                <a href="/console/dashboard" class="menu-item">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <rect x="3" y="3" width="7" height="9"></rect>
+                        <rect x="14" y="3" width="7" height="5"></rect>
+                        <rect x="14" y="12" width="7" height="9"></rect>
+                        <rect x="3" y="16" width="7" height="5"></rect>
+                    </svg>
+                    <span>대쉬보드</span>
+                </a>
+
+                <!-- 2. 게시판 관리 -->
+                <div class="menu-group" style="display: flex; flex-direction: column; gap: 4px; margin-top: 10px;">
+                    <div class="menu-group-title" style="padding: 5px 20px; font-size: 11px; font-weight: bold; color: #94a3b8; text-transform: uppercase; letter-spacing: 1px;">게시판 관리</div>
+                    <a href="/console/board/notice" class="menu-item sub-item">
+                        <span>- 공지사항 관리</span>
+                    </a>
+                    <a href="/console/board/faq" class="menu-item sub-item">
+                        <span>- FAQ 관리</span>
+                    </a>
+                    <a href="/console/board/voice" class="menu-item sub-item">
+                        <span>- 고객의 소리 관리</span>
+                    </a>
+                    <a href="/console/board/inquiry" class="menu-item sub-item">
+                        <span>- 문의게시판 관리</span>
+                    </a>
+                </div>
+
+                <!-- 3. 메뉴(음식) 관리 -->
+                <a href="/console/menu" class="menu-item" style="margin-top: 10px;">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
+                        <path d="M2 12h20"></path>
+                    </svg>
+                    <span>메뉴(음식) 관리</span>
+                </a>
+
+                <!-- 4. 팝업관리 -->
+                <a href="/console/popup" class="menu-item" style="margin-top: 10px;">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                        <line x1="9" y1="3" x2="9" y2="21"></line>
+                        <line x1="17" y1="9" x2="21" y2="9"></line>
+                        <line x1="17" y1="15" x2="21" y2="15"></line>
+                    </svg>
+                    <span>팝업관리</span>
+                </a>
+
+                <!-- 5. 가맹점 관리 (활성화) -->
+                <a href="/console/franchise" class="menu-item active" style="margin-top: 10px;">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                        <circle cx="12" cy="10" r="3"></circle>
+                    </svg>
+                    <span>가맹점 관리</span>
+                </a>
+            </div>
+        </div>
+
+        <!-- 우측 메인 콘텐츠 영역 -->
+        <div class="console-main">
+            <!-- 메인 헤더 -->
+            <div class="main-header">
+                <div class="main-header-title">
+                    <h2><%= title %></h2>
+                    <p>신규 가맹점의 매장명, 주소, 연락처 및 지도 위경도 좌표를 입력/수정합니다.</p>
+                </div>
+                
+                <% const userInfo = (typeof user !== 'undefined' && user) ? user : ((typeof adminUser !== 'undefined' && adminUser) ? adminUser : {}); %>
+                <div class="header-profile-wrap">
+                    <div style="display: flex; flex-direction: column; gap: 2px;">
+                        <span class="user-name"><%= userInfo.name || '관리자' %> 님</span>
+                        <span class="user-role"><%= userInfo.role === 'super_admin' ? '최고관리자' : '관리자' %></span>
+                    </div>
+                    <a href="/console/logout" class="btn-logout">
+                        <i class="fas fa-sign-out-alt"></i>
+                        <span>로그아웃</span>
+                    </a>
+                </div>
+            </div>
+
+            <!-- 페이지 콘텐츠 -->
+            <div class="board-form-container">
+                <form id="storeForm" method="POST" action="/console/franchise/<%= mode === 'edit' ? 'edit/' + store.id : 'add' %>">
+                    <!-- 매장명 -->
+                    <div class="form-group">
+                        <label for="name" class="form-label">
+                            <i class="fas fa-store" style="color: #0284c7;"></i>
+                            매장명 *
+                        </label>
+                        <input type="text" id="name" name="name" class="form-input" placeholder="예: 물고기자리 강남역점" required value="<%= store ? store.name : '' %>">
+                    </div>
+
+                    <!-- 주소 -->
+                    <div class="form-group">
+                        <label for="address" class="form-label">
+                            <i class="fas fa-map-marker-alt" style="color: #0284c7;"></i>
+                            매장 주소 *
+                        </label>
+                        <div style="display: flex; gap: 10px;">
+                            <input type="text" id="address" name="address" class="form-input" placeholder="주소를 검색하세요" required readonly value="<%= store ? store.address : '' %>" style="flex: 1;">
+                            <button type="button" onclick="searchAddress()" class="btn-secondary" style="white-space: nowrap; padding: 0 20px;">
+                                주소 검색
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- 위도/경도 (자동 입력) -->
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                        <div class="form-group">
+                            <label for="lat" class="form-label">위도 (Latitude)</label>
+                            <input type="text" id="lat" name="lat" class="form-input" readonly required value="<%= store ? store.lat : '' %>" placeholder="주소를 검색하면 자동 입력됩니다.">
+                        </div>
+                        <div class="form-group">
+                            <label for="lng" class="form-label">경도 (Longitude)</label>
+                            <input type="text" id="lng" name="lng" class="form-input" readonly required value="<%= store ? store.lng : '' %>" placeholder="주소를 검색하면 자동 입력됩니다.">
+                        </div>
+                    </div>
+
+                    <!-- 연락처 -->
+                    <div class="form-group">
+                        <label for="phone" class="form-label">
+                            <i class="fas fa-phone" style="color: #0284c7;"></i>
+                            매장 연락처
+                        </label>
+                        <input type="text" id="phone" name="phone" class="form-input" placeholder="예: 02-556-3345" value="<%= store ? store.phone : '' %>">
+                    </div>
+
+                    <!-- 노출 여부 -->
+                    <div class="form-group">
+                        <label class="form-label">노출 여부</label>
+                        <div style="display: flex; gap: 20px; align-items: center; padding-top: 6px;">
+                            <label style="display: flex; align-items: center; gap: 8px; cursor: pointer; font-size: 14px; font-weight: 600;">
+                                <input type="radio" name="use_yn" value="Y" <%= (!store || store.use_yn === 'Y') ? 'checked' : '' %>> 노출 (홈페이지 지도 표시)
+                            </label>
+                            <label style="display: flex; align-items: center; gap: 8px; cursor: pointer; font-size: 14px; font-weight: 600;">
+                                <input type="radio" name="use_yn" value="N" <%= (store && store.use_yn === 'N') ? 'checked' : '' %>> 숨김
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- 버튼 그룹 -->
+                    <div class="form-actions">
+                        <a href="/console/franchise" class="btn-secondary">
+                            <i class="fas fa-arrow-left"></i>
+                            목록으로 돌아가기
+                        </a>
+                        <button type="submit" class="btn-primary">
+                            <i class="fas fa-check"></i>
+                            <%= mode === 'edit' ? '수정 완료' : '등록 완료' %>
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- 우편번호 서비스 스크립트 -->
+    <script src="https://t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+    <!-- 카카오 맵 SDK (autoload=false 적용) -->
+    <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=32d21192c59a01f88208043771e1a27d&libraries=services&autoload=false"></script>
+
+    <script>
+        const btnToggleMenu = document.getElementById('btnToggleMenu');
+        const consoleSidebar = document.getElementById('consoleSidebar');
+        const sidebarBackdrop = document.getElementById('sidebarBackdrop');
+
+        if (btnToggleMenu && consoleSidebar && sidebarBackdrop) {
+            const toggleSidebar = () => {
+                consoleSidebar.classList.toggle('open');
+                sidebarBackdrop.classList.toggle('open');
+            };
+            btnToggleMenu.addEventListener('click', toggleSidebar);
+            sidebarBackdrop.addEventListener('click', toggleSidebar);
+        }
+
+        let geocoder = null;
+
+        // SDK 로드 후 지오코더 초기화
+        if (typeof kakao !== 'undefined' && kakao.maps) {
+            kakao.maps.load(function () {
+                if (kakao.maps.services) {
+                    geocoder = new kakao.maps.services.Geocoder();
+                    console.log('✅ 카카오 주소-좌표 변환 서비스 준비 완료');
+                }
+            });
+        }
+
+        function searchAddress() {
+            new daum.Postcode({
+                oncomplete: function (data) {
+                    const addr = data.address;
+                    document.getElementById("address").value = addr;
+
+                    setTimeout(function () {
+                        if (!geocoder && typeof kakao !== 'undefined' && kakao.maps && kakao.maps.services) {
+                            geocoder = new kakao.maps.services.Geocoder();
+                        }
+
+                        if (geocoder) {
+                            geocoder.addressSearch(addr, function (results, status) {
+                                if (status === kakao.maps.services.Status.OK) {
+                                    document.getElementById("lat").value = results[0].y;
+                                    document.getElementById("lng").value = results[0].x;
+                                    console.log('✅ 위경도 좌표 추출 성공:', results[0].y, results[0].x);
+                                } else {
+                                    console.error('❌ 좌표 검색 실패:', status);
+                                }
+                            });
+                        } else {
+                            console.error('❌ 카카오 지도 서비스를 불러올 수 없습니다.');
+                            alert('지도 서비스가 아직 준비되지 않았습니다. 잠시 후 다시 시도해주시거나 페이지를 새로고침해주세요.');
+                        }
+                    }, 500);
+                }
+            }).open();
+        }
+
+        // 폼 유효성 검사
+        document.getElementById('storeForm').addEventListener('submit', function (e) {
+            const lat = document.getElementById('lat').value;
+            const lng = document.getElementById('lng').value;
+            if (!lat || !lng) {
+                e.preventDefault();
+                alert('주소를 검색하여 위도와 경도를 추출해주세요.');
+                return false;
+            }
+        });
+    </script>
+</body>
+
+</html>

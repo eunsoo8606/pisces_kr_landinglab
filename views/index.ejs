@@ -746,39 +746,49 @@
     <section class="sales-dashboard">
         <div class="left-wing">
             <div class="store-slider">
-                <div class="store-item active" data-store="물고기자리 잠실점" data-size="20평" data-table="12개"
-                    data-sales="120,000,000원" data-bg="/images/foods/물고기자리 연출컷-1.webp">
-                    <img src="/images/room/room1.webp" alt="잠실점 실내" loading="lazy" decoding="async">
+                <!-- 1. 정자점 -->
+                <div class="store-item active" data-store="물고기자리 정자점" data-size="32평" data-table="21개" data-daily="8,390,000원" data-sales="149,000,000원" data-bg="/images/foods/물고기자리 연출컷-1.webp">
+                    <img src="/images/room/room1.webp" alt="정자점 실내" loading="lazy" decoding="async">
                 </div>
-                <div class="store-item" data-store="물고기자리 강남점" data-size="18평" data-table="10개" data-sales="98,000,000원"
-                    data-bg="/images/foods/물고기자리 연출컷-12.webp">
-                    <img src="/images/room/room2.webp" alt="강남점 실내" loading="lazy" decoding="async">
+                <!-- 2. 본점 -->
+                <div class="store-item" data-store="물고기자리 본점" data-size="40평" data-table="20개" data-daily="8,100,000원" data-sales="143,000,000원" data-bg="/images/foods/물고기자리 연출컷-2.webp">
+                    <img src="/images/room/room2.webp" alt="본점 실내" loading="lazy" decoding="async">
                 </div>
-                <div class="store-item" data-store="물고기자리 가락점" data-size="22평" data-table="14개"
-                    data-sales="110,000,000원" data-bg="/images/main_dish.webp">
-                    <img src="/images/room/room3.webp" alt="가락점 실내" loading="lazy" decoding="async">
-                </div>
-                <div class="store-item" data-store="물고기자리 논현점" data-size="25평" data-table="14개"
-                    data-sales="140,000,000원" data-bg="/images/sec_11_1.webp">
+                <!-- 3. 논현점 -->
+                <div class="store-item" data-store="물고기자리 논현점" data-size="43평" data-table="27개" data-daily="13,400,000원" data-sales="242,000,000원" data-bg="/images/sec_11_1.webp">
                     <img src="/images/room/room4.webp" alt="논현점 실내" loading="lazy" decoding="async">
                 </div>
-                <div class="store-item" data-store="미금점" data-size="15평" data-table="8개" data-sales="85,000,000원"
-                    data-bg="/images/sec_11_2.webp">
-                    <img src="/images/room/room2.webp" alt="미금점 실내" loading="lazy" decoding="async">
+                <!-- 4. 잠실점 -->
+                <div class="store-item" data-store="물고기자리 잠실점" data-size="30평" data-table="20개" data-daily="6,500,000원" data-sales="147,800,000원" data-bg="/images/main_dish.webp">
+                    <img src="/images/room/room3.webp" alt="잠실점 실내" loading="lazy" decoding="async">
+                </div>
+                <!-- 5. 동탄점 -->
+                <div class="store-item" data-store="물고기자리 동탄점" data-size="60평" data-table="30개" data-daily="8,500,000원" data-sales="138,000,000원" data-bg="/images/foods/물고기자리 연출컷-5.webp">
+                    <img src="/images/room/room1.webp" alt="동탄점 실내" loading="lazy" decoding="async">
+                </div>
+                <!-- 6. 사당점 -->
+                <div class="store-item" data-store="물고기자리 사당점" data-size="45평" data-table="21개" data-daily="6,700,000원" data-sales="117,000,000원" data-bg="/images/sec_11_2.webp">
+                    <img src="/images/room/room2.webp" alt="사당점 실내" loading="lazy" decoding="async">
                 </div>
             </div>
 
             <div class="store-status-card">
                 <div class="status-header">
-                    <span id="storeName">물고기자리 잠실점</span>
+                    <span id="storeName">물고기자리 정자점</span>
                 </div>
                 <ul class="status-details">
-                    <li><span class="label">평수</span> <span id="storeSize">20평</span></li>
-                    <li><span class="label">테이블수</span> <span id="storeTable">12개</span></li>
+                    <li><span class="label">면적</span> <span id="storeSize">32평</span></li>
+                    <li><span class="label">테이블수</span> <span id="storeTable">21개</span></li>
                 </ul>
-                <div class="status-sales">
-                    <span class="label">월 매출</span>
-                    <span id="storeSales">120,000,000원</span>
+                <div class="status-sales-group">
+                    <div class="status-sales daily-sales">
+                        <span class="label">일 최고매출</span>
+                        <span id="storeDaily">8,390,000원</span>
+                    </div>
+                    <div class="status-sales monthly-sales">
+                        <span class="label">월 최고매출</span>
+                        <span id="storeSales">149,000,000원</span>
+                    </div>
                 </div>
             </div>
         </div>

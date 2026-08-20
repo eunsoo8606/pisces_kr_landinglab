@@ -485,6 +485,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const storeSizeEl = document.getElementById('storeSize');
         const storeTableEl = document.getElementById('storeTable');
         const storeSalesEl = document.getElementById('storeSales');
+        const storeDailyEl = document.getElementById('storeDaily');
 
         let currentStoreIdx = 0;
         let autoPlayTimer = null;
@@ -493,44 +494,45 @@ document.addEventListener('DOMContentLoaded', () => {
             if (index < 0 || index >= storeItems.length) return;
             currentStoreIdx = index;
 
-            // 1) 좌측 리스트 클래스 토글
+            // 1) 지점 썸네일 아이템 active 클래스 교체
             storeItems.forEach((item, idx) => {
                 if (idx === index) item.classList.add('active');
                 else item.classList.remove('active');
             });
 
-
-
-            // 3) 정보 수치 카드 페이드 슬라이드 업데이트 (GSAP)
+            // 2) 데이터 바인딩
             const targetItem = storeItems[index];
             const nextData = {
                 store: targetItem.getAttribute('data-store'),
                 size: targetItem.getAttribute('data-size'),
                 table: targetItem.getAttribute('data-table'),
+                daily: targetItem.getAttribute('data-daily'),
                 sales: targetItem.getAttribute('data-sales')
             };
 
-            const animateTextSlot = (el, text) => {
-                if (!el) return;
-                gsap.to(el, {
-                    y: -10,
+            const statusCard = document.querySelector('.store-status-card');
+
+            // 3) 정보 카드와 이미지를 100% 동일 싱크로 부드럽게 페이드 교체
+            if (statusCard) {
+                gsap.to(statusCard, {
                     opacity: 0,
-                    duration: 0.2,
+                    y: -15,
+                    duration: 0.25,
                     ease: 'power2.in',
                     onComplete: () => {
-                        el.innerText = text;
-                        gsap.fromTo(el,
-                            { y: 10, opacity: 0 },
-                            { y: 0, opacity: 1, duration: 0.25, ease: 'power2.out' }
+                        if (storeNameEl) storeNameEl.innerText = nextData.store || '';
+                        if (storeSizeEl) storeSizeEl.innerText = nextData.size || '';
+                        if (storeTableEl) storeTableEl.innerText = nextData.table || '';
+                        if (storeDailyEl) storeDailyEl.innerText = nextData.daily || '';
+                        if (storeSalesEl) storeSalesEl.innerText = nextData.sales || '';
+
+                        gsap.fromTo(statusCard,
+                            { opacity: 0, y: 15 },
+                            { opacity: 1, y: 0, duration: 0.35, ease: 'power2.out' }
                         );
                     }
                 });
-            };
-
-            animateTextSlot(storeNameEl, nextData.store);
-            animateTextSlot(storeSizeEl, nextData.size);
-            animateTextSlot(storeTableEl, nextData.table);
-            animateTextSlot(storeSalesEl, nextData.sales);
+            }
         };
 
         // 수동 클릭 바인딩
@@ -1887,54 +1889,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    const storeItems = document.querySelectorAll('.store-item');
-    let currentStoreIdx = 0;
 
-    // 2. 매장별 정보 순환 트랜지션 함수
-    function nextStore() {
-        const currentItem = storeItems[currentStoreIdx];
-        currentStoreIdx = (currentStoreIdx + 1) % storeItems.length;
-        const nextItem = storeItems[currentStoreIdx];
-        const nextData = nextItem.dataset; // data-* 속성 데이터 가져오기
-
-        const sliderTl = gsap.timeline();
-
-        // A. 현재 반투명 스태츠 카드가 왼쪽으로 비켜나며 사라짐
-        sliderTl.to('.store-status-card', {
-            opacity: 0,
-            x: -30,
-            duration: 0.5,
-            ease: 'power2.in',
-            onComplete: () => {
-                // 완전히 사라진 순간 HTML 데이터를 다음 매장 내용으로 바꿈
-                const nameEl = document.getElementById('storeName');
-                const sizeEl = document.getElementById('storeSize');
-                const tableEl = document.getElementById('storeTable');
-                const salesEl = document.getElementById('storeSales');
-                if (nameEl) nameEl.innerText = nextData.store;
-                if (sizeEl) sizeEl.innerText = nextData.size;
-                if (tableEl) tableEl.innerText = nextData.table;
-                if (salesEl) salesEl.innerText = nextData.sales;
-            }
-        });
-
-        // B. 슬라이더 배경 실내 이미지 크로스페이드 교체
-        sliderTl.to(currentItem, { opacity: 0, duration: 0.8, ease: 'power2.inOut' }, 0);
-        sliderTl.to(nextItem, { opacity: 1, duration: 0.8, ease: 'power2.inOut' }, 0);
-
-        // C. 변경된 정보 카드가 부드러운 탄성(Back) 효과와 함께 다시 등장
-        sliderTl.to('.store-status-card', {
-            opacity: 1,
-            x: 0,
-            duration: 0.6,
-            ease: 'back.out(1.7)'
-        }, '+=0.1');
-    }
-
-    // 매장 데이터 및 메인페이지 매장 정보 엘리먼트가 존재하면 5초마다 자동 트랜지션 실행
-    if (storeItems.length > 0 && document.getElementById('storeName')) {
-        setInterval(nextStore, 5000);
-    }
 
     // 3. 스크롤 진입 시 좌측 날개(Left Wing) 대칭 슬라이딩 애니메이션 (원래의 안전한 기본 모션 복구)
     if (document.querySelector('.sales-dashboard .left-wing')) {

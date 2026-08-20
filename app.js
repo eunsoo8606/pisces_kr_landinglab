@@ -21,6 +21,7 @@ const apiRouter = require('./routes/api');
 const boardRouter = require('./routes/board');
 const menuRouter = require('./routes/menu');
 const popupRouter = require('./routes/popup');
+const franchiseRouter = require('./routes/franchise');
 
 // EJS 엔진 설정
 app.set('view engine', 'ejs');
@@ -169,6 +170,7 @@ app.use('/', apiRouter);
 app.use('/', boardRouter);
 app.use('/', menuRouter);
 app.use('/', popupRouter);
+app.use('/console/franchise', franchiseRouter);
 
 // 로컬 개발 환경에서만 listen (Vercel 서버리스에서는 module.exports로 진입)
 if (process.env.NODE_ENV !== 'production') {
