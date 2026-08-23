@@ -1669,13 +1669,40 @@ main {
     transform: translateY(40px);
 }
 
+/* 단일 영업시간 카드 확대 스타일 */
+.hours-cards-wrap.single-card .hours-card-float-wrap {
+    max-width: 560px;
+}
+
+.hours-cards-wrap.single-card .hours-card {
+    height: 310px;
+    border-radius: 20px;
+}
+
+.hours-cards-wrap.single-card .card-content {
+    padding: 36px;
+    text-align: center;
+}
+
+.hours-cards-wrap.single-card .step-label {
+    font-size: 17px;
+    letter-spacing: 1px;
+    margin-bottom: 10px;
+    color: rgba(255, 255, 255, 0.9);
+}
+
+.hours-cards-wrap.single-card .step-time {
+    font-size: 38px;
+    line-height: 48px;
+    font-weight: 800;
+}
+
 .hours-card-float-wrap {
     flex: 1;
     max-width: 380px;
     display: flex;
     justify-content: center;
     perspective: 1200px;
-    /* 3D 효과 깊이감을 float wrapper에 선언해 원근감 확장 */
 }
 
 /* 3단 이미지 카드 스타일 */

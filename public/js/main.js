@@ -1149,91 +1149,91 @@ document.addEventListener('DOMContentLoaded', () => {
     const rankingRowsContainer = document.getElementById('rankingRows');
 
     if (sectionRanking && rankingHeader && rankingSelectorWrap && rankingBoardWrap && monthTabs.length > 0 && rankingRowsContainer) {
-        // 12개월분 가상의 최고 매출 데이터셋
+        // 6개 매장 기준 유사 금액대 월별 다이나믹 랭킹 데이터셋 (1월~12월)
         const rankingData = {
             1: [
-                { branch: "평택고덕점", sales: "6,400,000원" },
-                { branch: "잠실점", sales: "5,880,000원" },
-                { branch: "야탑점", sales: "5,620,000원" },
-                { branch: "강남점", sales: "5,350,000원" },
-                { branch: "상암점", sales: "5,020,000원" }
+                { branch: "논현점", sales: "13,400,000원" },
+                { branch: "동탄점", sales: "8,500,000원" },
+                { branch: "정자점", sales: "8,390,000원" },
+                { branch: "본점", sales: "8,100,000원" },
+                { branch: "사당점", sales: "6,700,000원" }
             ],
             2: [
-                { branch: "강남점", sales: "6,850,000원" },
-                { branch: "논현점", sales: "6,300,000원" },
-                { branch: "평택고덕점", sales: "5,950,000원" },
-                { branch: "잠실점", sales: "5,720,000원" },
-                { branch: "사당점", sales: "5,220,000원" }
+                { branch: "논현점", sales: "12,950,000원" },
+                { branch: "정자점", sales: "8,620,000원" },
+                { branch: "본점", sales: "8,350,000원" },
+                { branch: "동탄점", sales: "8,200,000원" },
+                { branch: "잠실점", sales: "6,850,000원" }
             ],
             3: [
-                { branch: "평택고덕점", sales: "7,120,000원" },
-                { branch: "강남점", sales: "6,450,000원" },
-                { branch: "야탑점", sales: "5,800,000원" },
-                { branch: "구로디지털점", sales: "5,450,000원" },
-                { branch: "잠실점", sales: "5,250,000원" }
+                { branch: "논현점", sales: "13,800,000원" },
+                { branch: "동탄점", sales: "8,920,000원" },
+                { branch: "본점", sales: "8,450,000원" },
+                { branch: "정자점", sales: "8,150,000원" },
+                { branch: "사당점", sales: "6,900,000원" }
             ],
             4: [
-                { branch: "잠실점", sales: "6,920,000원" },
-                { branch: "논현점", sales: "6,520,000원" },
-                { branch: "평택고덕점", sales: "6,120,000원" },
-                { branch: "가락점", sales: "5,680,000원" },
-                { branch: "상암점", sales: "5,180,000원" }
+                { branch: "논현점", sales: "13,100,000원" },
+                { branch: "정자점", sales: "8,550,000원" },
+                { branch: "동탄점", sales: "8,400,000원" },
+                { branch: "잠실점", sales: "6,950,000원" },
+                { branch: "본점", sales: "6,800,000원" }
             ],
             5: [
-                { branch: "강남점", sales: "7,420,000원" },
-                { branch: "평택고덕점", sales: "6,850,000원" },
-                { branch: "잠실점", sales: "6,200,000원" },
-                { branch: "야탑점", sales: "5,850,000원" },
-                { branch: "사당점", sales: "5,380,000원" }
+                { branch: "논현점", sales: "13,950,000원" },
+                { branch: "본점", sales: "8,800,000원" },
+                { branch: "동탄점", sales: "8,650,000원" },
+                { branch: "정자점", sales: "8,250,000원" },
+                { branch: "사당점", sales: "7,100,000원" }
             ],
             6: [
-                { branch: "평택고덕점", sales: "7,250,000원" },
-                { branch: "논현점", sales: "6,650,000원" },
-                { branch: "구로디지털점", sales: "6,100,000원" },
-                { branch: "가락점", sales: "5,750,000원" },
-                { branch: "상암점", sales: "5,200,000원" }
+                { branch: "논현점", sales: "13,250,000원" },
+                { branch: "동탄점", sales: "8,750,000원" },
+                { branch: "정자점", sales: "8,480,000원" },
+                { branch: "본점", sales: "8,200,000원" },
+                { branch: "잠실점", sales: "6,600,000원" }
             ],
             7: [
-                { branch: "잠실점", sales: "7,380,000원" },
-                { branch: "강남점", sales: "6,720,000원" },
-                { branch: "야탑점", sales: "6,150,000원" },
-                { branch: "평택고덕점", sales: "5,880,000원" },
-                { branch: "사당점", sales: "5,420,000원" }
+                { branch: "논현점", sales: "13,600,000원" },
+                { branch: "정자점", sales: "8,700,000원" },
+                { branch: "동탄점", sales: "8,450,000원" },
+                { branch: "사당점", sales: "7,050,000원" },
+                { branch: "본점", sales: "6,900,000원" }
             ],
             8: [
-                { branch: "강남점", sales: "7,550,000원" },
-                { branch: "평택고덕점", sales: "6,920,000원" },
-                { branch: "논현점", sales: "6,400,000원" },
-                { branch: "잠실점", sales: "5,980,000원" },
-                { branch: "가락점", sales: "5,520,000원" }
+                { branch: "논현점", sales: "14,100,000원" },
+                { branch: "동탄점", sales: "8,980,000원" },
+                { branch: "본점", sales: "8,600,000원" },
+                { branch: "정자점", sales: "8,420,000원" },
+                { branch: "잠실점", sales: "6,750,000원" }
             ],
             9: [
-                { branch: "평택고덕점", sales: "7,180,000원" },
-                { branch: "야탑점", sales: "6,520,000원" },
-                { branch: "상암점", sales: "6,050,000원" },
-                { branch: "사당점", sales: "5,620,000원" },
-                { branch: "잠실점", sales: "5,300,000원" }
+                { branch: "논현점", sales: "13,050,000원" },
+                { branch: "본점", sales: "8,520,000원" },
+                { branch: "정자점", sales: "8,380,000원" },
+                { branch: "동탄점", sales: "8,150,000원" },
+                { branch: "사당점", sales: "6,800,000원" }
             ],
             10: [
-                { branch: "강남점", sales: "7,280,000원" },
-                { branch: "논현점", sales: "6,620,000원" },
-                { branch: "평택고덕점", sales: "6,280,000원" },
-                { branch: "가락점", sales: "5,820,000원" },
-                { branch: "구로디지털점", sales: "5,350,000원" }
+                { branch: "논현점", sales: "13,750,000원" },
+                { branch: "동탄점", sales: "8,850,000원" },
+                { branch: "정자점", sales: "8,600,000원" },
+                { branch: "잠실점", sales: "6,900,000원" },
+                { branch: "본점", sales: "6,750,000원" }
             ],
             11: [
-                { branch: "잠실점", sales: "6,980,000원" },
-                { branch: "평택고덕점", sales: "6,420,000원" },
-                { branch: "야탑점", sales: "5,920,000원" },
-                { branch: "강남점", sales: "5,580,000원" },
-                { branch: "사당점", sales: "5,150,000원" }
+                { branch: "논현점", sales: "13,300,000원" },
+                { branch: "정자점", sales: "8,650,000원" },
+                { branch: "본점", sales: "8,400,000원" },
+                { branch: "동탄점", sales: "8,250,000원" },
+                { branch: "사당점", sales: "6,950,000원" }
             ],
             12: [
-                { branch: "평택고덕점", sales: "7,620,000원" },
-                { branch: "강남점", sales: "7,120,000원" },
-                { branch: "잠실점", sales: "6,580,000원" },
-                { branch: "논현점", sales: "6,080,000원" },
-                { branch: "상암점", sales: "5,650,000원" }
+                { branch: "논현점", sales: "14,250,000원" },
+                { branch: "동탄점", sales: "9,100,000원" },
+                { branch: "본점", sales: "8,750,000원" },
+                { branch: "정자점", sales: "8,500,000원" },
+                { branch: "잠실점", sales: "7,150,000원" }
             ]
         };
 
