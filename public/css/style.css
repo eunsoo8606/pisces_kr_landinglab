@@ -8943,6 +8943,7 @@ footer {
     font-size: 16px;
     font-weight: 800;
     white-space: nowrap;
+    font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, Roboto, 'Noto Sans KR', sans-serif;
 }
 
 .badge-live {
@@ -10685,6 +10686,7 @@ footer {
     transition: transform 0.4s cubic-bezier(0.165, 0.84, 0.44, 1), opacity 0.4s ease;
     opacity: 1;
     transform: translateY(0);
+    font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, Roboto, 'Noto Sans KR', sans-serif;
 }
 
 .sticky-quick-bar.is-hidden {
@@ -10720,6 +10722,7 @@ footer {
     align-items: center;
     gap: 8px;
     color: #ffffff;
+    font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, Roboto, 'Noto Sans KR', sans-serif;
 }
 
 .badge-live {
@@ -10754,6 +10757,7 @@ footer {
     font-size: 18px;
     font-weight: 700;
     letter-spacing: -0.3px;
+    font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, Roboto, 'Noto Sans KR', sans-serif;
 }
 
 /* 데스크톱에서는 굳이 전화번호 링크를 노출하지 않거나 숨김 */
@@ -10765,6 +10769,7 @@ footer {
     text-decoration: none;
     transition: color 0.3s;
     margin-left: 15px;
+    font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, Roboto, 'Noto Sans KR', sans-serif;
 }
 
 .quick-bar-phone:hover {
@@ -11512,7 +11517,7 @@ footer {
     .quick-bar-phone {
         display: inline-block;
         /* 모바일에서는 가맹문의 전화번호 노출 */
-        font-family: 'Yeongwol', serif !important;
+        font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, Roboto, 'Noto Sans KR', sans-serif !important;
         font-size: 21px !important;
         font-weight: bold;
         color: #ffc107;
@@ -13777,6 +13782,7 @@ footer {
     }
 
     .quick-bar-title strong {
+        font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, Roboto, 'Noto Sans KR', sans-serif !important;
         font-size: 12.5px !important;
         white-space: nowrap !important;
         letter-spacing: -0.5px !important;
@@ -13789,6 +13795,7 @@ footer {
 
     .quick-bar-phone {
         display: inline-block !important;
+        font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, Roboto, 'Noto Sans KR', sans-serif !important;
         font-size: 12.5px !important;
         font-weight: 800 !important;
         margin-left: 6px !important;
