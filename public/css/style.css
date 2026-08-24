@@ -123,18 +123,18 @@ header {
     left: 0;
     width: 100%;
     z-index: 1000;
-    background: #ffffff !important;
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-    border-bottom: 1px solid rgba(0, 0, 0, 0.08) !important;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05) !important;
+    background: rgba(5, 11, 20, 0.96) !important;
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08) !important;
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5) !important;
     transition: var(--transition);
 }
 
 header.scrolled {
-    background: #ffffff !important;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08) !important;
-    border-bottom: 1px solid rgba(0, 0, 0, 0.08) !important;
+    background: rgba(5, 11, 20, 0.98) !important;
+    box-shadow: 0 6px 30px rgba(0, 0, 0, 0.6) !important;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;
 }
 
 nav {
@@ -170,14 +170,14 @@ nav {
 
 .nav-links a {
     text-decoration: none;
-    color: #111111 !important;
+    color: #ffffff !important;
     font-weight: 700;
     font-size: 16px;
     transition: var(--transition);
 }
 
 .nav-links li:hover>a {
-    color: #0056b3 !important;
+    color: #00a8cc !important;
 }
 
 /* Header CTA Button (둥근 형태 가맹문의 버튼) */
@@ -266,10 +266,19 @@ nav {
     padding-left: 5px;
 }
 
-header:hover .mega-menu {
-    opacity: 1;
-    visibility: visible;
-    transform: translateY(0);
+/* PC 화면(min-width: 992px)에서만 메가 메뉴 호버 활성화 */
+@media (min-width: 992px) {
+    header:hover .mega-menu {
+        opacity: 1;
+        visibility: visible;
+        transform: translateY(0);
+    }
+}
+
+@media (max-width: 991px) {
+    .mega-menu {
+        display: none !important;
+    }
 }
 
 /* Mobile Navigation Hamburger Menu & Drawer Styles */
@@ -291,14 +300,14 @@ header:hover .mega-menu {
 .hamburger-line {
     width: 100%;
     height: 2px;
-    background-color: #111111;
+    background-color: #ffffff !important;
     border-radius: 2px;
     transition: all 0.3s cubic-bezier(0.165, 0.84, 0.44, 1);
 }
 
 /* 햄버거 -> X자 변환 애니메이션 및 드로어 열림 상태 화이트 반전 */
 .mobile-nav-toggle.open .hamburger-line {
-    background-color: #ffffff;
+    background-color: #ffffff !important;
 }
 
 .mobile-nav-toggle.open .line-top {
@@ -1759,7 +1768,7 @@ main {
     font-weight: 800;
     color: #ffffff;
     letter-spacing: -0.5px;
-    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.85);
+    text-shadow: none;
 }
 
 .store-tag.best {
@@ -9173,12 +9182,13 @@ footer {
 .menu-page-hero {
     position: relative;
     width: 100%;
-    height: 450px;
+    height: 380px;
+    padding-top: 60px;
     display: flex;
     align-items: center;
     justify-content: center;
     text-align: center;
-    background-color: #000000;
+    background: linear-gradient(180deg, #050b14 0%, #0c101a 100%);
     overflow: hidden;
     color: #ffffff;
     font-family: 'Noto Serif KR', serif;
@@ -9246,7 +9256,7 @@ footer {
 
 .menu-page-content {
     background-color: #000000;
-    padding-top: 60px !important;
+    padding-top: 130px !important;
 }
 
 /* 반응형 히어로 */
@@ -9279,8 +9289,16 @@ footer {
     }
 
     .menu-page-content {
-        padding-top: 40px !important;
+        padding-top: 100px !important;
     }
+
+    .mobile-only-br {
+        display: inline !important;
+    }
+}
+
+.mobile-only-br {
+    display: none !important;
 }
 
 /* ==========================================================================

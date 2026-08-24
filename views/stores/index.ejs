@@ -6,14 +6,50 @@
 
     <div class="store-map-page">
         <div class="store-map-wrapper">
-            <!-- 사이드바 (검색 및 리스트) -->
-            <div class="store-sidebar">
+            <!-- 1. 지도 영역 (최우선 전면 레이어) -->
+            <div class="map-container">
+                <div id="map"></div>
+                <!-- API 키 미등록 시 안내 -->
+                <div id="map-placeholder">
+                    <div class="placeholder-content">
+                        <i class="fas fa-map-marked-alt"></i>
+                        <p>카카오 지도 API 키 등록이 필요합니다.</p>
+                        <small>store_map.ejs 파일 하단의 스크립트 부분을 확인해주세요.</small>
+                    </div>
+                </div>
+                <!-- 데이터 전달용 JSON 스크립트 태그 -->
+                <script id="stores-data" type="application/json"><%- JSON.stringify(storesData) %></script>
+            </div>
+
+            <!-- 2. 하단 플로팅 액션 그룹 (가맹점 찾기 & 문의하기) -->
+            <div class="floating-action-group">
+                <button type="button" class="sidebar-toggle-btn" id="sidebarToggleBtn" aria-label="가맹점 찾기 토글">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-10a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>
+                    <span class="toggle-text">가맹점 찾기</span>
+                    <svg class="toggle-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m18 15-6-6-6 6"/></svg>
+                </button>
+
+                <a href="/#franchise" class="floating-inquiry-btn" aria-label="창업 문의하기">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+                    </svg>
+                    <span>문의하기</span>
+                </a>
+            </div>
+
+            <!-- 4. 사이드바 (검색 및 가맹점 리스트) -->
+            <div class="store-sidebar" id="storeSidebar">
                 <div class="sidebar-header">
-                    <h2 class="sidebar-title">가맹점 찾기</h2>
+                    <div class="sidebar-title-row">
+                        <h2 class="sidebar-title">가맹점 찾기</h2>
+                        <button type="button" class="sidebar-close-btn" id="sidebarCloseBtn" aria-label="사이드바 닫기">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+                        </button>
+                    </div>
                     <p class="sidebar-subtitle">가까운 물고기자리 매장을 확인해보세요.</p>
                     <div class="search-box">
                         <input type="text" id="store-search" placeholder="매장명 또는 주소 검색">
-                        <button type="button" id="search-btn"><i class="fas fa-search"></i></button>
+                        <button type="button" id="search-btn" aria-label="검색"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg></button>
                     </div>
                     <div class="filter-options">
                         <button class="filter-btn active" data-filter="all">전체</button>
@@ -32,21 +68,6 @@
                     </div>
                 </div>
             </div>
-
-            <!-- 지도 영역 -->
-            <div class="map-container">
-                <div id="map"></div>
-                <!-- API 키 미등록 시 안내 -->
-                <div id="map-placeholder">
-                    <div class="placeholder-content">
-                        <i class="fas fa-map-marked-alt"></i>
-                        <p>카카오 지도 API 키 등록이 필요합니다.</p>
-                        <small>store_map.ejs 파일 하단의 스크립트 부분을 확인해주세요.</small>
-                    </div>
-                </div>
-                <!-- 데이터 전달용 JSON 스크립트 태그 -->
-                <script id="stores-data" type="application/json"><%- JSON.stringify(storesData) %></script>
-            </div>
         </div>
     </div>
 
@@ -55,6 +76,9 @@
         src="//dapi.kakao.com/v2/maps/sdk.js?appkey=<%= kakaoKey %>&autoload=false"></script>
     <script>
         document.addEventListener('DOMContentLoaded', () => {
+            document.body.classList.add('store-page-body');
+            document.documentElement.classList.add('store-page-body');
+
             // JSON 스크립트 태그에서 데이터 읽기
             const storesDataElement = document.getElementById('stores-data');
             if (!storesDataElement) return;
@@ -69,25 +93,82 @@
             const noResult = document.getElementById('no-result');
             const filterBtns = document.querySelectorAll('.filter-btn');
 
+            const sidebarToggleBtn = document.getElementById('sidebarToggleBtn');
+            const sidebarCloseBtn = document.getElementById('sidebarCloseBtn');
+            const storeSidebar = document.getElementById('storeSidebar');
+
             let map;
             let markers = [];
+            let currentCenterPos;
 
-            if (typeof kakao !== 'undefined' && kakao.maps) {
-                placeholder.style.display = 'none';
-                kakao.maps.load(() => {
-                    initMap();
-                });
-            } else {
-                renderStoreList(storeData);
+            // 사이드바 토글 (접기/열기) 함수
+            function toggleSidebar(forceState) {
+                if (!storeSidebar) return;
+                const shouldClose = typeof forceState === 'boolean' ? forceState : !storeSidebar.classList.contains('is-closed');
+                
+                if (shouldClose) {
+                    storeSidebar.classList.add('is-closed');
+                    if (sidebarToggleBtn) {
+                        sidebarToggleBtn.classList.add('is-collapsed');
+                        const toggleText = sidebarToggleBtn.querySelector('.toggle-text');
+                        if (toggleText) toggleText.textContent = '가맹점 찾기 열기';
+                    }
+                } else {
+                    storeSidebar.classList.remove('is-closed');
+                    if (sidebarToggleBtn) {
+                        sidebarToggleBtn.classList.remove('is-collapsed');
+                        const toggleText = sidebarToggleBtn.querySelector('.toggle-text');
+                        if (toggleText) toggleText.textContent = '가맹점 찾기 접기';
+                    }
+                }
+
+                // 토글 전환 후 카카오 지도 크기 재계산
+                setTimeout(() => {
+                    if (map && currentCenterPos) {
+                        map.relayout();
+                        map.setCenter(currentCenterPos);
+                    }
+                }, 350);
             }
+
+            if (sidebarToggleBtn) sidebarToggleBtn.addEventListener('click', () => toggleSidebar());
+            if (sidebarCloseBtn) sidebarCloseBtn.addEventListener('click', () => toggleSidebar(true));
+
+            function loadKakaoMap() {
+                if (typeof kakao !== 'undefined' && kakao.maps) {
+                    placeholder.style.display = 'none';
+                    kakao.maps.load(() => {
+                        initMap();
+                    });
+                } else {
+                    // Kakao SDK 로드가 늦어지는 경우 200ms 주기로 최대 15회 재시도
+                    let attempts = 0;
+                    const checkInterval = setInterval(() => {
+                        attempts++;
+                        if (typeof kakao !== 'undefined' && kakao.maps) {
+                            clearInterval(checkInterval);
+                            placeholder.style.display = 'none';
+                            kakao.maps.load(() => {
+                                initMap();
+                            });
+                        } else if (attempts >= 15) {
+                            clearInterval(checkInterval);
+                            renderStoreList(storeData);
+                        }
+                    }, 200);
+                }
+            }
+
+            loadKakaoMap();
 
             function initMap() {
                 try {
-                    const centerLat = storeData.length > 0 ? storeData[0].lat : 37.367833;
-                    const centerLng = storeData.length > 0 ? storeData[0].lng : 127.109088;
+                    const centerLat = storeData.length > 0 ? storeData[0].lat : 37.361543;
+                    const centerLng = storeData.length > 0 ? storeData[0].lng : 127.110292;
+                    currentCenterPos = new kakao.maps.LatLng(centerLat, centerLng);
 
                     const mapOption = {
-                        center: new kakao.maps.LatLng(centerLat, centerLng),
+                        center: currentCenterPos,
                         level: 8
                     };
 
@@ -96,6 +177,20 @@
                     map.addControl(zoomControl, kakao.maps.ControlPosition.RIGHT);
 
                     createMarkers(storeData);
+
+                    // 모바일 화면 뷰포트 레이아웃 렌더링 보장
+                    const refreshMap = () => {
+                        if (map) {
+                            map.relayout();
+                            map.setCenter(currentCenterPos);
+                        }
+                    };
+
+                    setTimeout(refreshMap, 100);
+                    setTimeout(refreshMap, 400);
+
+                    window.addEventListener('resize', refreshMap);
+                    window.addEventListener('orientationchange', refreshMap);
                 } catch (err) {
                     console.error("❌ Kakao Map initialization failed, falling back to list-only mode:", err);
                     placeholder.style.display = 'flex';
@@ -107,24 +202,22 @@
             function createMarkers(stores) {
                 markers.forEach(m => m.setMap(null));
                 markers = [];
- 
-                // 사용자가 등록한 커스텀 마커 이미지 적용 (더 크게 확대)
+
                 const imageSrc = '/images/maker.png';
                 const imageSize = new kakao.maps.Size(64, 64);
                 const imageOption = { offset: new kakao.maps.Point(32, 64) };
                 const markerImage = new kakao.maps.MarkerImage(imageSrc, imageSize, imageOption);
- 
+
                 stores.forEach((store) => {
                     const position = new kakao.maps.LatLng(store.lat, store.lng);
                     const marker = new kakao.maps.Marker({
                         position: position,
-                        title: store.name,
                         image: markerImage
                     });
- 
+
                     marker.setMap(map);
                     markers.push(marker);
- 
+
                     kakao.maps.event.addListener(marker, 'click', () => {
                         selectStore(store);
                     });
@@ -151,23 +244,73 @@
                     `;
 
                     li.addEventListener('click', () => {
-                        const targetMarker = markers.find(m => m.getTitle() === store.name);
-                        if (targetMarker) selectStore(store, targetMarker);
+                        selectStore(store, true);
                     });
                     storeList.appendChild(li);
                 });
             }
 
-            function selectStore(store) {
-                if (!map) return;
-                const moveLatLon = new kakao.maps.LatLng(store.lat, store.lng);
-                map.panTo(moveLatLon);
+            let activeOverlay = null;
 
+            window.closeStoreOverlay = function() {
+                if (activeOverlay) {
+                    activeOverlay.setMap(null);
+                    activeOverlay = null;
+                }
+            };
+
+            function selectStore(store, isFromListClick = false) {
+                if (!map) return;
+
+                currentCenterPos = new kakao.maps.LatLng(store.lat, store.lng);
+                map.panTo(currentCenterPos);
+
+                // 기존에 열려있던 오버레이 닫기
+                if (activeOverlay) {
+                    activeOverlay.setMap(null);
+                    activeOverlay = null;
+                }
+
+                // 커스텀 오버레이 팝업 카드 생성 (HTML 문자열로 지정하여 DOM 파괴 백지 현상 완전 차단)
+                const overlayHtml = `
+                    <div class="custom-overlay-wrap">
+                        <div class="overlay-header">
+                            <h4 class="overlay-title">${store.name}</h4>
+                            <button type="button" class="overlay-close" onclick="window.closeStoreOverlay()" aria-label="닫기">✕</button>
+                        </div>
+                        <p class="overlay-address">${store.address}</p>
+                        <div class="overlay-actions">
+                            <a href="tel:${store.phone}" class="overlay-btn-phone">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+                                ${store.phone}
+                            </a>
+                            <a href="https://map.kakao.com/link/map/${encodeURIComponent(store.name)},${store.lat},${store.lng}" target="_blank" class="overlay-btn-map" rel="noopener">
+                                길찾기 ↗
+                            </a>
+                        </div>
+                    </div>
+                `;
+
+                activeOverlay = new kakao.maps.CustomOverlay({
+                    content: overlayHtml,
+                    map: map,
+                    position: currentCenterPos,
+                    clickable: true,
+                    yAnchor: 1.15
+                });
+
+                // 마커 선택 시 목록 사이드바 토글을 스르륵 접어 내림
+                toggleSidebar(true);
+
+                // 사이드바 매장 목록 선택 상태 갱신 (목록에서 직접 클릭한 경우에만 scrollIntoView)
                 const listItems = document.querySelectorAll('.map-store-item');
                 listItems.forEach(item => {
-                    if (item.querySelector('.store-name').textContent === store.name) {
+                    const titleElem = item.querySelector('.store-name');
+                    if (titleElem && titleElem.textContent === store.name) {
                         item.classList.add('active');
-                        item.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                        if (isFromListClick && storeSidebar && !storeSidebar.classList.contains('is-closed')) {
+                            item.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                        }
                     } else {
                         item.classList.remove('active');
                     }

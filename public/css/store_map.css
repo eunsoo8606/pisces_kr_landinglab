@@ -9,12 +9,24 @@
     --bg-light: #f8fbff;
 }
 
-/* 전체 페이지 레이아웃 */
+/* /stores 가맹점 현황 페이지 전체 브라우저 스크롤 100% 고정 */
+html:has(.store-map-page),
+body:has(.store-map-page),
+html.store-page-body,
+body.store-page-body {
+    overflow: hidden !important;
+    height: 100vh !important;
+    height: 100dvh !important;
+    position: fixed;
+    width: 100%;
+}
+
+/* 전체 페이지 레이아웃 - 상단 헤더 짤림 완전 방지 (80px 확보) */
 .store-map-page {
     position: relative;
     width: 100%;
-    height: 100vh;
-    padding-top: 80px; /* 헤더 높이 확보 */
+    height: calc(100vh - 80px);
+    margin-top: 80px;
     box-sizing: border-box;
     background: #f4f7fc;
     overflow: hidden;
@@ -27,16 +39,19 @@
     display: flex;
 }
 
-/* 지도 영역 */
+/* 1. 지도 영역 - 화면 전체 100% 레이아웃 (최우선 배치) */
 .map-container {
-    flex: 1;
+    width: 100%;
     height: 100%;
-    position: relative;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 1;
 }
 
 #map {
-    width: 100%;
-    height: 100%;
+    width: 100% !important;
+    height: 100% !important;
 }
 
 #map-placeholder {
@@ -74,34 +89,155 @@
     margin-bottom: 0.5rem;
 }
 
-/* 사이드바 (데스크톱 버전) */
+/* 2. 하단 플로팅 액션 그룹 (가맹점 찾기 & 문의하기) */
+.floating-action-group {
+    position: fixed;
+    bottom: 24px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 99;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    max-width: 90vw;
+}
+
+.sidebar-toggle-btn {
+    position: relative;
+    bottom: auto;
+    left: auto;
+    transform: none;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 22px;
+    background: #1f3766;
+    color: #ffffff;
+    border: none;
+    border-radius: 30px;
+    font-size: 0.95rem;
+    font-weight: 700;
+    box-shadow: 0 8px 24px rgba(31, 55, 102, 0.35);
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.165, 0.84, 0.44, 1);
+    backdrop-filter: blur(8px);
+    white-space: nowrap;
+}
+
+.sidebar-toggle-btn:hover {
+    background: #15264b;
+    transform: translateY(-2px);
+    box-shadow: 0 12px 28px rgba(31, 55, 102, 0.45);
+}
+
+.sidebar-toggle-btn svg {
+    display: inline-block;
+    vertical-align: middle;
+    flex-shrink: 0;
+}
+
+.sidebar-toggle-btn .toggle-arrow {
+    transition: transform 0.3s ease;
+}
+
+.sidebar-toggle-btn.is-collapsed .toggle-arrow {
+    transform: rotate(180deg);
+}
+
+/* 하단 플로팅 문의하기 버튼 */
+.floating-inquiry-btn {
+    position: relative;
+    bottom: auto;
+    right: auto;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 22px;
+    background: linear-gradient(135deg, #0056b3 0%, #003d80 100%);
+    color: #ffffff !important;
+    text-decoration: none;
+    font-size: 0.95rem;
+    font-weight: 700;
+    border-radius: 30px;
+    box-shadow: 0 8px 24px rgba(0, 86, 179, 0.4);
+    transition: all 0.3s cubic-bezier(0.165, 0.84, 0.44, 1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(8px);
+    white-space: nowrap;
+}
+
+.floating-inquiry-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 30px rgba(0, 86, 179, 0.55);
+    background: linear-gradient(135deg, #0066cc 0%, #004b99 100%);
+}
+
+.floating-inquiry-btn svg {
+    display: inline-block;
+    vertical-align: middle;
+}
+
+/* 3. 사이드바 (가맹점 찾기 패널) - 오버레이 형태 */
 .store-sidebar {
     position: absolute;
     top: 20px;
     left: 20px;
     width: 380px;
-    height: calc(100% - 120px);
-    background: rgba(255, 255, 255, 0.95);
-    backdrop-filter: blur(10px);
+    max-height: calc(100% - 40px);
+    height: calc(100% - 40px);
+    background: rgba(255, 255, 255, 0.96);
+    backdrop-filter: blur(12px);
     border-radius: 20px;
-    box-shadow: 0 10px 30px rgba(31, 55, 102, 0.12);
-    border: 1px solid rgba(255, 255, 255, 0.5);
+    box-shadow: 0 12px 36px rgba(31, 55, 102, 0.15);
+    border: 1px solid rgba(255, 255, 255, 0.6);
     z-index: 20;
     display: flex;
     flex-direction: column;
     overflow: hidden;
+    transition: transform 0.4s cubic-bezier(0.165, 0.84, 0.44, 1), opacity 0.3s ease;
+}
+
+/* 토글 닫힘 상태 (데스크톱: 왼쪽으로 스르륵 숨김) */
+.store-sidebar.is-closed {
+    transform: translateX(-420px);
+    opacity: 0;
+    visibility: hidden !important;
+    pointer-events: none !important;
 }
 
 .sidebar-header {
-    padding: 25px 20px 15px;
+    padding: 22px 20px 15px;
     border-bottom: 1px solid var(--border-color);
+}
+
+.sidebar-title-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 4px;
 }
 
 .sidebar-title {
     font-size: 1.3rem;
     font-weight: 800;
     color: var(--primary-color);
-    margin: 0 0 4px 0;
+    margin: 0;
+}
+
+.sidebar-close-btn {
+    background: none;
+    border: none;
+    color: #a0aec0;
+    font-size: 1.1rem;
+    cursor: pointer;
+    padding: 4px 8px;
+    transition: color 0.2s;
+    border-radius: 50%;
+}
+
+.sidebar-close-btn:hover {
+    color: var(--primary-color);
+    background: rgba(0, 0, 0, 0.05);
 }
 
 .sidebar-subtitle {
@@ -188,7 +324,7 @@
 }
 
 .map-store-item {
-    padding: 20px;
+    padding: 18px 20px;
     border-bottom: 1px solid var(--border-color);
     transition: background 0.2s ease;
     cursor: pointer;
@@ -206,10 +342,11 @@
 }
 
 .store-name {
-    font-size: 1.1rem;
+    font-size: 1.05rem;
     font-weight: 700;
     color: #1f3766 !important;
     margin: 0 0 6px 0;
+    text-shadow: none !important;
 }
 
 .map-store-item.active .store-name {
@@ -244,63 +381,197 @@
     font-size: 0.9rem;
 }
 
-/* 모바일 전용 토글 버튼 제거 */
-.sidebar-toggle-btn {
-    display: none !important;
-}
-
 /* 모바일 미디어쿼리 (가로 768px 이하) */
 @media (max-width: 768px) {
     .store-map-page {
-        height: auto !important;
-        min-height: 100vh;
-        overflow-y: auto;
-        display: flex;
-        flex-direction: column;
-        padding-top: 60px; /* 모바일 헤더 높이에 맞춤 */
+        height: calc(100vh - 60px);
+        margin-top: 60px;
     }
 
-    .store-map-wrapper {
-        flex-direction: column;
-        height: auto;
+    .floating-action-group {
+        bottom: 18px;
+        gap: 8px;
+        width: calc(100% - 32px);
+        max-width: 420px;
+        justify-content: center;
     }
 
-    /* 지도는 상단에 적절한 고정 높이로 고정 */
-    .map-container {
-        height: 350px !important;
-        width: 100%;
-        position: relative;
+    .sidebar-toggle-btn {
+        flex: 1;
+        justify-content: center;
+        padding: 11px 12px;
+        font-size: 0.85rem;
+        gap: 5px;
     }
 
-    /* 사이드바를 지도의 하단에 바로 나열되도록 변경 */
+    .floating-inquiry-btn {
+        flex: 1;
+        justify-content: center;
+        padding: 11px 12px;
+        font-size: 0.85rem;
+        gap: 5px;
+    }
+
     .store-sidebar {
-        position: relative !important;
-        top: 0 !important;
-        left: 0 !important;
-        width: 100% !important;
-        height: auto !important;
-        border-radius: 0 !important;
-        box-shadow: none !important;
-        border: none !important;
-        z-index: 10;
-        background: #ffffff !important;
+        position: absolute;
+        top: auto;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        height: 60vh;
+        max-height: 70vh;
+        border-radius: 20px 20px 0 0;
+        box-shadow: 0 -10px 30px rgba(0, 0, 0, 0.2);
+        border: none;
+        transform: translateY(0);
+    }
+
+    /* 모바일 토글 닫힘 상태 (아래로 스르륵 내려감) */
+    .store-sidebar.is-closed {
+        transform: translateY(105%);
+        opacity: 0;
+        visibility: hidden !important;
+        pointer-events: none !important;
     }
 
     .sidebar-header {
-        padding: 20px 15px 15px !important;
-        border-bottom: 1px solid var(--border-color);
+        padding: 16px 15px 12px;
     }
 
     .sidebar-title {
-        font-size: 1.2rem !important;
-    }
-
-    .store-list-container {
-        overflow-y: visible !important;
-        height: auto !important;
+        font-size: 1.15rem;
     }
 
     .map-store-item {
-        padding: 16px 15px !important;
+        padding: 14px 15px !important;
     }
+}
+
+/* ==========================================
+   카카오 지도 커스텀 오버레이 (마커 클릭 팝업 카드)
+   ========================================== */
+.custom-overlay-wrap {
+    position: relative;
+    bottom: 75px;
+    border-radius: 16px;
+    background: rgba(13, 20, 36, 0.96);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.45);
+    padding: 16px 20px 14px;
+    width: 280px;
+    max-width: 88vw;
+    box-sizing: border-box;
+    color: #ffffff;
+    font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+    z-index: 100;
+    word-break: break-all;
+    word-wrap: break-word;
+}
+
+/* 하단 꼬리표 (말풍선 삼각형) */
+.custom-overlay-wrap::after {
+    content: '';
+    position: absolute;
+    bottom: -8px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 0;
+    height: 0;
+    border-left: 8px solid transparent;
+    border-right: 8px solid transparent;
+    border-top: 8px solid rgba(13, 20, 36, 0.96);
+}
+
+.overlay-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 6px;
+    gap: 10px;
+}
+
+.overlay-title {
+    font-size: 1.05rem;
+    font-weight: 800;
+    color: #ffffff;
+    margin: 0;
+    letter-spacing: -0.3px;
+    word-break: break-all;
+    word-wrap: break-word;
+    white-space: normal;
+}
+
+.overlay-close {
+    background: none;
+    border: none;
+    color: rgba(255, 255, 255, 0.6);
+    font-size: 1.1rem;
+    cursor: pointer;
+    padding: 2px 6px;
+    line-height: 1;
+    transition: color 0.2s;
+}
+
+.overlay-close:hover {
+    color: #ffffff;
+}
+
+.overlay-address {
+    font-size: 0.82rem;
+    color: rgba(255, 255, 255, 0.75);
+    margin: 0 0 10px 0;
+    line-height: 1.4;
+    word-break: break-all;
+    word-wrap: break-word;
+    white-space: normal;
+    overflow-wrap: break-word;
+}
+
+.overlay-actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 8px;
+    padding-top: 8px;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.overlay-btn-phone {
+    flex: 1;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    background: #0056b3;
+    color: #ffffff !important;
+    text-decoration: none;
+    font-size: 0.8rem;
+    font-weight: 700;
+    padding: 7px 12px;
+    border-radius: 8px;
+    transition: background 0.2s;
+}
+
+.overlay-btn-phone:hover {
+    background: #0066cc;
+}
+
+.overlay-btn-map {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    background: rgba(255, 255, 255, 0.12);
+    color: #ffffff !important;
+    text-decoration: none;
+    font-size: 0.8rem;
+    font-weight: 600;
+    padding: 7px 12px;
+    border-radius: 8px;
+    transition: background 0.2s;
+}
+
+.overlay-btn-map:hover {
+    background: rgba(255, 255, 255, 0.25);
 }
