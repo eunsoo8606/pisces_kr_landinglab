@@ -6953,7 +6953,7 @@ footer {
 }
 
 .mobile-br {
-    display: none;
+    display: none !important;
 }
 
 .menu-sub {
@@ -8785,6 +8785,10 @@ footer {
    서클 마스크 리빌 섹션 모바일 반응형 (Reveal Section Responsive)
    ========================================================================== */
 @media (max-width: 768px) {
+    .menu-page-content {
+        padding-top: 100px !important;
+    }
+
     .reveal-section {
         height: auto !important;
         min-height: 100vh !important;
