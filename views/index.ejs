@@ -1410,24 +1410,30 @@
             <!-- 음식 이미지 쇼케이스 (실운영 DB 100% 동적 렌더링) -->
             <div class="menu-showcase">
 
-                <% const safeMenuList=(typeof menuList !=='undefined' && Array.isArray(menuList)) ? menuList : []; const
-                    recommendedList=safeMenuList.filter(m=> m.category === 'recommended');
+                <% 
+                    const safeMenuList = (typeof menuList !== 'undefined' && Array.isArray(menuList)) ? menuList : [];
+                    const recommendedList = safeMenuList.filter(m => m.category === 'recommended');
                     const sashimiList = safeMenuList.filter(m => m.category === 'sashimi');
                     const sideList = safeMenuList.filter(m => m.category === 'side');
                     const sakeList = safeMenuList.filter(m => m.category === 'sake');
 
                     // DB menus 레코드 기반 100% 동적 바인딩
                     const mainCourseDb = recommendedList[0] || safeMenuList.find(m => m.name.includes('모둠 숙성회')) || {
-                    name: '모둠 숙성회 1인 코스', price: '42,000원', badge: 'SIGNATURE', image_url: '/images/foods/물고기자리
-                    연출컷-1.jpg' };
+                        name: '모둠 숙성회 1인 코스',
+                        price: '42,000원',
+                        badge: 'SIGNATURE',
+                        image_url: '/images/foods/물고기자리 연출컷-1.webp'
+                    };
                     const winterCourseDb = recommendedList[1] || safeMenuList.find(m => m.name.includes('겨울')) || {
-                    name: '[겨울한정] 1인 코스', price: '52,000원', badge: 'WINTER LIMITED', image_url: '/images/foods/물고기자리
-                    연출컷-5.jpg' };
+                        name: '[겨울한정] 1인 코스',
+                        price: '52,000원',
+                        badge: 'WINTER LIMITED',
+                        image_url: '/images/foods/물고기자리 연출컷-5.webp'
+                    };
 
                     // 우측 수직 스택: 사이드 메뉴 3종 (도미 머리구이, 새우튀김, 서더리 매운탕)
-                    const sideMiniItems = (recommendedList.length >= 5) ? recommendedList.slice(2, 5) : (sideList.length
-                    > 0 ? sideList.slice(0, 3) : []);
-                    %>
+                    const sideMiniItems = (recommendedList.length >= 5) ? recommendedList.slice(2, 5) : (sideList.length > 0 ? sideList.slice(0, 3) : []);
+                %>
 
                     <!-- 1. 추천메뉴 (2대 메인 코스 + 우측 3개 수직 사이드 미니 스택) -->
                     <div class="menu-panel active" data-panel="recommended">
