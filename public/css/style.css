@@ -63,7 +63,7 @@
 :root {
     --primary-color: #314e8d;
     --primary-light: #4a6cb3;
-    --accent-color: #00a8cc;
+    --accent-color: #0056b3;
     --text-dark: #2c3e50;
     --text-light: #ffffff;
     --bg-white: #ffffff;
@@ -383,7 +383,7 @@ header:hover .mega-menu {
     content: '+';
     font-family: 'Outfit', sans-serif;
     font-size: 18px;
-    color: #00a8cc;
+    color: #0056b3;
     transition: transform 0.3s ease;
 }
 
@@ -987,7 +987,7 @@ main {
 }
 
 .marquee-icon.fish {
-    color: #00a8cc;
+    color: #0056b3;
     /* 아쿠아 블루 피쉬 */
     filter: drop-shadow(0 0 6px rgba(0, 168, 204, 0.6));
 }
@@ -1648,53 +1648,494 @@ main {
     z-index: 2;
 }
 
-.hours-subtitle {
-    font-size: 28px;
-    font-weight: 700;
-    color: #1a2a3a;
-    /* 차콜/다크 텍스트 */
-    letter-spacing: -1px;
-    margin-bottom: 50px;
-    opacity: 0;
-    transform: translateY(30px);
+/* ==========================================================================
+   운영시간 섹션 상단 매장 전경 고화질 사진 + 일 최고매출 와이드 쇼케이스 (배경 입체 오버랩)
+   ========================================================================== */
+.hours-store-showcase-wrap {
+    position: absolute;
+    top: 275px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100vw;
+    max-width: 100vw;
+    margin: 0;
+    z-index: 1;
+    opacity: 0.92;
+    pointer-events: auto;
 }
 
-.hours-cards-wrap {
-    display: flex;
-    justify-content: center;
-    gap: 40px;
+.store-ticker-viewport {
     width: 100%;
-    margin-bottom: 60px;
-    opacity: 0;
-    transform: translateY(40px);
+    overflow: hidden;
+    position: relative;
+    padding: 10px 0;
+    mask-image: linear-gradient(to right, transparent, black 4%, black 96%, transparent);
+    -webkit-mask-image: linear-gradient(to right, transparent, black 4%, black 96%, transparent);
 }
 
-/* 단일 영업시간 카드 확대 스타일 */
-.hours-cards-wrap.single-card .hours-card-float-wrap {
-    max-width: 560px;
+.store-ticker-track {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    width: max-content;
+    animation: storeShowcaseSlide 34s linear infinite;
 }
 
-.hours-cards-wrap.single-card .hours-card {
-    height: 310px;
-    border-radius: 20px;
+.store-ticker-track:hover {
+    animation-play-state: paused;
 }
 
-.hours-cards-wrap.single-card .card-content {
-    padding: 36px;
-    text-align: center;
+@keyframes storeShowcaseSlide {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
 }
 
-.hours-cards-wrap.single-card .step-label {
-    font-size: 17px;
-    letter-spacing: 1px;
-    margin-bottom: 10px;
-    color: rgba(255, 255, 255, 0.9);
+.hours-store-card {
+    position: relative;
+    width: 320px;
+    height: 190px;
+    border-radius: 22px;
+    overflow: hidden;
+    border: 1px solid rgba(255, 255, 255, 0.35);
+    box-shadow: 0 16px 36px rgba(15, 23, 42, 0.14);
+    flex-shrink: 0;
+    background: #0f172a;
+    transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+    cursor: pointer;
 }
 
-.hours-cards-wrap.single-card .step-time {
-    font-size: 38px;
-    line-height: 48px;
+.hours-store-card:hover {
+    transform: translateY(-6px) scale(1.03);
+    box-shadow: 0 22px 50px rgba(0, 86, 179, 0.32);
+    border-color: rgba(96, 165, 250, 0.7);
+    z-index: 3;
+}
+
+.card-img-wrap {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+}
+
+.card-img-wrap img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.7s cubic-bezier(0.165, 0.84, 0.44, 1);
+}
+
+.hours-store-card:hover .card-img-wrap img {
+    transform: scale(1.1);
+}
+
+.card-img-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, rgba(15, 23, 42, 0.2) 0%, rgba(15, 23, 42, 0.88) 100%);
+    pointer-events: none;
+}
+
+.card-info-content {
+    position: absolute;
+    inset: 0;
+    padding: 20px 22px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    z-index: 3;
+    color: #ffffff;
+}
+
+.card-top-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+}
+
+.store-name {
+    font-size: 19px;
     font-weight: 800;
+    color: #ffffff;
+    letter-spacing: -0.5px;
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.85);
+}
+
+.store-tag.best {
+    background: #ef4444;
+    color: #ffffff;
+    font-family: 'Outfit', sans-serif;
+    font-size: 10px;
+    font-weight: 900;
+    padding: 2.5px 8px;
+    border-radius: 8px;
+    letter-spacing: 0.5px;
+    box-shadow: 0 4px 10px rgba(239, 68, 68, 0.4);
+}
+
+.card-sub-row {
+    font-size: 13px;
+    color: rgba(255, 255, 255, 0.82);
+    font-weight: 500;
+    margin-bottom: auto;
+    margin-top: 2px;
+    text-shadow: 0 1px 4px rgba(0, 0, 0, 0.7);
+}
+
+.card-sales-row {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.sales-label {
+    font-size: 11.5px;
+    color: rgba(255, 255, 255, 0.75);
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    text-shadow: 0 1px 4px rgba(0, 0, 0, 0.7);
+}
+
+.sales-val {
+    font-family: 'Outfit', sans-serif;
+    font-size: 22px;
+    font-weight: 900;
+    color: #60a5fa;
+    letter-spacing: -0.5px;
+    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.95), 0 0 12px rgba(96, 165, 250, 0.5);
+}
+
+.hours-subtitle {
+    font-size: 36px;
+    font-weight: 900;
+    color: #111111 !important;
+    letter-spacing: -1.2px;
+    margin-top: 10px;
+    margin-bottom: 75px;
+    text-align: center;
+    position: relative;
+    z-index: 10;
+    opacity: 1;
+    text-shadow: 0 4px 16px rgba(255, 255, 255, 0.95), 0 2px 8px rgba(255, 255, 255, 0.95);
+}
+
+/* ==========================================================================
+   원형 시계 게이지 프레임 (첨부 레퍼런스 스타일 100% 매칭)
+   ========================================================================== */
+.hours-clock-showcase {
+    position: relative;
+    width: 100%;
+    max-width: 520px;
+    height: 520px;
+    margin: 0 auto 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 5;
+}
+
+/* 원형 비디오 뷰포트 (중앙 원형 메인 뷰) */
+.clock-circle-viewport {
+    position: relative;
+    width: 380px;
+    height: 380px;
+    border-radius: 50%;
+    overflow: hidden;
+    border: 10px solid #ffffff;
+    box-shadow: 0 25px 60px rgba(15, 23, 42, 0.25), inset 0 0 30px rgba(0, 0, 0, 0.35);
+    z-index: 5;
+    background: #0f172a;
+}
+
+.circle-media-wrap {
+    width: 100%;
+    height: 100%;
+    position: relative;
+}
+
+.circle-media-wrap video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transform: scale(1.05);
+    filter: blur(2.5px) brightness(0.68) contrast(1.05);
+}
+
+.circle-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(180deg, rgba(15, 23, 42, 0.15) 0%, rgba(15, 23, 42, 0.45) 100%);
+    pointer-events: none;
+}
+
+/* 원형 내부 정가운데 텍스트 (박스 모형 제거 및 폰트 대폭 확대) */
+.hours-glass-badge {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: none;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    border: none;
+    border-radius: 0;
+    padding: 0;
+    text-align: center;
+    width: 90%;
+    box-shadow: none;
+    z-index: 10;
+    pointer-events: none;
+}
+
+.glass-label {
+    font-size: 16px;
+    color: rgba(255, 255, 255, 0.92);
+    font-weight: 700;
+    display: block;
+    margin-bottom: 6px;
+    letter-spacing: 1px;
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.85);
+}
+
+.glass-time {
+    font-size: 38px;
+    font-weight: 900;
+    color: #ffffff;
+    letter-spacing: -1px;
+    margin: 0;
+    line-height: 1.15;
+    text-shadow: 0 4px 16px rgba(0, 0, 0, 0.95), 0 2px 6px rgba(0, 0, 0, 0.9);
+}
+
+/* 원형 외곽 아날로그 눈금 & 골드 링 궤적 */
+.clock-dial-frame {
+    position: absolute;
+    width: 480px;
+    height: 480px;
+    border-radius: 50%;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+    z-index: 3;
+}
+
+/* 틱 눈금 원형 링 */
+.dial-ticks-ring {
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    border: 2px dashed rgba(148, 163, 184, 0.45);
+    box-shadow: inset 0 0 0 10px rgba(241, 245, 249, 0.5);
+}
+
+/* 블루 아크 링 궤적 (지속적 회전 애니메이션) */
+.dial-gold-arc {
+    position: absolute;
+    inset: -6px;
+    border-radius: 50%;
+    border: 6px solid transparent;
+    border-left-color: #0056b3;
+    border-bottom-color: #3b82f6;
+    filter: drop-shadow(0 4px 14px rgba(0, 86, 179, 0.45));
+    animation: rotateArc 14s linear infinite;
+}
+
+@keyframes rotateArc {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* 16:00 및 22:40 핀 태그 */
+.dial-pin-tag {
+    position: absolute;
+    background: #ffffff;
+    border: 1px solid #0056b3;
+    color: #0056b3;
+    font-size: 11px;
+    font-weight: 800;
+    padding: 3px 9px;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 86, 179, 0.25);
+    z-index: 6;
+}
+
+.dial-pin-tag.pin-start {
+    top: 48%;
+    left: -14px;
+    transform: translateY(-50%);
+}
+
+.dial-pin-tag.pin-end {
+    top: 50%;
+    right: -14px;
+    transform: translateY(-50%);
+}
+
+/* 톱니바퀴 엠블럼 */
+.gear-emblem {
+    position: absolute;
+    top: 15px;
+    right: 55px;
+    font-size: 26px;
+    opacity: 0.7;
+    animation: spinGear 25s linear infinite;
+}
+
+@keyframes spinGear {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+/* 좌우 상승 그래프 & 지폐 데코 아이콘 */
+.hours-decor-left,
+.hours-decor-right {
+    position: absolute;
+    z-index: 6;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(8px);
+    padding: 8px 14px;
+    border-radius: 30px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.12);
+    border: 1px solid #f1f5f9;
+}
+
+.hours-decor-left {
+    left: -20px;
+    bottom: 80px;
+}
+
+.hours-decor-right {
+    right: -20px;
+    top: 70px;
+}
+
+.decor-chart-svg {
+    width: 22px;
+    height: 22px;
+}
+
+.money-stack-icon {
+    font-size: 18px;
+}
+
+/* 하단 타이틀 아이콘 */
+.hours-bottom-header {
+    text-align: center;
+    margin-top: 10px;
+}
+
+.hours-title {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    font-size: 36px;
+    font-weight: 800;
+    color: #111111 !important;
+    letter-spacing: -1px;
+    margin-bottom: 12px;
+}
+
+.title-icon {
+    font-size: 28px;
+}
+
+@media (max-width: 768px) {
+    .section-hours {
+        padding: 60px 0 80px !important;
+    }
+
+    .hours-store-showcase-wrap {
+        top: -155px !important;
+    }
+
+    .hours-store-card {
+        width: 240px !important;
+        height: 140px !important;
+        border-radius: 16px !important;
+    }
+
+    .card-info-content {
+        padding: 14px 16px !important;
+    }
+
+    .store-name {
+        font-size: 15px !important;
+    }
+
+    .card-sub-row {
+        font-size: 11px !important;
+    }
+
+    .sales-label {
+        font-size: 10px !important;
+    }
+
+    .sales-val {
+        font-size: 17px !important;
+    }
+
+    .hours-subtitle {
+        font-size: 25px !important;
+        margin-top: 0 !important;
+        margin-bottom: 50px !important;
+    }
+
+    .hours-clock-showcase {
+        max-width: 290px !important;
+        height: 290px !important;
+        margin: 0 auto 25px !important;
+    }
+
+    .clock-circle-viewport {
+        width: 215px !important;
+        height: 215px !important;
+        border-width: 6px !important;
+    }
+
+    .clock-dial-frame {
+        width: 270px !important;
+        height: 270px !important;
+    }
+
+    .glass-label {
+        font-size: 12px !important;
+        margin-bottom: 3px !important;
+    }
+
+    .glass-time {
+        font-size: 26px !important;
+    }
+
+    .dial-pin-tag {
+        font-size: 9.5px !important;
+        padding: 2px 6px !important;
+    }
+
+    .dial-pin-tag.pin-start {
+        left: -10px !important;
+    }
+
+    .dial-pin-tag.pin-end {
+        right: -10px !important;
+    }
+
+    .hours-title {
+        font-size: 22px !important;
+        letter-spacing: -0.5px !important;
+    }
+
+    .hours-desc {
+        font-size: 13.5px !important;
+    }
 }
 
 .hours-card-float-wrap {
@@ -1908,7 +2349,7 @@ main {
 .hours-title {
     font-size: 58px;
     font-weight: 900;
-    color: #1a2a3a;
+    color: #111111 !important;
     line-height: 1.3;
     letter-spacing: -2px;
     margin-bottom: 20px;
@@ -3419,7 +3860,7 @@ footer {
 }
 
 .month-arrow-btn:active {
-    color: #00a8cc;
+    color: #0056b3;
     transform: scale(0.9);
 }
 
@@ -3496,7 +3937,7 @@ footer {
 }
 
 .ranking-row.rank-1st {
-    color: #00a8cc;
+    color: #0056b3;
     /* 1위 골드 */
 }
 
@@ -3806,7 +4247,7 @@ footer {
     color: #ffffff;
     margin-bottom: 24px;
     letter-spacing: -0.5px;
-    border-left: 4px solid #00a8cc;
+    border-left: 4px solid #0056b3;
     padding-left: 14px;
     line-height: 1.2;
 }
@@ -5707,9 +6148,9 @@ footer {
         font-family: 'Outfit', 'Pretendard', sans-serif !important;
         font-size: 22px !important;
         font-weight: 800 !important;
-        color: #00d2ff !important;
+        color: #0056b3 !important;
         margin-bottom: 10px !important;
-        text-shadow: 0 2px 8px rgba(0, 210, 255, 0.25) !important;
+        text-shadow: 0 2px 8px rgba(0, 86, 179, 0.3) !important;
     }
 
     .cost-table tbody td:nth-child(3) {
@@ -7125,7 +7566,7 @@ footer {
 .accent-line {
     width: 60px;
     height: 2px;
-    background-color: #00a8cc;
+    background-color: #0056b3;
     /* 아쿠아 포인트 컬러 */
     margin: 30px auto 0;
 }
@@ -7139,7 +7580,7 @@ footer {
 }
 
 .dashboard-owner-message .message-item {
-    border-left: 2px solid #00a8cc;
+    border-left: 2px solid #0056b3;
     /* 기본 청색 포인트 바 제공 */
     padding: 10px 0 10px 25px;
     background: rgba(255, 255, 255, 0.02);
@@ -7332,7 +7773,7 @@ footer {
     top: 5px;
     width: 3px;
     height: 18px;
-    background-color: #00a8cc;
+    background-color: #0056b3;
 }
 
 .metric-item {
@@ -7342,7 +7783,7 @@ footer {
 
 .metric-item .label {
     font-size: 14px;
-    color: #00a8cc;
+    color: #0056b3;
     /* 포인트 하늘색 */
     text-transform: uppercase;
     letter-spacing: 1px;
@@ -7384,7 +7825,7 @@ footer {
 .shorts-card:hover {
     transform: translateY(-90px) scale(1.05);
     /* 슬라이드 다운 상태에서 약간 위로 올라오는 호버 */
-    border-color: #00a8cc;
+    border-color: #0056b3;
     box-shadow: 0 40px 80px rgba(0, 168, 204, 0.3);
 }
 
@@ -7430,7 +7871,7 @@ footer {
     font-family: 'Outfit', sans-serif;
     font-size: 15px;
     font-weight: 700;
-    color: #00a8cc;
+    color: #0056b3;
     letter-spacing: 2px;
     display: block;
     margin-bottom: 20px;
@@ -7465,7 +7906,7 @@ footer {
     display: inline-flex;
     align-items: center;
     gap: 12px;
-    background: linear-gradient(90deg, #0056b3 0%, #00a8cc 100%);
+    background: linear-gradient(90deg, #0056b3 0%, #0056b3 100%);
     color: #ffffff;
     font-size: 16px;
     font-weight: 800;
@@ -7704,7 +8145,7 @@ footer {
 }
 
 .form-control:focus {
-    border-color: #00a8cc;
+    border-color: #0056b3;
     background: rgba(0, 0, 0, 0.45);
     outline: none;
     box-shadow: 0 0 20px rgba(0, 168, 204, 0.15);
@@ -7749,7 +8190,7 @@ footer {
 }
 
 .custom-radio input[type="radio"]:checked+.radio-mark {
-    border-color: #00a8cc;
+    border-color: #0056b3;
     box-shadow: 0 0 10px rgba(0, 168, 204, 0.3);
 }
 
@@ -7825,7 +8266,7 @@ footer {
 }
 
 .custom-checkbox input[type="checkbox"]:checked+.checkbox-mark {
-    border-color: #00a8cc;
+    border-color: #0056b3;
     background: rgba(0, 168, 204, 0.1);
     box-shadow: 0 0 10px rgba(0, 168, 204, 0.2);
 }
@@ -7857,7 +8298,7 @@ footer {
 .btn-privacy-view {
     background: none;
     border: none;
-    color: #00a8cc;
+    color: #0056b3;
     font-size: 14px;
     font-weight: 600;
     cursor: pointer;
@@ -8023,7 +8464,7 @@ footer {
     align-items: center;
     justify-content: center;
     gap: 12px;
-    background: linear-gradient(135deg, #0056b3 0%, #00a8cc 100%);
+    background: linear-gradient(135deg, #0056b3 0%, #0056b3 100%);
     color: #ffffff;
     font-size: 17px;
     font-weight: 700;
@@ -8161,7 +8602,7 @@ footer {
     .btn-privacy-view {
         margin-left: 30px !important;
         font-size: 13px !important;
-        color: #00a8cc !important;
+        color: #0056b3 !important;
         text-decoration: underline !important;
         background: transparent !important;
         border: none !important;
@@ -8217,7 +8658,7 @@ footer {
 
 .btn-scroll-top:hover {
     background: rgba(0, 24, 46, 0.85);
-    border-color: #00a8cc;
+    border-color: #0056b3;
     box-shadow: 0 15px 40px rgba(0, 168, 204, 0.25);
     transform: translateY(-5px);
 }
@@ -13499,7 +13940,7 @@ footer {
 }
 
 .card-category.signature {
-    background: #00a8cc !important;
+    background: #0056b3 !important;
     color: #ffffff !important;
     font-size: 11px !important;
     font-weight: 800 !important;
@@ -13538,7 +13979,7 @@ footer {
 
 .hero-big-card .card-sub-info {
     font-size: 12.5px !important;
-    color: #00a8cc !important;
+    color: #0056b3 !important;
     font-weight: 600 !important;
     margin-bottom: 15px !important;
 }
@@ -13556,7 +13997,7 @@ footer {
 .hero-big-card .price-val {
     font-size: 30px !important;
     font-weight: 900 !important;
-    color: #00a8cc !important;
+    color: #0056b3 !important;
 }
 
 .hero-big-card .price-val.accent-red {
@@ -13633,7 +14074,7 @@ footer {
 .mini-tag {
     font-size: 10.5px !important;
     font-weight: 800 !important;
-    color: #00d2ff !important;
+    color: #0056b3 !important;
     letter-spacing: 1px !important;
     text-transform: uppercase !important;
     text-shadow: 0 2px 4px rgba(0,0,0,0.5) !important;

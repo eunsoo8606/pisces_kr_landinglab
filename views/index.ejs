@@ -1343,35 +1343,261 @@
             </div>
         </div>
     </section>
-    <!-- 다섯 번째 섹션: 운영 시간 (밝은 파도 배경) -->
+    <!-- 다섯 번째 섹션: 운영 시간 (원형 시계 게이지 프리미엄 비주얼) -->
     <section class="section-hours">
         <div class="container hours-container">
-            <!-- 상단 소제목 -->
-            <h3 class="hours-subtitle">단 7시간 운영으로도</h3>
-
-            <!-- 중앙 단일 영업시간 카드 -->
-            <div class="hours-cards-wrap single-card">
-                <!-- 카드: 영업 시간 -->
-                <div class="hours-card-float-wrap">
-                    <div class="hours-card card-active">
-                        <div class="card-bg-img">
-                            <video autoplay loop muted playsinline preload="metadata">
-                                <source src="/video/sec_3.mp4" type="video/mp4">
-                            </video>
+            <!-- 상단 매장 전경 사진 + 일 최고매출 대형 쇼케이스 무한 슬라이더 -->
+            <div class="hours-store-showcase-wrap">
+                <div class="store-ticker-viewport">
+                    <div class="store-ticker-track">
+                        <!-- 1회차 6개 매장 카드 -->
+                        <div class="hours-store-card">
+                            <div class="card-img-wrap">
+                                <img src="/images/stores/store_bonjeom.webp" alt="물고기자리 본점 전경" loading="lazy">
+                                <div class="card-img-overlay"></div>
+                            </div>
+                            <div class="card-info-content">
+                                <div class="card-top-row">
+                                    <span class="store-name">물고기자리 본점</span>
+                                    <span class="store-tag best">BEST</span>
+                                </div>
+                                <div class="card-sub-row">40평 · 20테이블</div>
+                                <div class="card-sales-row">
+                                    <span class="sales-label">일 최고 매출</span>
+                                    <strong class="sales-val">9,082,000원</strong>
+                                </div>
+                            </div>
                         </div>
-                        <div class="card-overlay"></div>
-                        <div class="card-noise-overlay"></div>
-                        <div class="card-content">
-                            <span class="step-label">영업 시간</span>
-                            <h4 class="step-time" data-time="18:00~22:30">18:00~22:30</h4>
+
+                        <div class="hours-store-card">
+                            <div class="card-img-wrap">
+                                <img src="/images/stores/store_dongtan.webp" alt="물고기자리 동탄점 전경" loading="lazy">
+                                <div class="card-img-overlay"></div>
+                            </div>
+                            <div class="card-info-content">
+                                <div class="card-top-row">
+                                    <span class="store-name">동탄점</span>
+                                </div>
+                                <div class="card-sub-row">35평 · 18테이블</div>
+                                <div class="card-sales-row">
+                                    <span class="sales-label">일 최고 매출</span>
+                                    <strong class="sales-val">8,950,000원</strong>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="hours-store-card">
+                            <div class="card-img-wrap">
+                                <img src="/images/stores/store_jeongja.webp" alt="물고기자리 정자점 전경" loading="lazy">
+                                <div class="card-img-overlay"></div>
+                            </div>
+                            <div class="card-info-content">
+                                <div class="card-top-row">
+                                    <span class="store-name">정자점</span>
+                                </div>
+                                <div class="card-sub-row">32평 · 21테이블</div>
+                                <div class="card-sales-row">
+                                    <span class="sales-label">일 최고 매출</span>
+                                    <strong class="sales-val">8,720,000원</strong>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="hours-store-card">
+                            <div class="card-img-wrap">
+                                <img src="/images/stores/store_nonhyeon.webp" alt="물고기자리 논현점 전경" loading="lazy">
+                                <div class="card-img-overlay"></div>
+                            </div>
+                            <div class="card-info-content">
+                                <div class="card-top-row">
+                                    <span class="store-name">논현점</span>
+                                </div>
+                                <div class="card-sub-row">28평 · 14테이블</div>
+                                <div class="card-sales-row">
+                                    <span class="sales-label">일 최고 매출</span>
+                                    <strong class="sales-val">8,410,000원</strong>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="hours-store-card">
+                            <div class="card-img-wrap">
+                                <img src="/images/stores/store_sadang.webp" alt="물고기자리 사당점 전경" loading="lazy">
+                                <div class="card-img-overlay"></div>
+                            </div>
+                            <div class="card-info-content">
+                                <div class="card-top-row">
+                                    <span class="store-name">사당점</span>
+                                </div>
+                                <div class="card-sub-row">30평 · 16테이블</div>
+                                <div class="card-sales-row">
+                                    <span class="sales-label">일 최고 매출</span>
+                                    <strong class="sales-val">8,250,000원</strong>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="hours-store-card">
+                            <div class="card-img-wrap">
+                                <img src="/images/stores/store_jamsil.webp" alt="물고기자리 잠실점 전경" loading="lazy">
+                                <div class="card-img-overlay"></div>
+                            </div>
+                            <div class="card-info-content">
+                                <div class="card-top-row">
+                                    <span class="store-name">잠실점</span>
+                                </div>
+                                <div class="card-sub-row">33평 · 17테이블</div>
+                                <div class="card-sales-row">
+                                    <span class="sales-label">일 최고 매출</span>
+                                    <strong class="sales-val">8,100,000원</strong>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 2회차 무한 롤링 연결 카드 -->
+                        <div class="hours-store-card">
+                            <div class="card-img-wrap">
+                                <img src="/images/stores/store_bonjeom.webp" alt="물고기자리 본점 전경" loading="lazy">
+                                <div class="card-img-overlay"></div>
+                            </div>
+                            <div class="card-info-content">
+                                <div class="card-top-row">
+                                    <span class="store-name">물고기자리 본점</span>
+                                    <span class="store-tag best">BEST</span>
+                                </div>
+                                <div class="card-sub-row">40평 · 20테이블</div>
+                                <div class="card-sales-row">
+                                    <span class="sales-label">일 최고 매출</span>
+                                    <strong class="sales-val">9,082,000원</strong>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="hours-store-card">
+                            <div class="card-img-wrap">
+                                <img src="/images/stores/store_dongtan.webp" alt="물고기자리 동탄점 전경" loading="lazy">
+                                <div class="card-img-overlay"></div>
+                            </div>
+                            <div class="card-info-content">
+                                <div class="card-top-row">
+                                    <span class="store-name">동탄점</span>
+                                </div>
+                                <div class="card-sub-row">35평 · 18테이블</div>
+                                <div class="card-sales-row">
+                                    <span class="sales-label">일 최고 매출</span>
+                                    <strong class="sales-val">8,950,000원</strong>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="hours-store-card">
+                            <div class="card-img-wrap">
+                                <img src="/images/stores/store_jeongja.webp" alt="물고기자리 정자점 전경" loading="lazy">
+                                <div class="card-img-overlay"></div>
+                            </div>
+                            <div class="card-info-content">
+                                <div class="card-top-row">
+                                    <span class="store-name">정자점</span>
+                                </div>
+                                <div class="card-sub-row">32평 · 21테이블</div>
+                                <div class="card-sales-row">
+                                    <span class="sales-label">일 최고 매출</span>
+                                    <strong class="sales-val">8,720,000원</strong>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="hours-store-card">
+                            <div class="card-img-wrap">
+                                <img src="/images/stores/store_nonhyeon.webp" alt="물고기자리 논현점 전경" loading="lazy">
+                                <div class="card-img-overlay"></div>
+                            </div>
+                            <div class="card-info-content">
+                                <div class="card-top-row">
+                                    <span class="store-name">논현점</span>
+                                </div>
+                                <div class="card-sub-row">28평 · 14테이블</div>
+                                <div class="card-sales-row">
+                                    <span class="sales-label">일 최고 매출</span>
+                                    <strong class="sales-val">8,410,000원</strong>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="hours-store-card">
+                            <div class="card-img-wrap">
+                                <img src="/images/stores/store_sadang.webp" alt="물고기자리 사당점 전경" loading="lazy">
+                                <div class="card-img-overlay"></div>
+                            </div>
+                            <div class="card-info-content">
+                                <div class="card-top-row">
+                                    <span class="store-name">사당점</span>
+                                </div>
+                                <div class="card-sub-row">30평 · 16테이블</div>
+                                <div class="card-sales-row">
+                                    <span class="sales-label">일 최고 매출</span>
+                                    <strong class="sales-val">8,250,000원</strong>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="hours-store-card">
+                            <div class="card-img-wrap">
+                                <img src="/images/stores/store_jamsil.webp" alt="물고기자리 잠실점 전경" loading="lazy">
+                                <div class="card-img-overlay"></div>
+                            </div>
+                            <div class="card-info-content">
+                                <div class="card-top-row">
+                                    <span class="store-name">잠실점</span>
+                                </div>
+                                <div class="card-sub-row">33평 · 17테이블</div>
+                                <div class="card-sales-row">
+                                    <span class="sales-label">일 최고 매출</span>
+                                    <strong class="sales-val">8,100,000원</strong>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
 
+            <!-- 상단 소제목 -->
+            <h3 class="hours-subtitle">단 7시간 운영으로도</h3>
+
+            <!-- 중앙 원형 시계 게이지 & 메인 비주얼 프레임 -->
+            <div class="hours-clock-showcase">
+                <!-- 원형 외곽 아날로그 눈금 & 골드 링 궤적 -->
+                <div class="clock-dial-frame">
+                    <div class="dial-ticks-ring"></div>
+                    <div class="dial-gold-arc"></div>
+                    <span class="dial-pin-tag pin-start">16:00</span>
+                    <span class="dial-pin-tag pin-end">22:40</span>
+                </div>
+
+                <!-- 중앙 원형 비디오 뷰포트 -->
+                <div class="clock-circle-viewport">
+                    <div class="circle-media-wrap">
+                        <video autoplay loop muted playsinline preload="metadata">
+                            <source src="/video/sec_3.mp4" type="video/mp4">
+                        </video>
+                        <div class="circle-overlay"></div>
+                    </div>
+
+                    <!-- 원형 내부 하단 글래스모피즘 정보 박스 -->
+                    <div class="hours-glass-badge">
+                        <span class="glass-label">영업 시간</span>
+                        <h4 class="glass-time">16:00~22:40</h4>
+                    </div>
+                </div>
+            </div>
+
             <!-- 하단 대제목 및 설명 -->
-            <h2 class="hours-title">충분한 1일 매출을 만듭니다.</h2>
-            <p class="hours-desc">운영시간대비 최고의 수익은 물고기자리의 큰 장점입니다.</p>
+            <div class="hours-bottom-header">
+                <h2 class="hours-title" style="color: #111111 !important;">
+                    충분한 1일 매출을 만듭니다.
+                </h2>
+                <p class="hours-desc">운영시간대비 최고의 수익은 물고기자리의 큰 장점입니다.</p>
+            </div>
         </div>
     </section>
 
@@ -1410,30 +1636,30 @@
             <!-- 음식 이미지 쇼케이스 (실운영 DB 100% 동적 렌더링) -->
             <div class="menu-showcase">
 
-                <% 
-                    const safeMenuList = (typeof menuList !== 'undefined' && Array.isArray(menuList)) ? menuList : [];
-                    const recommendedList = safeMenuList.filter(m => m.category === 'recommended');
+                <% const safeMenuList=(typeof menuList !=='undefined' && Array.isArray(menuList)) ? menuList : []; const
+                    recommendedList=safeMenuList.filter(m=> m.category === 'recommended');
                     const sashimiList = safeMenuList.filter(m => m.category === 'sashimi');
                     const sideList = safeMenuList.filter(m => m.category === 'side');
                     const sakeList = safeMenuList.filter(m => m.category === 'sake');
 
                     // DB menus 레코드 기반 100% 동적 바인딩
                     const mainCourseDb = recommendedList[0] || safeMenuList.find(m => m.name.includes('모둠 숙성회')) || {
-                        name: '모둠 숙성회 1인 코스',
-                        price: '42,000원',
-                        badge: 'SIGNATURE',
-                        image_url: '/images/foods/물고기자리 연출컷-1.webp'
+                    name: '모둠 숙성회 1인 코스',
+                    price: '42,000원',
+                    badge: 'SIGNATURE',
+                    image_url: '/images/foods/물고기자리 연출컷-1.webp'
                     };
                     const winterCourseDb = recommendedList[1] || safeMenuList.find(m => m.name.includes('겨울')) || {
-                        name: '[겨울한정] 1인 코스',
-                        price: '52,000원',
-                        badge: 'WINTER LIMITED',
-                        image_url: '/images/foods/물고기자리 연출컷-5.webp'
+                    name: '[겨울한정] 1인 코스',
+                    price: '52,000원',
+                    badge: 'WINTER LIMITED',
+                    image_url: '/images/foods/물고기자리 연출컷-5.webp'
                     };
 
                     // 우측 수직 스택: 사이드 메뉴 3종 (도미 머리구이, 새우튀김, 서더리 매운탕)
-                    const sideMiniItems = (recommendedList.length >= 5) ? recommendedList.slice(2, 5) : (sideList.length > 0 ? sideList.slice(0, 3) : []);
-                %>
+                    const sideMiniItems = (recommendedList.length >= 5) ? recommendedList.slice(2, 5) : (sideList.length
+                    > 0 ? sideList.slice(0, 3) : []);
+                    %>
 
                     <!-- 1. 추천메뉴 (2대 메인 코스 + 우측 3개 수직 사이드 미니 스택) -->
                     <div class="menu-panel active" data-panel="recommended">
@@ -1458,7 +1684,7 @@
                                     <div class="card-sub-info">(미취학 아동 무료 / 초등학생 ₩ 19,900)</div>
                                     <div class="card-price-wrap">
                                         <span class="price-val">₩ <%= mainCourseDb.price.replace('원', '' ).trim() %>
-                                                </span>
+                                        </span>
                                         <span class="price-unit">/ 1인</span>
                                     </div>
                                 </div>

@@ -867,135 +867,46 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // 9. 다섯 번째 섹션 (.section-hours) GSAP ScrollTrigger 진입 모션 & 3D 틸트 호버
+    // 9. 다섯 번째 섹션 (.section-hours) GSAP ScrollTrigger 진입 모션 & 3D 원형 시계 쇼케이스
     const sectionHours = document.querySelector('.section-hours');
     const hoursSubtitle = document.querySelector('.hours-subtitle');
-    const hoursCardsWrap = document.querySelector('.hours-cards-wrap');
-    const floatWraps = document.querySelectorAll('.hours-card-float-wrap');
-    const hoursCards = document.querySelectorAll('.hours-card');
+    const clockShowcase = document.querySelector('.hours-clock-showcase');
+    const clockViewport = document.querySelector('.clock-circle-viewport');
+    const clockDialFrame = document.querySelector('.clock-dial-frame');
     const hoursTitle = document.querySelector('.hours-title');
     const hoursDesc = document.querySelector('.hours-desc');
 
-    if (sectionHours && hoursSubtitle && hoursCardsWrap && hoursTitle && hoursDesc) {
+    if (sectionHours) {
         const hoursTimeline = gsap.timeline({
             scrollTrigger: {
                 trigger: sectionHours,
-                start: 'top 75%', // 섹션 상단이 뷰포트 75% 도달 시
+                start: 'top 75%',
                 toggleActions: 'play none none none',
             }
         });
 
-        // 1) 서브타이틀 등장
-        hoursTimeline.to(hoursSubtitle, {
-            opacity: 1,
-            y: 0,
-            duration: 0.8,
-            ease: 'power3.out'
-        })
-            // 2) 3개 카드가 차례대로 날아오듯 바운스되며 등장 (Stagger)
-            .fromTo(floatWraps,
-                { opacity: 0, y: 50, scale: 0.85, rotateX: -15 },
-                {
-                    opacity: 1,
-                    y: 0,
-                    scale: 1,
-                    rotateX: 0,
-                    duration: 1.2,
-                    stagger: 0.15,
-                    ease: 'back.out(1.4)',
-                    clearProps: 'transform', // 3D 틸트 호버와 CSS가 충돌하지 않도록 트랜스폼 클리어
-                    onStart: () => {
-                        gsap.set(hoursCardsWrap, { opacity: 1, y: 0 });
-                    }
-                },
+        if (hoursSubtitle) {
+            hoursTimeline.fromTo(hoursSubtitle,
+                { opacity: 0, y: 30 },
+                { opacity: 1, y: 0, duration: 0.8, ease: 'power3.out' }
+            );
+        }
+
+        if (clockShowcase) {
+            hoursTimeline.fromTo(clockShowcase,
+                { opacity: 0, scale: 0.85 },
+                { opacity: 1, scale: 1, duration: 1.1, ease: 'back.out(1.4)' },
+                '-=0.4'
+            );
+        }
+
+        if (hoursTitle) {
+            hoursTimeline.fromTo([hoursTitle, hoursDesc],
+                { opacity: 0, y: 25 },
+                { opacity: 1, y: 0, duration: 0.8, stagger: 0.15, ease: 'power3.out' },
                 '-=0.5'
-            )
-            // 3) 하단 타이틀 등장
-            .to([hoursTitle, hoursDesc], {
-                opacity: 1,
-                y: 0,
-                duration: 1.0,
-                stagger: 0.2,
-                ease: 'power3.out'
-            }, '-=0.6');
-
-        // 3.5) 각 시간 숫자의 롤러 회전: 스크롤 진입 시 1회만 촤르륵 롤링되다 목표 시간으로 깔끔하게 세팅 완료
-        hoursCards.forEach((card, cardIdx) => {
-            const lists = card.querySelectorAll('.ticker-number-list');
-            lists.forEach((list, idx) => {
-                const targetDigit = parseInt(list.dataset.target, 10);
-                const targetY = -(10 + targetDigit) * 38;
-
-                gsap.fromTo(list,
-                    { y: 0 },
-                    {
-                        y: targetY,
-                        duration: 1.6,
-                        delay: cardIdx * 0.15 + idx * 0.08, // 카드 및 자리수별 미세 엇박자 롤링 쾌감
-                        ease: 'power3.out',
-                        scrollTrigger: {
-                            trigger: '.section-hours',
-                            start: 'top 75%',
-                            toggleActions: 'play none none none',
-                            once: true
-                        }
-                    }
-                );
-            });
-        });
-
-        // 개별 카드 자동 3D 홀로그램 루프 비활성화 (기우뚱거리는 3D 틸트 제거)
-        /*
-        hoursCards.forEach((card, index) => {
-            const bgImg = card.querySelector('.card-bg-img img');
-            const content = card.querySelector('.card-content');
-
-            // 애니메이션 상태 객체
-            const state = { rx: 0, ry: 0, shineX: 20, shineY: 20 };
-
-            gsap.timeline({ repeat: -1, yoyo: true })
-                .to(state, {
-                    rx: 8,
-                    ry: -8,
-                    shineX: 80,
-                    shineY: 80,
-                    duration: 3.2 + index * 0.4,
-                    ease: 'sine.inOut',
-                    delay: index * 0.3,
-                    onUpdate: () => {
-                        const rect = card.getBoundingClientRect();
-                        const w = rect.width || 380;
-                        const h = rect.height || 250;
-
-                        // 1) 3D 카드 틸팅
-                        gsap.set(card, {
-                            rotateX: state.rx,
-                            rotateY: state.ry
-                        });
-
-                        // 2) 반사광 좌표 실시간 주입
-                        card.style.setProperty('--mouse-x', `${(state.shineX / 100) * w}px`);
-                        card.style.setProperty('--mouse-y', `${(state.shineY / 100) * h}px`);
-
-                        // 3) 배경 이미지와 텍스트의 3D 패러랙스 연동 (정방향/역방향)
-                        if (bgImg) {
-                            gsap.set(bgImg, {
-                                x: -state.ry * 1.5,
-                                y: state.rx * 1.5,
-                                scale: 1.08
-                            });
-                        }
-                        if (content) {
-                            gsap.set(content, {
-                                x: state.ry * 1.2,
-                                y: -state.rx * 1.2,
-                                z: 40
-                            });
-                        }
-                    }
-                });
-        });
-        */
+            );
+        }
     }
 
     // 10. 여섯 번째 섹션 (.section-model) GSAP ScrollTrigger 진입 모션
