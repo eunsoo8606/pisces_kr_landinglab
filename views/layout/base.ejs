@@ -13,12 +13,8 @@
     <link rel="icon" href="/favicon.webp?v=2" type="image/png">
 
     <!-- 검색엔진 소유권 인증 태그 -->
-    <% if (locals.googleVerification) { %>
-    <meta name="google-site-verification" content="<%= googleVerification %>">
-    <% } %>
-    <% if (locals.naverVerification) { %>
-    <meta name="naver-site-verification" content="<%= naverVerification %>">
-    <% } %>
+    <meta name="naver-site-verification" content="022f7c4c02012d90450260ae8572d94cd628e415" />
+    <meta name="google-site-verification" content="455YHK66VecF8j-Xs5JbBjKP-KRKIqW3hpkDJVOkJMs" />
 
     <!-- 기본 SEO 메타 태그 -->
     <meta name="description" content="<%= locals.metaDescription || '전문 조리사 필요 없는 쉽고 완벽한 주방 시스템. 물고기자리에서 성공적인 프리미엄 숙성회 프랜차이즈 창업을 시작하세요.' %>">
@@ -39,6 +35,47 @@
     <meta name="twitter:title" content="<%= title %>">
     <meta name="twitter:description" content="<%= locals.metaDescription || '전문 조리사 필요 없는 쉽고 완벽한 주방 시스템. 물고기자리에서 성공적인 프리미엄 숙성회 프랜차이즈 창업을 시작하세요.' %>">
     <meta name="twitter:image" content="<%= baseUrl %>/images/logo/meta-logo.webp">
+
+    <!-- 네이버 / 구글 검색엔진 수집 최적화 (JSON-LD 구조화 데이터) -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "Restaurant",
+        "name": "물고기자리",
+        "alternateName": "물고기자리 프리미엄 숙성회",
+        "image": "<%= baseUrl %>/images/logo/meta-logo.webp",
+        "url": "<%= baseUrl %>",
+        "description": "<%= (locals.metaDescription || '전문 조리사 필요 없는 쉽고 완벽한 주방 시스템. 물고기자리에서 성공적인 프리미엄 숙성회 프랜차이즈 창업을 시작하세요.').replace(/\"/g, '\\\"') %>",
+        "servesCuisine": "Japanese, Sashimi",
+        "priceRange": "₩₩₩",
+        "brand": {
+            "@type": "Brand",
+            "name": "물고기자리",
+            "logo": "<%= baseUrl %>/images/logo/meta-logo.webp"
+        },
+        "publisher": {
+            "@type": "Organization",
+            "name": "물고기자리",
+            "logo": {
+                "@type": "ImageObject",
+                "url": "<%= baseUrl %>/images/logo/meta-logo.webp"
+            }
+        }
+    }
+    </script>
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "WebSite",
+        "name": "물고기자리",
+        "url": "<%= baseUrl %>",
+        "potentialAction": {
+            "@type": "SearchAction",
+            "target": "<%= baseUrl %>/stores?search={search_term_string}",
+            "query-input": "required name=search_term_string"
+        }
+    }
+    </script>
 
     <!-- 외부 도메인 DNS/TLS 프리커넥트 (네트워크 핸드셰이크 지연 0ms화) -->
     <link rel="preconnect" href="https://fonts.googleapis.com">

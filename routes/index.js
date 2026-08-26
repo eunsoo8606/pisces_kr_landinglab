@@ -177,37 +177,122 @@ router.get(['/community', '/community/:category'], async (req, res) => {
 });
 
 // 6. sitemap.xml 동적 생성 라우트
-router.get('/sitemap.xml', (req, res) => {
-    const baseUrl = `${req.protocol}://${req.get('host')}`;
-    const urls = [
-        { loc: `${baseUrl}/`, changefreq: 'daily', priority: '1.0' },
-        { loc: `${baseUrl}/brand/about`, changefreq: 'weekly', priority: '0.8' },
-        { loc: `${baseUrl}/menu`, changefreq: 'weekly', priority: '0.8' },
-        { loc: `${baseUrl}/community`, changefreq: 'weekly', priority: '0.8' }
-    ];
+router.get('/sitemap.xml', async (req, res) => {
+    try {
+        const baseUrl = `${req.protocol}://${req.get('host')}`;
+        const urls = [
+            { loc: `${baseUrl}/`, changefreq: 'daily', priority: '1.0' },
+            { loc: `${baseUrl}/brand/about`, changefreq: 'weekly', priority: '0.8' },
+            { loc: `${baseUrl}/menu`, changefreq: 'weekly', priority: '0.8' },
+            { loc: `${baseUrl}/menu/main`, changefreq: 'weekly', priority: '0.8' },
+            { loc: `${baseUrl}/menu/side`, changefreq: 'weekly', priority: '0.8' },
+            { loc: `${baseUrl}/menu/sake`, changefreq: 'weekly', priority: '0.8' },
+            { loc: `${baseUrl}/stores`, changefreq: 'daily', priority: '0.9' },
+            { loc: `${baseUrl}/community`, changefreq: 'daily', priority: '0.8' },
+            { loc: `${baseUrl}/community/notice`, changefreq: 'daily', priority: '0.8' },
+            { loc: `${baseUrl}/community/faq`, changefreq: 'weekly', priority: '0.7' },
+            { loc: `${baseUrl}/community/voice`, changefreq: 'daily', priority: '0.7' },
+            { loc: `${baseUrl}/community/inquiry`, changefreq: 'daily', priority: '0.7' }
+        ];
 
-    let xml = '<?xml version="1.0" encoding="UTF-8"?>';
-    xml += '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">';
-    urls.forEach(url => {
-        xml += '<url>';
-        xml += `<loc>${url.loc}</loc>`;
-        xml += `<changefreq>${url.changefreq}</changefreq>`;
-        xml += `<priority>${url.priority}</priority>`;
-        xml += '</url>';
-    });
-    xml += '</urlset>';
+        // DB에서 최신 게시글 가져와 sitemap 추가
+        try {
+            const [posts] = await db.query('SELECT id, category, updated_at FROM boards ORDER BY id DESC LIMIT 50');
+            if (posts && posts.length > 0) {
+                posts.forEach(post => {
+                    const lastmod = post.updated_at ? new Date(post.updated_at).toISOString().split('T')[0] : new Date().toISOString().split('T')[0];
+                    urls.push({
+                        loc: `${baseUrl}/community/${post.category}`,
+                        lastmod: lastmod,
+                        changefreq: 'weekly',
+                        priority: '0.6'
+                    });
+                });
+            }
+        } catch (dbErr) {
+            console.error('⚠️ DB post query for sitemap failed:', dbErr);
+        }
 
-    res.header('Content-Type', 'application/xml');
-    res.send(xml);
+        let xml = '<?xml version="1.0" encoding="UTF-8"?>';
+        xml += '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">';
+        urls.forEach(url => {
+            xml += '<url>';
+            xml += `<loc>${url.loc}</loc>`;
+            if (url.lastmod) xml += `<lastmod>${url.lastmod}</lastmod>`;
+            xml += `<changefreq>${url.changefreq}</changefreq>`;
+            xml += `<priority>${url.priority}</priority>`;
+            xml += '</url>';
+        });
+        xml += '</urlset>';
+
+        res.header('Content-Type', 'application/xml');
+        res.send(xml);
+    } catch (err) {
+        console.error('❌ Failed to generate sitemap.xml:', err);
+        res.status(500).send('Sitemap Generation Error');
+    }
 });
 
-// 7. robots.txt 동적 생성 라우트
+// 7. RSS 2.0 피드 동적 생성 라우트 (/rss.xml 및 /rss)
+router.get(['/rss.xml', '/rss'], async (req, res) => {
+    try {
+        const baseUrl = `${req.protocol}://${req.get('host')}`;
+        const siteTitle = '물고기자리 - 프리미엄 숙성회 전문 프랜차이즈';
+        const siteDescription = '전문 조리사 필요 없는 쉽고 완벽한 주방 시스템. 물고기자리에서 성공적인 프리미엄 숙성회 창업을 시작하세요.';
+
+        let itemsXml = '';
+        try {
+            const [posts] = await db.query('SELECT * FROM boards ORDER BY id DESC LIMIT 30');
+            if (posts && posts.length > 0) {
+                posts.forEach(post => {
+                    const pubDate = new Date(post.created_at || Date.now()).toUTCString();
+                    const postTitle = post.title || '물고기자리 안내소식';
+                    const postLink = `${baseUrl}/community/${post.category || 'notice'}`;
+                    const rawContent = post.content ? post.content.replace(/<[^>]*>?/gm, '').substring(0, 300) : siteDescription;
+
+                    itemsXml += `
+        <item>
+            <title><![CDATA[${postTitle}]]></title>
+            <link>${postLink}</link>
+            <description><![CDATA[${rawContent}]]></description>
+            <pubDate>${pubDate}</pubDate>
+            <guid>${postLink}#${post.id}</guid>
+        </item>`;
+                });
+            }
+        } catch (dbErr) {
+            console.error('⚠️ DB fetch for RSS failed:', dbErr);
+        }
+
+        const rssXml = `<?xml version="1.0" encoding="UTF-8" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+<channel>
+    <title><![CDATA[${siteTitle}]]></title>
+    <link>${baseUrl}</link>
+    <description><![CDATA[${siteDescription}]]></description>
+    <language>ko-KR</language>
+    <atom:link href="${baseUrl}/rss.xml" rel="self" type="application/rss+xml" />
+    ${itemsXml}
+</channel>
+</rss>`;
+
+        res.header('Content-Type', 'application/xml');
+        res.send(rssXml);
+    } catch (err) {
+        console.error('❌ Failed to generate rss.xml:', err);
+        res.status(500).send('RSS Generation Error');
+    }
+});
+
+// 8. robots.txt 동적 생성 라우트
 router.get('/robots.txt', (req, res) => {
     const baseUrl = `${req.protocol}://${req.get('host')}`;
     let robots = 'User-agent: *\n';
     robots += 'Allow: /\n';
-    robots += 'Disallow: /console/\n\n';
+    robots += 'Disallow: /console/\n';
+    robots += 'Disallow: /api/\n\n';
     robots += `Sitemap: ${baseUrl}/sitemap.xml\n`;
+    robots += `Sitemap: ${baseUrl}/rss.xml\n`;
     
     res.header('Content-Type', 'text/plain');
     res.send(robots);
