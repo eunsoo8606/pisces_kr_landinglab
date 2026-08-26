@@ -241,6 +241,54 @@ router.get(['/rss.xml', '/rss'], async (req, res) => {
         const siteDescription = '전문 조리사 필요 없는 쉽고 완벽한 주방 시스템. 물고기자리에서 성공적인 프리미엄 숙성회 창업을 시작하세요.';
 
         let itemsXml = '';
+
+        // A. 대표 메뉴 리스트 RSS 아이템 추가
+        try {
+            const [menus] = await db.query('SELECT * FROM menus ORDER BY sort_order ASC, id ASC LIMIT 20');
+            if (menus && menus.length > 0) {
+                menus.forEach(menu => {
+                    const menuTitle = `[대표메뉴] ${menu.name} ${menu.badge ? '(' + menu.badge + ')' : ''}`;
+                    const menuLink = `${baseUrl}/menu`;
+                    const menuDesc = `${menu.name} - 가격: ${menu.price}. 23년 노하우의 명품 숙성회 전문 물고기자리 시그니처 메뉴입니다.`;
+
+                    itemsXml += `
+        <item>
+            <title><![CDATA[${menuTitle}]]></title>
+            <link>${menuLink}</link>
+            <description><![CDATA[${menuDesc}]]></description>
+            <pubDate>${new Date().toUTCString()}</pubDate>
+            <guid>${menuLink}#menu-${menu.id}</guid>
+        </item>`;
+                });
+            }
+        } catch (menuErr) {
+            console.error('⚠️ DB menu fetch for RSS failed:', menuErr);
+        }
+
+        // B. 가맹점 현황 리스트 RSS 아이템 추가
+        try {
+            const [stores] = await db.query('SELECT * FROM stores ORDER BY id ASC LIMIT 30');
+            if (stores && stores.length > 0) {
+                stores.forEach(store => {
+                    const storeTitle = `[가맹점 안내] 물고기자리 ${store.name}`;
+                    const storeLink = `${baseUrl}/stores`;
+                    const storeDesc = `물고기자리 ${store.name} - 주소: ${store.address}, 문의전화: ${store.phone}. 가까운 물고기자리 매장을 방문해보세요.`;
+
+                    itemsXml += `
+        <item>
+            <title><![CDATA[${storeTitle}]]></title>
+            <link>${storeLink}</link>
+            <description><![CDATA[${storeDesc}]]></description>
+            <pubDate>${new Date().toUTCString()}</pubDate>
+            <guid>${storeLink}#store-${store.id}</guid>
+        </item>`;
+                });
+            }
+        } catch (storeErr) {
+            console.error('⚠️ DB store fetch for RSS failed:', storeErr);
+        }
+
+        // C. 게시판/공지사항 리스트 RSS 아이템 추가
         try {
             const [posts] = await db.query('SELECT * FROM boards ORDER BY id DESC LIMIT 30');
             if (posts && posts.length > 0) {
@@ -256,7 +304,7 @@ router.get(['/rss.xml', '/rss'], async (req, res) => {
             <link>${postLink}</link>
             <description><![CDATA[${rawContent}]]></description>
             <pubDate>${pubDate}</pubDate>
-            <guid>${postLink}#${post.id}</guid>
+            <guid>${postLink}#post-${post.id}</guid>
         </item>`;
                 });
             }
