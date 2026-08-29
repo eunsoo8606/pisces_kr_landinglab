@@ -182,8 +182,8 @@ router.get(['/community', '/community/:category'], async (req, res) => {
     }
 });
 
-// 6. sitemap.xml 동적 생성 라우트
-router.get('/sitemap.xml', async (req, res) => {
+// 6. sitemap.xml 동적 생성 라우트 (/sitemap.xml 및 /sitemap)
+router.get(['/sitemap.xml', '/sitemap'], async (req, res) => {
     try {
         const baseUrl = getBaseUrl(req);
         const urls = [
@@ -219,19 +219,20 @@ router.get('/sitemap.xml', async (req, res) => {
             console.error('⚠️ DB post query for sitemap failed:', dbErr);
         }
 
-        let xml = '<?xml version="1.0" encoding="UTF-8"?>';
-        xml += '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">';
+        let xml = '<?xml version="1.0" encoding="UTF-8"?>\n';
+        xml += '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n';
         urls.forEach(url => {
-            xml += '<url>';
-            xml += `<loc>${url.loc}</loc>`;
-            if (url.lastmod) xml += `<lastmod>${url.lastmod}</lastmod>`;
-            xml += `<changefreq>${url.changefreq}</changefreq>`;
-            xml += `<priority>${url.priority}</priority>`;
-            xml += '</url>';
+            const safeLoc = url.loc.replace(/&/g, '&amp;');
+            xml += '  <url>\n';
+            xml += `    <loc>${safeLoc}</loc>\n`;
+            if (url.lastmod) xml += `    <lastmod>${url.lastmod}</lastmod>\n`;
+            xml += `    <changefreq>${url.changefreq}</changefreq>\n`;
+            xml += `    <priority>${url.priority}</priority>\n`;
+            xml += '  </url>\n';
         });
         xml += '</urlset>';
 
-        res.header('Content-Type', 'application/xml');
+        res.header('Content-Type', 'application/xml; charset=utf-8');
         res.send(xml);
     } catch (err) {
         console.error('❌ Failed to generate sitemap.xml:', err);
