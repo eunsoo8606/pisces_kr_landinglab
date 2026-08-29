@@ -2,6 +2,12 @@ const express = require('express');
 const router = express.Router();
 const db = require('../db/database');
 
+// 프록시 및 HTTPS 환경 지원 baseUrl 생성 헬퍼
+function getBaseUrl(req) {
+    const protocol = req.headers['x-forwarded-proto'] || (req.secure ? 'https' : req.protocol);
+    return `${protocol}://${req.get('host')}`;
+}
+
 // 1. 메인 페이지
 router.get('/', async (req, res) => {
     try {
@@ -19,7 +25,7 @@ router.get('/', async (req, res) => {
         res.render('index', {
             title: '물고기자리 - 프리미엄 숙성회',
             branding: 'PISCES since 2002',
-            metaDescription: '칼 없는 주방, 주방장 없는 횟집! 물고기자리에서 성공적인 프리미엄 숙성회 프랜차이즈 창업을 시작하세요. 20여 년 of 노하우로 최상급 활선어 숙성회를 무한리필로 제공합니다.',
+            metaDescription: '20여 년 노하우의 프리미엄 숙성회 전문 프랜차이즈 물고기자리. 최상급 활선어 무한리필과 성공적인 소자본 횟집 창업 솔루션을 제공합니다.',
             metaKeywords: '물고기자리, 숙성회, 무한리필, 활어회, 프랜차이즈, 창업, 횟집, 소자본창업, 일식창업',
             popups: popups,
             menuList: menuList || []
@@ -29,7 +35,7 @@ router.get('/', async (req, res) => {
         res.render('index', {
             title: '물고기자리 - 프리미엄 숙성회',
             branding: 'PISCES since 2002',
-            metaDescription: '칼 없는 주방, 주방장 없는 횟집! 물고기자리에서 성공적인 프리미엄 숙성회 프랜차이즈 창업을 시작하세요. 20여 년 of 노하우로 최상급 활선어 숙성회를 무한리필로 제공합니다.',
+            metaDescription: '20여 년 노하우의 프리미엄 숙성회 전문 프랜차이즈 물고기자리. 최상급 활선어 무한리필과 성공적인 소자본 횟집 창업 솔루션을 제공합니다.',
             metaKeywords: '물고기자리, 숙성회, 무한리필, 활어회, 프랜차이즈, 창업, 횟집, 소자본창업, 일식창업',
             popups: [],
             menuList: []
@@ -61,7 +67,7 @@ router.get(['/menu', '/menu/:category'], async (req, res) => {
             branding: 'PISCES since 2002',
             activeTab: activeTab,
             menuList: menuList,
-            metaDescription: '물고기자리의 대표 메뉴를 소개합니다. 엄선된 최고급 원어로 오랜 시간 정성껏 빚어내는 프리미엄 숙성회 모듬부터 다채로운 사이드 메뉴까지 경험해 보세요.',
+            metaDescription: '물고기자리의 대표 메뉴를 소개합니다. 최고급 원어로 정성껏 빚어내는 프리미엄 숙성회 모듬부터 다채로운 사이드 메뉴까지 경험해 보세요.',
             metaKeywords: '물고기자리 메뉴, 숙성회 코스, 모듬회, 매운탕, 초밥, 횟집 메뉴, 모듬숙성회'
         });
     } catch (err) {
@@ -167,7 +173,7 @@ router.get(['/community', '/community/:category'], async (req, res) => {
             branding: 'PISCES since 2002',
             activeTab: activeTab,
             list: listResult,
-            metaDescription: '물고기자리 고객 센터 및 소통 공간. 공지사항, 자주 묻는 질문(FAQ) 안내와 함께 서비스 불편사항 접수(고객의 소리), 가맹 및 비즈니스 제휴 문의를 제공합니다.',
+            metaDescription: '물고기자리 고객센터 및 소통 공간. 공지사항, 자주 묻는 질문(FAQ), 서비스 불편사항 접수(고객의 소리) 및 가맹/비즈니스 제휴 문의를 제공합니다.',
             metaKeywords: '물고기자리 고객센터, 가맹문의, 제휴문의, 공지사항, FAQ, 고객의소리, 불편접수'
         });
     } catch (err) {
@@ -179,7 +185,7 @@ router.get(['/community', '/community/:category'], async (req, res) => {
 // 6. sitemap.xml 동적 생성 라우트
 router.get('/sitemap.xml', async (req, res) => {
     try {
-        const baseUrl = `${req.protocol}://${req.get('host')}`;
+        const baseUrl = getBaseUrl(req);
         const urls = [
             { loc: `${baseUrl}/`, changefreq: 'daily', priority: '1.0' },
             { loc: `${baseUrl}/brand/about`, changefreq: 'weekly', priority: '0.8' },
@@ -236,9 +242,9 @@ router.get('/sitemap.xml', async (req, res) => {
 // 7. RSS 2.0 피드 동적 생성 라우트 (/rss.xml 및 /rss)
 router.get(['/rss.xml', '/rss'], async (req, res) => {
     try {
-        const baseUrl = `${req.protocol}://${req.get('host')}`;
+        const baseUrl = getBaseUrl(req);
         const siteTitle = '물고기자리 - 프리미엄 숙성회 전문 프랜차이즈';
-        const siteDescription = '전문 조리사 필요 없는 쉽고 완벽한 주방 시스템. 물고기자리에서 성공적인 프리미엄 숙성회 창업을 시작하세요.';
+        const siteDescription = '20여 년 노하우의 프리미엄 숙성회 전문 프랜차이즈 물고기자리. 최상급 활선어 무한리필과 성공적인 소자본 횟집 창업 솔루션을 제공합니다.';
 
         let itemsXml = '';
 
@@ -334,7 +340,7 @@ router.get(['/rss.xml', '/rss'], async (req, res) => {
 
 // 8. robots.txt 동적 생성 라우트
 router.get('/robots.txt', (req, res) => {
-    const baseUrl = `${req.protocol}://${req.get('host')}`;
+    const baseUrl = getBaseUrl(req);
     let robots = 'User-agent: *\n';
     robots += 'Allow: /\n';
     robots += 'Disallow: /console/\n';

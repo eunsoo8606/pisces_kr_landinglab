@@ -176,9 +176,13 @@ app.use((req, res, next) => {
     })();
 });
 
+// 프록시(Nginx, Vercel, Cloudflare 등) 및 HTTPS 헤더 신뢰 설정
+app.set('trust proxy', true);
+
 // 모든 템플릿에 baseUrl 및 소유권 인증키 주입
 app.use((req, res, next) => {
-    res.locals.baseUrl = `${req.protocol}://${req.get('host')}`;
+    const protocol = req.headers['x-forwarded-proto'] || (req.secure ? 'https' : req.protocol);
+    res.locals.baseUrl = `${protocol}://${req.get('host')}`;
     res.locals.googleVerification = process.env.GOOGLE_SITE_VERIFICATION || '';
     res.locals.naverVerification = process.env.NAVER_SITE_VERIFICATION || '';
     next();
