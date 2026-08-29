@@ -40,7 +40,7 @@ router.get('/', async (req, res) => {
 // 2. 메뉴 소개 라우트
 router.get(['/menu', '/menu/:category'], async (req, res) => {
     const categoryParam = req.params.category || 'recommend';
-    
+
     const categoryMap = {
         'main': 'main',
         'course': 'main',
@@ -50,12 +50,12 @@ router.get(['/menu', '/menu/:category'], async (req, res) => {
         'side': 'side',
         'sake': 'sake'
     };
-    
+
     const activeTab = categoryMap[categoryParam] || 'main';
-    
+
     try {
         const [menuList] = await db.query('SELECT * FROM menus ORDER BY sort_order ASC, id ASC');
-        
+
         res.render('menu', {
             title: '메뉴소개 | 물고기자리 - 프리미엄 숙성회',
             branding: 'PISCES since 2002',
@@ -140,16 +140,16 @@ router.get('/brand/location', (req, res) => {
 // 5. 커뮤니티 라우트 (DB 연동)
 router.get(['/community', '/community/:category'], async (req, res) => {
     const categoryParam = req.params.category || 'notice';
-    
+
     const categoryMap = {
         'notice': 'notice',
         'faq': 'faq',
         'voice': 'voice',
         'inquiry': 'inquiry'
     };
-    
+
     const activeTab = categoryMap[categoryParam] || 'notice';
-    
+
     try {
         let listQuery = 'SELECT * FROM boards WHERE category = ?';
         if (activeTab === 'notice') {
@@ -341,7 +341,7 @@ router.get('/robots.txt', (req, res) => {
     robots += 'Disallow: /api/\n\n';
     robots += `Sitemap: ${baseUrl}/sitemap.xml\n`;
     robots += `Sitemap: ${baseUrl}/rss.xml\n`;
-    
+
     res.header('Content-Type', 'text/plain');
     res.send(robots);
 });
