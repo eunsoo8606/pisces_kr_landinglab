@@ -143,6 +143,7 @@ router.get('/console/dashboard', checkAuth, async (req, res) => {
             [todayInquiriesResult],
             [totalInquiriesResult],
             [recentLogs],
+            [recentInquiries],
             [dailyStats],
             [monthlyStats],
             [deviceStats],
@@ -154,6 +155,7 @@ router.get('/console/dashboard', checkAuth, async (req, res) => {
             db.query('SELECT COUNT(*) AS count FROM inquiries WHERE DATE(created_at) = CURDATE()'),
             db.query('SELECT COUNT(*) AS count FROM inquiries'),
             db.query('SELECT ip_address, country, country_code, device_type, os_name, browser_name, referer, requested_url, created_at FROM visitor_logs ORDER BY created_at DESC LIMIT 5'),
+            db.query('SELECT id, name, phone, email, region, message, status, created_at FROM inquiries ORDER BY created_at DESC LIMIT 5'),
             db.query(`
                 SELECT DATE_FORMAT(created_at, '%m-%d') AS label, COUNT(*) AS count 
                 FROM visitor_logs 
@@ -200,6 +202,7 @@ router.get('/console/dashboard', checkAuth, async (req, res) => {
             title: '물고기자리 관리자 콘솔',
             stats,
             visitorLogs: recentLogs,
+            recentInquiries,
             activeMenu: 'dashboard',
             analytics: {
                 daily: dailyStats,

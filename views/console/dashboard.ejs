@@ -586,6 +586,14 @@
                     <span>대쉬보드</span>
                 </a>
 
+                <!-- 2. 창업 상담 관리 -->
+                <a href="/console/inquiry" class="menu-item <%= (typeof activeMenu !== 'undefined' && activeMenu === 'inquiry') ? 'active' : '' %>" style="margin-top: 4px;">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+                    </svg>
+                    <span>창업 상담 관리</span>
+                </a>
+
                 <!-- 3. 게시판 관리 (서브메뉴 분리) -->
                 <div class="menu-group" style="display: flex; flex-direction: column; gap: 4px; margin-top: 10px;">
                     <div class="menu-group-title" style="padding: 5px 20px; font-size: 11px; font-weight: bold; color: #94a3b8; text-transform: uppercase; letter-spacing: 1px;">게시판 관리</div>
@@ -670,14 +678,20 @@
 
             <!-- 지표 카드 (Metrics) -->
             <div class="metrics-grid">
-                <div class="metric-card orange">
-                    <div class="metric-label">당일 접수 건수</div>
+                <a href="/console/inquiry?status=pending" class="metric-card orange" style="text-decoration: none; cursor: pointer;" title="상담 관리로 이동">
+                    <div class="metric-label" style="display: flex; align-items: center; justify-content: space-between;">
+                        <span>당일 접수 건수</span>
+                        <span style="font-size: 11px; font-weight: bold; background: rgba(245, 158, 11, 0.2); padding: 2px 6px; border-radius: 4px;">바로가기 &gt;</span>
+                    </div>
                     <div class="metric-value"><%= stats.todayInquiries %> <span>건</span></div>
-                </div>
-                <div class="metric-card purple">
-                    <div class="metric-label">누적 상담 신청</div>
+                </a>
+                <a href="/console/inquiry" class="metric-card purple" style="text-decoration: none; cursor: pointer;" title="상담 관리로 이동">
+                    <div class="metric-label" style="display: flex; align-items: center; justify-content: space-between;">
+                        <span>누적 상담 신청</span>
+                        <span style="font-size: 11px; font-weight: bold; background: rgba(139, 92, 246, 0.2); padding: 2px 6px; border-radius: 4px;">전체보기 &gt;</span>
+                    </div>
                     <div class="metric-value"><%= stats.totalInquiries %> <span>건</span></div>
-                </div>
+                </a>
                 <div class="metric-card blue">
                     <div class="metric-label">오늘 방문자 수</div>
                     <div class="metric-value"><%= stats.todayVisitors %> <span>명</span></div>
@@ -744,6 +758,90 @@
                             </div>
                         <% } %>
                     </div>
+                </div>
+            </div>
+
+            <!-- 실시간 창업 상담 접수 현황 (최신 5건) -->
+            <div class="full-width-card" style="margin-bottom: 24px;">
+                <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px;">
+                    <h3 class="chart-title" style="margin: 0; display: flex; align-items: center; gap: 8px;">
+                        <span style="display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: #f59e0b;"></span>
+                        실시간 창업 상담 접수 현황 (최신 5건)
+                    </h3>
+                    <a href="/console/inquiry" style="font-size: 13px; color: #0284c7; text-decoration: none; font-weight: 700; display: flex; align-items: center; gap: 4px;">
+                        <span>전체 목록 및 관리</span>
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="width: 14px; height: 14px;">
+                            <polyline points="9 18 15 12 9 6"></polyline>
+                        </svg>
+                    </a>
+                </div>
+                <div class="table-container">
+                    <% if (typeof recentInquiries !== 'undefined' && recentInquiries && recentInquiries.length > 0) { %>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th style="width: 110px;">처리상태</th>
+                                    <th style="width: 120px;">신청자명</th>
+                                    <th style="width: 140px;">연락처</th>
+                                    <th style="width: 140px;">희망지역</th>
+                                    <th>문의내용</th>
+                                    <th style="width: 150px;">접수일시</th>
+                                    <th style="width: 90px; text-align: center;">관리</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <% recentInquiries.forEach(item => { 
+                                    const dateStr = new Date(item.created_at).toLocaleString('ko-KR', {
+                                        month: '2-digit',
+                                        day: '2-digit',
+                                        hour: '2-digit',
+                                        minute: '2-digit',
+                                        hour12: false
+                                    });
+                                %>
+                                    <tr>
+                                        <td>
+                                            <% if (item.status === 'pending') { %>
+                                                <span style="display: inline-flex; align-items: center; padding: 3px 8px; border-radius: 12px; font-size: 12px; font-weight: 700; background: rgba(245, 158, 11, 0.1); color: #d97706; border: 1px solid rgba(245, 158, 11, 0.3);">
+                                                    ⏳ 접수대기
+                                                </span>
+                                            <% } else if (item.status === 'complete') { %>
+                                                <span style="display: inline-flex; align-items: center; padding: 3px 8px; border-radius: 12px; font-size: 12px; font-weight: 700; background: rgba(16, 185, 129, 0.1); color: #059669; border: 1px solid rgba(16, 185, 129, 0.3);">
+                                                    ✅ 상담완료
+                                                </span>
+                                            <% } else { %>
+                                                <span style="display: inline-flex; align-items: center; padding: 3px 8px; border-radius: 12px; font-size: 12px; font-weight: 700; background: rgba(100, 116, 139, 0.1); color: #64748b; border: 1px solid rgba(100, 116, 139, 0.3);">
+                                                    🚫 취소
+                                                </span>
+                                            <% } %>
+                                        </td>
+                                        <td><strong style="color: #0f172a;"><%= item.name %></strong></td>
+                                        <td>
+                                            <a href="tel:<%= item.phone %>" style="color: #0284c7; text-decoration: none; font-weight: 600;">
+                                                <%= item.phone %>
+                                            </a>
+                                        </td>
+                                        <td><span style="color: #0369a1; font-weight: 600;"><%= item.region || '미정' %></span></td>
+                                        <td>
+                                            <span style="color: #475569; font-size: 13px; max-width: 300px; display: inline-block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;" title="<%= item.message %>">
+                                                <%= item.message ? item.message : '(내용 없음)' %>
+                                            </span>
+                                        </td>
+                                        <td style="font-size: 12px; color: #64748b;"><%= dateStr %></td>
+                                        <td style="text-align: center;">
+                                            <a href="/console/inquiry" style="padding: 4px 10px; border-radius: 4px; background: #f1f5f9; color: #0284c7; font-size: 12px; font-weight: 700; text-decoration: none; border: 1px solid #cbd5e1;">
+                                                확인
+                                            </a>
+                                        </td>
+                                    </tr>
+                                <% }) %>
+                            </tbody>
+                        </table>
+                    <% } else { %>
+                        <div style="text-align: center; padding: 36px; color: #64748b; font-size: 13px;">
+                            최근 접수된 창업 상담 신청 내역이 없습니다.
+                        </div>
+                    <% } %>
                 </div>
             </div>
 
