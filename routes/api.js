@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const db = require('../db/database');
 const { sendConsultationNotification } = require('../utils/email');
+const { sendConsultationSms, sendInquirySms } = require('../utils/sms');
 const { checkAuth } = require('./auth');
 const rateLimit = require('express-rate-limit');
 
@@ -40,6 +41,8 @@ router.post('/inquire', apiLimiter, async (req, res) => {
         const email = req.body.email || '';
         const region = req.body.region || '';
         const message = req.body.message || '';
+        const visitPath = req.body.visitPath || '';
+        const experience = req.body.experience || '';
 
         // 유효성 체크
         if (!name || !phone) {
@@ -57,17 +60,30 @@ router.post('/inquire', apiLimiter, async (req, res) => {
             [name, phone, email, region, message]
         );
 
-        // 1-2. 관리자 메일 알림 전송 (메일 전송 실패 시에도 접수는 완료되도록 처리)
+        // 1-2. 관리자 메일 및 SMS 알림 전송 (알림 실패 시에도 접수는 완료되도록 처리)
         try {
-            await sendConsultationNotification({
-                name,
-                phone,
-                email,
-                region,
-                message
-            });
-        } catch (mailErr) {
-            console.error('⚠️ Mail send error in API route:', mailErr);
+            await Promise.allSettled([
+                sendConsultationNotification({
+                    name,
+                    phone,
+                    email,
+                    region,
+                    message,
+                    experience,
+                    path: visitPath
+                }),
+                sendConsultationSms({
+                    name,
+                    phone,
+                    email,
+                    region,
+                    message,
+                    visitPath,
+                    experience
+                })
+            ]);
+        } catch (notifyErr) {
+            console.error('⚠️ Notification send error in API route:', notifyErr);
         }
 
         if (isJson) {
@@ -163,6 +179,19 @@ router.post('/api/community/inquiry', apiLimiter, async (req, res) => {
              VALUES ('inquiry', ?, ?, ?, ?, ?, ?, 1, 'pending')`,
             [title, content, name, phone, email || null, type]
         );
+
+        // 관리자 SMS 알림 전송 (실패 시에도 클라이언트 응답은 성공으로 유지)
+        try {
+            await sendInquirySms({
+                name,
+                phone,
+                email,
+                type,
+                content
+            });
+        } catch (smsErr) {
+            console.error('⚠️ [Solapi SMS] Community inquiry SMS error:', smsErr);
+        }
 
         res.json({ success: true, message: '문의 사항이 성공적으로 접수되었습니다.' });
     } catch (err) {
