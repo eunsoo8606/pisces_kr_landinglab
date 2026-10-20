@@ -1,0 +1,33 @@
+{
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  "@id": "https://piscesfc.com/#organization",
+  "name": "주식회사 물고기파트너스",
+  "legalName": "주식회사 물고기파트너스",
+  "alternateName": "Fish Partners",
+  "url": "https://piscesfc.com/",
+  "description": "주식회사 물고기파트너스는 프리미엄 숙성회 전문 브랜드 물고기자리를 운영하는 외식 프랜차이즈 기업입니다. 자체 가공센터의 손질 완료 필렛 공급, 저온 숙성, 콜드체인 배송 및 가맹점 운영 지원 시스템을 제공합니다.",
+  "brand": {
+    "@type": "Brand",
+    "@id": "https://piscesfc.com/#brand",
+    "name": "물고기자리",
+    "alternateName": "PISCES PREMIUM",
+    "url": "https://piscesfc.com/",
+    "description": "2002년부터 운영 경험을 쌓아온 프리미엄 숙성회 전문 외식 브랜드"
+  },
+  "address": {
+    "@type": "PostalAddress",
+    "streetAddress": "죽전로 17, 703호 (보정동, 풍산프라자)",
+    "addressLocality": "용인시 기흥구",
+    "addressRegion": "경기도",
+    "addressCountry": "KR"
+  },
+  "telephone": "+82-1566-6851",
+  "email": "fishpartners@naver.com",
+  "contactPoint": {
+    "@type": "ContactPoint",
+    "telephone": "+82-1566-6851",
+    "contactType": "franchise inquiries",
+    "availableLanguage": "Korean"
+  }
+}

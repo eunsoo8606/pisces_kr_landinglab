@@ -1,0 +1,16 @@
+{
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  "@id": "https://piscesfc.com/#website",
+  "name": "물고기자리",
+  "alternateName": "PISCES PREMIUM",
+  "url": "https://piscesfc.com/",
+  "inLanguage": "ko-KR",
+  "description": "물고기자리 공식 홈페이지. 프리미엄 숙성회, 숙성회 전문점 창업, 횟집 프랜차이즈, 필렛 공급 시스템, 가맹 창업비용, 메뉴 및 전국 매장 정보를 안내합니다.",
+  "publisher": {
+    "@id": "https://piscesfc.com/#organization"
+  },
+  "about": {
+    "@id": "https://piscesfc.com/#brand"
+  }
+}

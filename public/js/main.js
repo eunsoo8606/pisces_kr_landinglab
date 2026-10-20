@@ -1,27 +1,35 @@
 document.addEventListener('DOMContentLoaded', () => {
-    // 1. Lenis Smooth Scroll 초기화
-    const lenis = new Lenis({
-        duration: 1.2,
-        easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
-        orientation: 'vertical',
-        gestureOrientation: 'vertical',
-        smoothWheel: true,
-        wheelMultiplier: 1,
-        smoothTouch: false,
-        touchMultiplier: 2,
-        infinite: false,
-    });
+    // 1. 모바일 기기 판별 및 부드러운 스크롤 최적화
+    const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0 || window.innerWidth <= 768;
 
-    // GSAP ScrollTrigger 연동
-    gsap.registerPlugin(ScrollTrigger);
+    // 모바일 터치 환경에서는 네이티브 120Hz/60Hz 관성 스크롤을 유지하여 뻑뻑함 해소
+    let lenis = null;
+    if (typeof Lenis !== 'undefined') {
+        lenis = new Lenis({
+            duration: isTouchDevice ? 0.8 : 1.2,
+            easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+            orientation: 'vertical',
+            gestureOrientation: 'vertical',
+            smoothWheel: !isTouchDevice, // 데스크톱 휠에서만 스무스 스크롤 작동
+            wheelMultiplier: 1,
+            smoothTouch: false, // 모바일 네이티브 관성 스크롤 우선
+            touchMultiplier: 1,
+            infinite: false,
+        });
 
-    lenis.on('scroll', ScrollTrigger.update);
+        // GSAP ScrollTrigger 연동
+        gsap.registerPlugin(ScrollTrigger);
+        lenis.on('scroll', ScrollTrigger.update);
 
-    gsap.ticker.add((time) => {
-        lenis.raf(time * 1000);
-    });
+        gsap.ticker.add((time) => {
+            lenis.raf(time * 1000);
+        });
+    } else {
+        gsap.registerPlugin(ScrollTrigger);
+    }
 
-    gsap.ticker.lagSmoothing(0);
+    // lagSmoothing(0)은 프레임 드롭 시 보정하지 않아 모바일에서 뚝뚝 끊김을 유발하므로 표준값(500ms, 33ms)으로 복원
+    gsap.ticker.lagSmoothing(500, 33);
 
     // 시간 표시 롤러(Ticker) DOM 동적 변환 (예외 처리 및 안전 필터링)
     try {
@@ -239,7 +247,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const forkTranslateY = isMobile ? -30 : -60;
 
             // [초기 세팅] 첫 화면(스크롤 0)에 젓가락, 음식, 카드를 완전히 노출(Opacity 1)로 설정
-            gsap.set(heroCenterContent, { opacity: 0, y: textY, scale: 0.96 });
+            gsap.set(heroCenterContent, { opacity: 0, y: textY });
             if (titleLines.length > 0) gsap.set(titleLines, { y: '100%' });
             if (subNotice) gsap.set(subNotice, { opacity: 0, y: 25 });
             if (salesWidget) gsap.set(salesWidget, { opacity: 0, y: 30 });
@@ -251,13 +259,13 @@ document.addEventListener('DOMContentLoaded', () => {
             gsap.set(mediaOverlay, { opacity: 0.85 });
             if (mobileCenterText) gsap.set(mobileCenterText, { opacity: 1 });
 
-            // GSAP ScrollTrigger 역전 스크롤 타임라인
+            // GSAP ScrollTrigger 역전 스크롤 타임라인 (모바일 & 데스크톱 모두 전환 연출 적용)
             const heroScrollTl = gsap.timeline({
                 scrollTrigger: {
                     trigger: heroDarkSection,
                     start: 'top top',
-                    end: isMobile ? '+=550' : 'bottom top',
-                    scrub: 1.2,
+                    end: isMobile ? '+=320' : 'bottom top',
+                    scrub: isMobile ? 0.7 : 1.2,
                     pin: true,
                     pinSpacing: true,
                     invalidateOnRefresh: true
@@ -265,7 +273,7 @@ document.addEventListener('DOMContentLoaded', () => {
             });
 
             heroScrollTl
-                // A) 스크롤을 내리기 시작하면 첫 화면의 젓가락, 음식, 좌우 카드들이 바깥으로 페이드아웃하며 소멸
+                // A) 스크롤을 내리기 시작하면 첫 화면의 젓가락, 음식, 모바일 카피(PC는 좌우 카드)들이 바깥으로 페이드아웃하며 소멸
                 .to(scrollFork, {
                     xPercent: -50,
                     x: forkTranslateX,
@@ -275,7 +283,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     ease: 'power2.in'
                 }, 0)
                 .to(scrollFood, {
-                    y: 80,
+                    y: isMobile ? 50 : 80,
                     opacity: 0,
                     duration: 1.2,
                     ease: 'power2.in'
@@ -311,7 +319,6 @@ document.addEventListener('DOMContentLoaded', () => {
             heroScrollTl.to(heroCenterContent, {
                 opacity: 1,
                 y: 0,
-                scale: 1,
                 duration: 1.2,
                 ease: 'power2.out'
             }, 0.3);
@@ -381,56 +388,106 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // ==========================================================================
-    // 4-2. 기존 창업 Pain Point 섹션 GSAP 애니메이션 (ScrollTrigger - 좌우 동시 고정 릴레이)
+    // 4-2. 기존 창업 Pain Point 섹션 GSAP 애니메이션 (3D 현실 경고장 스택 릴레이)
     // ==========================================================================
     try {
         const sectionProblems = document.querySelector('.section-problems');
         const cards = document.querySelectorAll('.problem-flow-card');
         const bgImages = document.querySelectorAll('.problem-bg-image');
 
-        if (sectionProblems && cards.length > 0 && bgImages.length > 0) {
-            // GSAP가 직접 스타일링을 제어하도록 초기 세팅 (0번만 보이고 1,2번은 숨김)
-            gsap.set(cards, { opacity: 0, y: 30, visibility: 'hidden' });
-            gsap.set(bgImages, { opacity: 0, scale: 1.08 });
-
-            // 첫번째 요소 활성화
-            gsap.set(cards[0], { opacity: 1, y: 0, visibility: 'visible' });
-            gsap.set(bgImages[0], { opacity: 1, scale: 1 });
-
+        if (sectionProblems && cards.length >= 3) {
             const isMobile = window.innerWidth <= 768;
-            const scrollDistance = isMobile ? '+=1200' : '+=2000';
+            // 스크롤 거리를 늘려 민감도를 낮추고 안정적인 감속 제어 (모바일 850px -> 1500px)
+            const scrollDistance = isMobile ? '+=1500' : '+=2200';
+
+            // [초기 3D 스택 세팅] 책상 위에 3장의 경고장이 겹쳐진 입체 덱 구성
+            gsap.set(cards[0], { zIndex: 3, y: 0, scale: 1, opacity: 1, rotateX: 0, transformOrigin: 'center top' });
+            gsap.set(cards[1], { zIndex: 2, y: 14, scale: 0.96, opacity: 0.85, rotateX: 0, transformOrigin: 'center top' });
+            gsap.set(cards[2], { zIndex: 1, y: 28, scale: 0.92, opacity: 0.65, rotateX: 0, transformOrigin: 'center top' });
+
+            if (bgImages.length >= 3) {
+                gsap.set(bgImages, { opacity: 0, scale: 1.08 });
+                gsap.set(bgImages[0], { opacity: 1, scale: 1 });
+            }
 
             const pinTimeline = gsap.timeline({
                 scrollTrigger: {
                     trigger: sectionProblems,
-                    start: 'top+=100px top', // 스크롤이 100px 더 진행되어 섹션 콘텐츠가 화면 더 아래쪽 깊숙이 안착했을 때 멈춤 고정
-                    end: scrollDistance, // 고정되어 스크롤할 총 거리 (모바일은 좀 더 기민하게)
+                    start: 'top top',
+                    end: scrollDistance,
                     pin: true,
-                    scrub: 0.5,
+                    pinSpacing: true,
+                    scrub: isMobile ? 1.0 : 1.2, // 묵직하고 부드러운 감쇠 적용
                     invalidateOnRefresh: true
                 }
             });
 
-            // Step 1: 0번 카드/이미지 -> 1번 카드/이미지 전환
-            pinTimeline
-                .to(cards[0], { opacity: 0, y: -30, visibility: 'hidden', duration: 1 })
-                .to(bgImages[0], { opacity: 0, scale: 0.95, duration: 1 }, '<')
-                .to(cards[1], { opacity: 1, y: 0, visibility: 'visible', duration: 1 }, '-=0.3')
-                .to(bgImages[1], { opacity: 1, scale: 1, duration: 1 }, '<')
-                // 대기시간 확보 (스크롤 감지 스냅 유지용 빈 트윈)
-                .to({}, { duration: 0.8 });
+            // 1) 첫 번째 카드 진입 정지 홀딩 (스크롤 시작하자마자 바로 날아가지 않고 카드 01을 읽을 수 있는 버퍼 확보)
+            pinTimeline.to({}, { duration: 0.6 });
 
-            // Step 2: 1번 카드/이미지 -> 2번 카드/이미지 전환
+            // Step 1: Card 01 젖혀서 날리기 ➡️ Card 02 전면 승격
             pinTimeline
-                .to(cards[1], { opacity: 0, y: -30, visibility: 'hidden', duration: 1 })
-                .to(bgImages[1], { opacity: 0, scale: 0.95, duration: 1 }, '<')
-                .to(cards[2], { opacity: 1, y: 0, visibility: 'visible', duration: 1 }, '-=0.3')
-                .to(bgImages[2], { opacity: 1, scale: 1, duration: 1 }, '<')
-                // 대기시간 확보
-                .to({}, { duration: 0.8 });
+                .to(cards[0], {
+                    y: isMobile ? -110 : -140,
+                    rotateX: -32,
+                    opacity: 0,
+                    scale: 0.92,
+                    duration: 1.2,
+                    ease: 'power2.in'
+                })
+                .to(cards[1], {
+                    y: 0,
+                    scale: 1,
+                    opacity: 1,
+                    duration: 1.2,
+                    ease: 'power2.out'
+                }, '<0.25')
+                .to(cards[2], {
+                    y: 14,
+                    scale: 0.96,
+                    opacity: 0.85,
+                    duration: 1.2,
+                    ease: 'power2.out'
+                }, '<');
+
+            if (bgImages.length >= 2) {
+                pinTimeline
+                    .to(bgImages[0], { opacity: 0, scale: 0.96, duration: 1.2 }, '<')
+                    .to(bgImages[1], { opacity: 1, scale: 1, duration: 1.2 }, '<');
+            }
+
+            // 2) Card 02 안착 후 안정적인 읽기 홀딩 타임
+            pinTimeline.to({}, { duration: 0.8 });
+
+            // Step 2: Card 02 젖혀서 날리기 ➡️ Card 03 전면 승격
+            pinTimeline
+                .to(cards[1], {
+                    y: isMobile ? -110 : -140,
+                    rotateX: -32,
+                    opacity: 0,
+                    scale: 0.92,
+                    duration: 1.2,
+                    ease: 'power2.in'
+                })
+                .to(cards[2], {
+                    y: 0,
+                    scale: 1,
+                    opacity: 1,
+                    duration: 1.2,
+                    ease: 'power2.out'
+                }, '<0.25');
+
+            if (bgImages.length >= 3) {
+                pinTimeline
+                    .to(bgImages[1], { opacity: 0, scale: 0.96, duration: 1.2 }, '<')
+                    .to(bgImages[2], { opacity: 1, scale: 1, duration: 1.2 }, '<');
+            }
+
+            // 3) Card 03 및 솔루션 안내 확인을 위한 여유 홀딩 타임
+            pinTimeline.to({}, { duration: 0.9 });
         }
     } catch (err) {
-        console.error("section-problems split-sticky double pin animation failed:", err);
+        console.error("section-problems 3D card flip animation failed:", err);
     }
 
     // ==========================================================================
@@ -701,9 +758,10 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // 6. 퀄리티 섹션 우측 이미지 슬라이더 동작 제어
-    const slides = document.querySelectorAll('.quality-slide');
-    const prevBtn = document.querySelector('.prev-btn');
-    const nextBtn = document.querySelector('.next-btn');
+    const qualitySection = document.querySelector('.section-quality');
+    const slides = qualitySection ? qualitySection.querySelectorAll('.quality-slide') : [];
+    const prevBtn = qualitySection ? qualitySection.querySelector('.ctrl-btn.prev-btn') : null;
+    const nextBtn = qualitySection ? qualitySection.querySelector('.ctrl-btn.next-btn') : null;
     let currentSlide = 0;
     let isTransitioning = false;
 
@@ -1837,16 +1895,15 @@ document.addEventListener('DOMContentLoaded', () => {
         ownerMsgObserver.observe(ownerMessageContainer);
     }
 
-    // 서클 마스크 리빌 & 숏츠 컨텐츠 순차 페이드 타임라인 정의 (모바일 성능 모드 분기)
+    // 서클 마스크 리빌 & 숏츠 컨텐츠 순차 페이드 타임라인 정의 (데스크톱 GSAP ScrollTrigger Pinning)
     const revealElem = document.querySelector('.reveal-section');
     if (revealElem) {
         const isMobileDevice = window.innerWidth <= 768;
 
         if (isMobileDevice) {
-            // 모바일: CPU/GPU 프레임 드롭을 유발하는 heavy clipPath/pin 스크롤을 경량화 처리하여 모바일 스크롤 버벅거림 100% 해결
-            gsap.set('.reveal-overlay', { clipPath: 'circle(150% at 50% 50%)' });
+            // 모바일: 스크롤 병목(clipPath/pin) 배제하고 부드러운 정적 배치
+            gsap.set('.reveal-overlay', { display: 'none' });
             gsap.set('.shorts-container', { opacity: 1, pointerEvents: 'auto' });
-            gsap.set('.shorts-card', { opacity: 1, y: 0 });
             gsap.set('.shorts-title', { opacity: 1, x: 0, y: 0 });
             gsap.set('.shorts-metrics', { opacity: 1, x: 0 });
             gsap.set('.shorts-desc-item', { opacity: 1, y: 0 });
@@ -1902,6 +1959,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 );
         }
     }
+
     // 매장현황 바로가기 섹션 (.section-store-shortcut) GSAP ScrollTrigger 진입 모션
     const sectionStoreShortcut = document.querySelector('.section-store-shortcut');
     const shortcutContent = document.querySelector('.shortcut-content');
@@ -2652,13 +2710,48 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         });
     }
+
+    // 화면 하단 비디오 요소 지연 로딩 & 뷰포트 진입 시 자동 재생 (초기 대역폭 20MB+ 절약)
+    const lazyVideos = document.querySelectorAll('video[data-lazy-video]');
+    if (lazyVideos.length > 0 && 'IntersectionObserver' in window) {
+        const videoObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                const vid = entry.target;
+                if (entry.isIntersecting) {
+                    if (vid.dataset.src && !vid.src) {
+                        vid.src = vid.dataset.src;
+                        vid.load();
+                    }
+                    const playPromise = vid.play();
+                    if (playPromise !== undefined) {
+                        playPromise.catch(() => { /* 저전력 모드 자동재생 거부 무시 */ });
+                    }
+                } else {
+                    if (!vid.paused) {
+                        vid.pause();
+                    }
+                }
+            });
+        }, {
+            rootMargin: '200px 0px 200px 0px',
+            threshold: 0.1
+        });
+
+        lazyVideos.forEach(vid => videoObserver.observe(vid));
+    }
 });
 
-// 모든 리소스(이미지 등) 로드 완료 시 ScrollTrigger 위치를 재계산하여 레이아웃 시프트로 인한 좌표 왜곡 해결
+// 리소스 로드 및 폰트 렌더링 완료 시점에 ScrollTrigger 위치를 재계산하여 레이아웃 시프트로 인한 좌표 왜곡 해결
 window.addEventListener('load', () => {
-    ScrollTrigger.refresh();
+    if (document.fonts && document.fonts.ready) {
+        document.fonts.ready.then(() => {
+            ScrollTrigger.refresh();
+        });
+    } else {
+        requestAnimationFrame(() => ScrollTrigger.refresh());
+    }
 
-    // 지연 렌더링에 대응하기 위한 시차 재조정 루프
+    // 비동기 이미지 및 외부 요소 지연 렌더링에 대응하기 위한 시차 재조정 루프
     setTimeout(() => {
         ScrollTrigger.refresh();
     }, 300);

@@ -1,0 +1,422 @@
+/* ==========================================================================
+   서클 마스크 리빌 & 유튜브 쇼츠 섹션 전용 독립 스타일 (reveal-shorts Component)
+   ========================================================================== */
+
+/* 1. 데스크톱 기본 레이아웃 (3열 나란히 진열) */
+.reveal-section {
+    position: relative;
+    width: 100%;
+    height: 100vh;
+    overflow: hidden;
+    background-color: #00182e;
+}
+
+.reveal-inner {
+    position: relative;
+    width: 100%;
+    height: 100%;
+}
+
+/* 스크롤 시 확장될 마스킹 오버레이 */
+.reveal-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 5;
+    clip-path: circle(20% at 50% 50%);
+    background-color: #00182e;
+    pointer-events: none;
+}
+
+.reveal-image-container {
+    width: 100%;
+    height: 100%;
+    position: relative;
+}
+
+.reveal-image-container img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    filter: brightness(0.35);
+}
+
+/* 숏츠 콘텐츠 컨테이너 */
+.shorts-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 20;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #00182e;
+    padding: 0 10%;
+    opacity: 0;
+    pointer-events: none;
+}
+
+.shorts-grid-area {
+    width: 65%;
+    display: flex;
+    justify-content: flex-start;
+}
+
+.shorts-carousel-container {
+    width: 100%;
+    display: block;
+    position: relative;
+}
+
+.shorts-grid {
+    display: flex;
+    gap: 30px;
+    width: 100%;
+    position: relative;
+}
+
+/* 데스크톱: 외부 슬라이더 조작 버튼 및 도트는 완전 숨김 */
+.shorts-nav-btn {
+    display: none !important;
+}
+
+.shorts-dots {
+    display: none !important;
+}
+
+/* 유튜브 숏츠 카드 비디오 프레임 (데스크톱: 3개 카드가 가로로 균등하게 1:1:1로 나란히 진열) */
+.shorts-card {
+    flex: 1;
+    aspect-ratio: 9 / 16;
+    background: #000000;
+    border-radius: 20px;
+    overflow: hidden;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    transition: all 0.3s ease;
+    opacity: 0;
+    transform: translateY(-80px);
+    box-shadow: 0 30px 60px rgba(0, 0, 0, 0.5);
+    position: relative;
+    visibility: visible;
+}
+
+.shorts-card iframe {
+    width: 100%;
+    height: 100%;
+    border: none;
+    display: block;
+    border-radius: 20px;
+}
+
+.shorts-card:hover {
+    transform: translateY(-90px) scale(1.05);
+    border-color: #0056b3;
+    box-shadow: 0 40px 80px rgba(0, 168, 204, 0.3);
+}
+
+/* 영상 내부 유튜브 UI 완전 차단 및 수동 터치 전용 레이어 */
+.shorts-screen-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 5;
+    background: transparent;
+    cursor: pointer;
+}
+
+/* 우측 텍스트 영역 */
+.shorts-text-area {
+    width: 30%;
+    text-align: left;
+    color: #ffffff;
+}
+
+.shorts-title {
+    font-size: 42px;
+    margin-bottom: 30px;
+    line-height: 1.3;
+    font-weight: 700;
+    opacity: 0;
+    transform: translateX(30px);
+}
+
+.shorts-metrics {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    opacity: 0;
+    transform: translateX(30px);
+}
+
+.shorts-desc-group {
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+    margin-top: 10px;
+    text-align: left;
+}
+
+.shorts-desc-item {
+    font-size: 15px;
+    color: rgba(255, 255, 255, 0.65);
+    line-height: 1.8;
+    font-weight: 400;
+    word-break: keep-all;
+}
+
+.shorts-desc-item.highlight-desc {
+    font-size: 17px;
+    color: #ffffff;
+    font-weight: 600;
+    position: relative;
+    padding-left: 16px;
+}
+
+.shorts-desc-item.highlight-desc::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 5px;
+    width: 3px;
+    height: 18px;
+    background-color: #0056b3;
+}
+
+
+/* ==========================================================================
+   2. 모바일 반응형 (768px 이하): 1장씩 화면 중앙에 꽉 차는 슬라이더 모드
+   ========================================================================== */
+@media (max-width: 768px) {
+    .reveal-section {
+        height: auto !important;
+        min-height: 100vh !important;
+        overflow: hidden !important;
+        background-color: #00182e !important;
+        will-change: transform;
+        transform: translateZ(0);
+    }
+
+    .reveal-inner {
+        height: auto !important;
+        min-height: 100vh !important;
+    }
+
+    .reveal-overlay {
+        display: none !important;
+    }
+
+    .shorts-container {
+        position: relative !important;
+        display: flex !important;
+        flex-direction: column !important;
+        justify-content: center !important;
+        align-items: center !important;
+        padding: 40px 15px 30px !important;
+        gap: 24px !important;
+        height: auto !important;
+        min-height: 100vh !important;
+        opacity: 1 !important;
+        pointer-events: auto !important;
+        box-sizing: border-box !important;
+    }
+
+    .shorts-grid-area {
+        position: relative !important;
+        width: 100% !important;
+        max-width: 100% !important;
+        margin: 0 auto !important;
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: center !important;
+        justify-content: center !important;
+        padding: 0 5px !important;
+    }
+
+    .shorts-carousel-container {
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        gap: 12px !important;
+        width: 100% !important;
+        position: relative !important;
+    }
+
+    .shorts-grid {
+        position: relative !important;
+        width: 250px !important;
+        max-width: calc(100vw - 110px) !important;
+        aspect-ratio: 9 / 16 !important;
+        height: auto !important;
+        display: block !important;
+        overflow: hidden !important;
+        border-radius: 20px !important;
+        box-shadow: 0 20px 50px rgba(0, 0, 0, 0.8) !important;
+        background: #000000 !important;
+        margin: 0 !important;
+    }
+
+    /* 모바일 외부 좌우 내비게이션 버튼 */
+    .shorts-nav-btn {
+        display: flex !important;
+        width: 40px !important;
+        height: 40px !important;
+        min-width: 40px !important;
+        border-radius: 50% !important;
+        background: rgba(0, 24, 46, 0.8) !important;
+        border: 1.5px solid rgba(255, 255, 255, 0.25) !important;
+        color: #ffffff !important;
+        align-items: center !important;
+        justify-content: center !important;
+        cursor: pointer !important;
+        z-index: 10 !important;
+        backdrop-filter: blur(8px) !important;
+        -webkit-backdrop-filter: blur(8px) !important;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5) !important;
+        padding: 0 !important;
+        flex-shrink: 0 !important;
+        transition: transform 0.2s ease !important;
+    }
+
+    .shorts-nav-btn:active {
+        transform: scale(0.92) !important;
+    }
+
+    .shorts-card {
+        position: absolute !important;
+        top: 0 !important;
+        left: 0 !important;
+        width: 100% !important;
+        height: 100% !important;
+        flex: none !important;
+        max-width: 100% !important;
+        min-width: 100% !important;
+        aspect-ratio: auto !important;
+        opacity: 0 !important;
+        visibility: hidden !important;
+        transform: scale(0.95) !important;
+        transition: opacity 0.35s ease, transform 0.35s cubic-bezier(0.25, 1, 0.5, 1), visibility 0.35s !important;
+        border-radius: 20px !important;
+        border: 1px solid rgba(255, 255, 255, 0.15) !important;
+        overflow: hidden !important;
+        z-index: 1 !important;
+    }
+
+    .shorts-card.active {
+        opacity: 1 !important;
+        visibility: visible !important;
+        transform: scale(1) !important;
+        z-index: 2 !important;
+    }
+
+    .shorts-card:hover {
+        transform: none !important;
+    }
+
+    /* 슬라이더 인디케이터 도트 */
+    .shorts-dots {
+        display: flex !important;
+        justify-content: center !important;
+        align-items: center !important;
+        gap: 8px !important;
+        margin-top: 16px !important;
+        width: 100% !important;
+    }
+
+    .shorts-dot {
+        width: 8px !important;
+        height: 8px !important;
+        border-radius: 4px !important;
+        background: rgba(255, 255, 255, 0.28) !important;
+        border: none !important;
+        padding: 0 !important;
+        cursor: pointer !important;
+        transition: all 0.3s cubic-bezier(0.25, 1, 0.5, 1) !important;
+    }
+
+    .shorts-dot.active {
+        width: 26px !important;
+        background: #0056b3 !important;
+        box-shadow: 0 0 10px rgba(0, 86, 179, 0.8) !important;
+    }
+
+    .shorts-text-area {
+        width: 100% !important;
+        text-align: center !important;
+        padding: 0 10px !important;
+    }
+
+    .shorts-title {
+        font-size: 20px !important;
+        text-align: center !important;
+        margin-bottom: 15px !important;
+        line-height: 1.4 !important;
+        opacity: 1 !important;
+        transform: none !important;
+    }
+
+    .shorts-metrics {
+        flex-direction: column !important;
+        justify-content: center !important;
+        gap: 20px !important;
+        margin-top: 10px !important;
+        opacity: 1 !important;
+        transform: none !important;
+    }
+
+    .shorts-desc-group {
+        text-align: center !important;
+        gap: 20px !important;
+    }
+
+    .shorts-desc-item {
+        font-size: 13.5px !important;
+        line-height: 1.6 !important;
+    }
+
+    .shorts-desc-item.highlight-desc {
+        font-size: 15px !important;
+        padding-left: 0 !important;
+    }
+
+    .shorts-desc-item.highlight-desc::before {
+        display: none !important;
+    }
+}
+
+/* 3. 480px 이하 초소형 모바일 */
+@media (max-width: 480px) {
+    .shorts-container {
+        padding: 20px 10px !important;
+        gap: 15px !important;
+    }
+
+    .shorts-carousel-container {
+        gap: 8px !important;
+    }
+
+    .shorts-nav-btn {
+        width: 36px !important;
+        height: 36px !important;
+        min-width: 36px !important;
+    }
+
+    .shorts-grid {
+        width: 230px !important;
+        max-width: calc(100vw - 90px) !important;
+    }
+
+    .shorts-title {
+        font-size: 17px !important;
+        margin-bottom: 10px !important;
+    }
+
+    .shorts-desc-item {
+        font-size: 12.5px !important;
+    }
+}

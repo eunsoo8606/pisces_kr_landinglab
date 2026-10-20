@@ -353,4 +353,27 @@ router.get('/robots.txt', (req, res) => {
     res.send(robots);
 });
 
+// 9. llms.txt (AI 검색 엔진 및 LLM 크롤러용 정보 파일 서빙)
+router.get('/llms.txt', (req, res) => {
+    res.sendFile(path.join(__dirname, '../public/llms.txt'));
+});
+
+// 10. organization.jsonld (조직 및 브랜드 구조화 데이터 JSON-LD 서빙)
+router.get('/organization.jsonld', (req, res) => {
+    res.header('Content-Type', 'application/ld+json; charset=utf-8');
+    res.sendFile(path.join(__dirname, '../public/organization.jsonld'));
+});
+
+// 11. website.jsonld (웹사이트 기본 정보 및 주제 구조화 데이터 서빙)
+router.get('/website.jsonld', (req, res) => {
+    res.header('Content-Type', 'application/ld+json; charset=utf-8');
+    res.sendFile(path.join(__dirname, '../public/website.jsonld'));
+});
+
+// 12. breadcrumb.jsonld (메뉴 계층 구조화 데이터 서빙)
+router.get('/breadcrumb.jsonld', (req, res) => {
+    res.header('Content-Type', 'application/ld+json; charset=utf-8');
+    res.sendFile(path.join(__dirname, '../public/breadcrumb.jsonld'));
+});
+
 module.exports = router;
