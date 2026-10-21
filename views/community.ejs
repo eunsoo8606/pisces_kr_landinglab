@@ -355,48 +355,36 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            padding: 55px 20px;
+            padding: 60px 20px;
             text-align: center;
-            background: rgba(255, 255, 255, 0.02);
-            border: 1px dashed rgba(255, 255, 255, 0.15);
+            background: #f8fafc;
+            border: 1px dashed #cbd5e1;
             border-radius: 16px;
             margin: 15px 0;
-            color: rgba(255, 255, 255, 0.6);
+            color: #475569;
         }
 
         .empty-community-box svg {
-            color: rgba(255, 255, 255, 0.3);
-            margin-bottom: 12px;
+            color: #94a3b8;
+            margin-bottom: 14px;
         }
 
         .empty-community-box .empty-title {
-            font-size: 1.05rem;
+            font-size: 1.1rem;
             font-weight: 700;
-            color: rgba(255, 255, 255, 0.85);
-            margin: 0 0 6px 0;
+            color: #0f172a; /* 선명한 검은색 폰트 */
+            margin: 0 0 8px 0;
         }
 
         .empty-community-box .empty-desc {
-            font-size: 0.88rem;
-            color: rgba(255, 255, 255, 0.45);
+            font-size: 0.92rem;
+            color: #64748b; /* 가독성 높은 다크 슬레이트 보조 텍스트 */
             margin: 0;
         }
 
         @media (max-width: 768px) {
             .empty-community-box {
-                background: #ffffff !important;
-                border: 1px dashed #cbd5e1 !important;
-                color: #64748b !important;
-                padding: 40px 15px !important;
-            }
-            .empty-community-box svg {
-                color: #94a3b8 !important;
-            }
-            .empty-community-box .empty-title {
-                color: #1e293b !important;
-            }
-            .empty-community-box .empty-desc {
-                color: #64748b !important;
+                padding: 40px 15px;
             }
         }
     </style>
@@ -843,7 +831,7 @@
                     </div>
                     <div class="form-col">
                         <label for="commVoicePhone" class="form-label">연락처 <span class="required-dot"></span></label>
-                        <input type="tel" id="commVoicePhone" class="form-control" placeholder="연락처를 입력하세요." required>
+                        <input type="tel" id="commVoicePhone" class="form-control" placeholder="연락처를 입력하세요. (숫자만 입력)" required inputmode="numeric" maxlength="13">
                     </div>
                 </div>
 
@@ -896,7 +884,7 @@
                     </div>
                     <div class="form-col">
                         <label for="commInquirerPhone" class="form-label">연락처 <span class="required-dot"></span></label>
-                        <input type="tel" id="commInquirerPhone" class="form-control" placeholder="연락처를 입력하세요." required>
+                        <input type="tel" id="commInquirerPhone" class="form-control" placeholder="연락처를 입력하세요. (숫자만 입력)" required inputmode="numeric" maxlength="13">
                     </div>
                 </div>
 

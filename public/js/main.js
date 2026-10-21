@@ -1243,13 +1243,15 @@ document.addEventListener('DOMContentLoaded', () => {
                 stagger: 0.05,
                 ease: 'power2.in',
                 onComplete: () => {
-                    // 2) 신규 데이터 HTML 바인딩
+                    // 2) 신규 데이터 HTML 바인딩 (하이엔드 타이포그래피 기반 순위)
                     rankingRowsContainer.innerHTML = data.map((item, idx) => {
                         const rankNum = idx + 1;
                         const rankClass = rankNum === 1 ? 'rank-1st' : rankNum === 2 ? 'rank-2nd' : rankNum === 3 ? 'rank-3rd' : '';
                         return `
                             <div class="ranking-row ${rankClass}">
-                                <div class="col-rank">${rankNum}위</div>
+                                <div class="col-rank">
+                                    <span class="rank-num">${rankNum}</span><span class="rank-unit">위</span>
+                                </div>
                                 <div class="col-branch">${item.branch}</div>
                                 <div class="col-sales">${item.sales}</div>
                             </div>
@@ -2031,6 +2033,96 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     }
+
+    // ==========================================================================
+    // 휴대폰/전화번호 자동 하이픈 및 숫자 전용 입력 포맷터
+    // ==========================================================================
+    function formatPhoneNumber(value) {
+        if (!value) return '';
+        // 숫자만 추출
+        const clean = value.replace(/[^0-9]/g, '');
+
+        // 서울 지역번호 (02)
+        if (clean.startsWith('02')) {
+            const s = clean.slice(0, 10);
+            if (s.length <= 2) return s;
+            if (s.length <= 5) return `${s.slice(0, 2)}-${s.slice(2)}`;
+            if (s.length <= 9) return `${s.slice(0, 2)}-${s.slice(2, s.length - 4)}-${s.slice(s.length - 4)}`;
+            return `${s.slice(0, 2)}-${s.slice(2, 6)}-${s.slice(6)}`;
+        }
+
+        // 전국 대표번호 (15xx, 16xx, 18xx 등 8자리)
+        if (/^(15|16|18)[0-9]/.test(clean) && !clean.startsWith('0')) {
+            const s = clean.slice(0, 8);
+            if (s.length <= 4) return s;
+            return `${s.slice(0, 4)}-${s.slice(4)}`;
+        }
+
+        // 일반 휴대폰 (010)
+        if (clean.startsWith('010')) {
+            const s = clean.slice(0, 11);
+            if (s.length <= 3) return s;
+            if (s.length <= 7) return `${s.slice(0, 3)}-${s.slice(3)}`;
+            return `${s.slice(0, 3)}-${s.slice(3, 7)}-${s.slice(7)}`;
+        }
+
+        // 그 외 전화번호 (011, 016, 031, 070 등)
+        const s = clean.slice(0, 11);
+        if (s.length <= 3) return s;
+        if (s.length <= 6) return `${s.slice(0, 3)}-${s.slice(3)}`;
+        if (s.length <= 10) {
+            return `${s.slice(0, 3)}-${s.slice(3, 6)}-${s.slice(6)}`;
+        }
+        return `${s.slice(0, 3)}-${s.slice(3, 7)}-${s.slice(7)}`;
+    }
+
+    function initAutoHyphenPhoneInputs() {
+        const phoneInputs = document.querySelectorAll(
+            '#inquirerPhone, #quickPhone, #commVoicePhone, #commInquirerPhone, input[type="tel"], input[name="inquirerPhone"], input[name="phone"]'
+        );
+
+        phoneInputs.forEach((input) => {
+            if (input.dataset.hyphenBound) return;
+            input.dataset.hyphenBound = 'true';
+
+            input.setAttribute('inputmode', 'numeric');
+            input.setAttribute('maxlength', '13');
+
+            // 1. input 이벤트: 숫자만 허용 및 하이픈 자동 포맷팅
+            input.addEventListener('input', function () {
+                const formatted = formatPhoneNumber(this.value);
+                if (this.value !== formatted) {
+                    this.value = formatted;
+                }
+            });
+
+            // 2. keydown 이벤트: 하이픈 직후 백스페이스 시 직전 숫자까지 자연스럽게 삭제
+            input.addEventListener('keydown', function (e) {
+                if (e.key === 'Backspace') {
+                    const selStart = this.selectionStart;
+                    const selEnd = this.selectionEnd;
+                    if (selStart === selEnd && selStart > 1 && this.value[selStart - 1] === '-') {
+                        e.preventDefault();
+                        const before = this.value.slice(0, selStart - 2);
+                        const after = this.value.slice(selStart);
+                        this.value = formatPhoneNumber(before + after);
+                        const newPos = Math.max(0, selStart - 2);
+                        this.setSelectionRange(newPos, newPos);
+                    }
+                }
+            });
+
+            // 3. 붙여넣기(paste) 대응
+            input.addEventListener('paste', function () {
+                setTimeout(() => {
+                    this.value = formatPhoneNumber(this.value);
+                }, 0);
+            });
+        });
+    }
+
+    // 초기 실행
+    initAutoHyphenPhoneInputs();
 
     // 폼 유효성 검사 및 전송 연출
     const inquiryForm = document.getElementById('inquiryForm');

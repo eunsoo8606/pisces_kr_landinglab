@@ -77,6 +77,13 @@
     box-sizing: border-box;
 }
 
+i,
+em,
+address,
+cite {
+    font-style: normal;
+}
+
 html {
     overflow-x: hidden;
     max-width: 100%;
@@ -2550,7 +2557,6 @@ main {
 /* 별도 항목 행 */
 .row-etc td {
     border-bottom: 1px solid rgba(0, 86, 179, 0.1);
-    font-style: italic;
     color: rgba(255, 255, 255, 0.5) !important;
 }
 
@@ -3979,8 +3985,9 @@ footer {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 24px 0;
+    padding: 18px 24px;
     border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    transition: all 0.25s ease;
 }
 
 .ranking-row:last-child {
@@ -3988,47 +3995,148 @@ footer {
 }
 
 .ranking-row-header {
-    border-bottom: 1px solid rgba(255, 255, 255, 0.15);
-    color: rgba(255, 255, 255, 0.45);
-    font-weight: 700;
-    font-size: 15px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+    color: rgba(255, 255, 255, 0.4);
+    font-weight: 600;
+    font-size: 14px;
+    letter-spacing: -0.3px;
+    padding: 14px 24px 18px 24px;
 }
 
 .col-rank {
-    width: 15%;
+    width: 20%;
+    display: flex;
+    align-items: baseline;
+    gap: 3px;
+}
+
+.rank-num {
+    font-family: 'Outfit', 'Noto Sans KR', sans-serif;
+    font-size: 24px;
     font-weight: 800;
-    font-size: 18px;
+    line-height: 1;
+    letter-spacing: -0.5px;
+    color: rgba(255, 255, 255, 0.3);
+    transition: color 0.3s ease;
+}
+
+.rank-unit {
+    font-size: 13px;
+    font-weight: 600;
+    color: rgba(255, 255, 255, 0.3);
 }
 
 .col-branch {
-    width: 50%;
+    width: 45%;
     font-weight: 700;
     font-size: 18px;
     text-align: left;
+    color: #ffffff;
+    letter-spacing: -0.3px;
 }
 
 .col-sales {
     width: 35%;
     text-align: right;
-    font-weight: 800;
+    font-family: 'Outfit', 'Noto Sans KR', sans-serif;
+    font-weight: 700;
     font-size: 18px;
+    color: rgba(255, 255, 255, 0.65);
+    letter-spacing: -0.3px;
 }
 
-/* 데이터 행 스타일 */
+/* 데이터 행 공통 */
 .ranking-row {
     color: #ffffff;
-    transition: background 0.3s ease;
+    border-left: 3px solid transparent;
+    margin-bottom: 2px;
+    border-radius: 6px;
+    background: transparent;
 }
 
+.ranking-row:hover {
+    background: rgba(255, 255, 255, 0.02);
+}
+
+/* 1위: 샴페인 골드 액센트 */
 .ranking-row.rank-1st {
-    color: #0056b3;
-    /* 1위 골드 */
+    background: linear-gradient(90deg, rgba(212, 175, 55, 0.12) 0%, rgba(212, 175, 55, 0.02) 60%, transparent 100%);
+    border-left: 3px solid #d4af37;
 }
 
-.ranking-row.rank-1st .col-rank,
+.ranking-row.rank-1st .rank-num {
+    color: #d4af37;
+    font-size: 28px;
+    text-shadow: 0 0 16px rgba(212, 175, 55, 0.35);
+}
+
+.ranking-row.rank-1st .rank-unit {
+    color: #d4af37;
+    font-weight: 700;
+}
+
+.ranking-row.rank-1st .col-branch {
+    color: #ffffff;
+    font-weight: 800;
+}
+
 .ranking-row.rank-1st .col-sales {
-    text-shadow: 0 0 12px rgba(0, 242, 254, 0.65);
-    animation: neonTextPulse 2.0s infinite alternate ease-in-out;
+    color: #d4af37;
+    font-weight: 800;
+    font-size: 19px;
+    text-shadow: 0 0 12px rgba(212, 175, 55, 0.25);
+}
+
+/* 2위: 플래티넘 실버 액센트 */
+.ranking-row.rank-2nd {
+    background: linear-gradient(90deg, rgba(203, 213, 225, 0.08) 0%, rgba(203, 213, 225, 0.01) 60%, transparent 100%);
+    border-left: 3px solid #cbd5e1;
+}
+
+.ranking-row.rank-2nd .rank-num {
+    color: #e2e8f0;
+    font-size: 26px;
+}
+
+.ranking-row.rank-2nd .rank-unit {
+    color: #cbd5e1;
+    font-weight: 600;
+}
+
+.ranking-row.rank-2nd .col-branch {
+    color: #ffffff;
+    font-weight: 700;
+}
+
+.ranking-row.rank-2nd .col-sales {
+    color: #e2e8f0;
+    font-weight: 700;
+}
+
+/* 3위: 웜 코퍼 브론즈 액센트 */
+.ranking-row.rank-3rd {
+    background: linear-gradient(90deg, rgba(201, 136, 96, 0.08) 0%, rgba(201, 136, 96, 0.01) 60%, transparent 100%);
+    border-left: 3px solid #c98860;
+}
+
+.ranking-row.rank-3rd .rank-num {
+    color: #c98860;
+    font-size: 26px;
+}
+
+.ranking-row.rank-3rd .rank-unit {
+    color: #c98860;
+    font-weight: 600;
+}
+
+.ranking-row.rank-3rd .col-branch {
+    color: #ffffff;
+    font-weight: 700;
+}
+
+.ranking-row.rank-3rd .col-sales {
+    color: #d8a07c;
+    font-weight: 700;
 }
 
 /* ==========================================================================
@@ -6223,30 +6331,32 @@ footer {
         text-align: right !important;
     }
 
-    /* 랭킹보드 1~3위 순위별 광채 테두리 및 배지 포인트 튜닝 */
-    .ranking-row.rank-1st {
-        color: #0056b3 !important;
-        background: rgba(0, 86, 179, 0.08) !important;
-        border-radius: 8px !important;
-        padding-left: 8px !important;
-        padding-right: 8px !important;
-        border-bottom: 1px solid rgba(0, 86, 179, 0.15) !important;
+    /* 랭킹보드 모바일 최적화 */
+    .ranking-row {
+        padding: 14px 10px !important;
     }
 
-    .ranking-row.rank-2nd {
-        color: #e0e0e0 !important;
-        background: rgba(255, 255, 255, 0.04) !important;
-        border-radius: 8px !important;
-        padding-left: 8px !important;
-        padding-right: 8px !important;
+    .rank-num {
+        font-size: 20px !important;
     }
 
-    .ranking-row.rank-3rd {
-        color: #cd7f32 !important;
-        background: rgba(205, 127, 50, 0.04) !important;
-        border-radius: 8px !important;
-        padding-left: 8px !important;
-        padding-right: 8px !important;
+    .ranking-row.rank-1st .rank-num {
+        font-size: 22px !important;
+    }
+
+    .ranking-row.rank-1st .col-sales {
+        color: #d4af37 !important;
+        font-size: 14px !important;
+    }
+
+    .ranking-row.rank-2nd .col-sales {
+        color: #e2e8f0 !important;
+        font-size: 13.5px !important;
+    }
+
+    .ranking-row.rank-3rd .col-sales {
+        color: #d8a07c !important;
+        font-size: 13.5px !important;
     }
 
     /* 매장별 매출 대시보드 모바일(768px) 반응형 */
@@ -10468,7 +10578,7 @@ footer {
 .inquiry-intro .box-title {
     font-size: 28px;
     font-weight: 800;
-    color: #0f172a;
+    color: white;
     margin-bottom: 12px;
     font-family: 'Noto Serif KR', serif;
 }
@@ -10507,7 +10617,7 @@ footer {
 .form-label {
     font-size: 14px;
     font-weight: 700;
-    color: #334155;
+    color: white;
     display: flex;
     align-items: center;
 }
@@ -14085,8 +14195,7 @@ footer {
     letter-spacing: -2px;
     margin-bottom: 12px;
     line-height: 1.1;
-    font-style: italic;
-    /* 선택하라! 폰트 역동성 강조 */
+    /* 폰트 역동성 강조 */
     text-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
 }
 
@@ -14237,6 +14346,23 @@ footer {
     /* 음식 이미지 z-index 6보다 위에 배치되어 전면으로 돌출 */
     transform: translateX(60px);
     /* 오른쪽 바깥에 대기 */
+}
+
+@media (max-width: 1250px) {
+
+    /* 2. 젓가락과 요리 이미지 모바일 세로 화면 폭에 맞춰 콤팩트 배치 */
+    .hero-scroll-fork {
+        position: absolute;
+        top: 8%;
+        right: -5%;
+        width: 620px;
+        height: auto;
+        transform: translate(60px, -60px);
+        /* 처음에 우측 상단 대각선 바깥에 대기 */
+        opacity: 0;
+        will-change: transform, opacity;
+        z-index: 7;
+    }
 }
 
 /* 모바일/태블릿 이하 대응: 비움과 채움의 미니멀 최적화 */

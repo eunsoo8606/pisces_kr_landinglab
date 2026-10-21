@@ -2124,8 +2124,8 @@
                             <label for="inquirerPhone">연락처</label>
                         </div>
                         <div class="form-input-cell">
-                            <input type="text" id="inquirerPhone" name="inquirerPhone" class="form-control"
-                                placeholder="연락처를 입력해 주세요. (예: 010-0000-0000)">
+                            <input type="tel" id="inquirerPhone" name="inquirerPhone" class="form-control"
+                                placeholder="연락처를 입력해 주세요. (숫자만 입력)" inputmode="numeric" maxlength="13">
                         </div>
                     </div>
 
@@ -2285,8 +2285,8 @@
                     <input type="text" id="quickName" name="inquirerName" placeholder="이름" required autocomplete="off">
                 </div>
                 <div class="quick-input-group">
-                    <input type="tel" id="quickPhone" name="inquirerPhone" placeholder="연락처" required
-                        autocomplete="off">
+                    <input type="tel" id="quickPhone" name="inquirerPhone" placeholder="연락처 (숫자만 입력)" required
+                        autocomplete="off" inputmode="numeric" maxlength="13">
                 </div>
                 <button type="submit" class="btn-quick-submit">
                     <span>보내기</span>
