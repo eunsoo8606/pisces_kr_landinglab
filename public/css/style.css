@@ -14710,8 +14710,10 @@ footer {
     flex-direction: column !important;
     justify-content: flex-end !important;
     padding: 30px 26px !important;
-    transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1) !important;
+    transition: transform 0.35s ease, box-shadow 0.35s ease, border-color 0.35s ease !important;
     min-height: 480px !important;
+    transform: translateZ(0);
+    will-change: transform, opacity;
 }
 
 .hero-big-card:hover {
@@ -14839,8 +14841,10 @@ footer {
     padding: 20px 24px !important;
     border: 1px solid rgba(255, 255, 255, 0.15) !important;
     box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3) !important;
-    transition: all 0.35s cubic-bezier(0.165, 0.84, 0.44, 1) !important;
+    transition: transform 0.35s ease, box-shadow 0.35s ease, border-color 0.35s ease !important;
     cursor: pointer !important;
+    transform: translateZ(0);
+    will-change: transform, opacity;
 }
 
 .mini-card-bg {

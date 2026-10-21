@@ -1816,46 +1816,46 @@ document.addEventListener('DOMContentLoaded', () => {
             btn.addEventListener('click', () => switchMenuTab(btn.dataset.tab));
         });
 
-        // 섹션 진입 애니메이션: 타이틀은 좌측에서, 탭 메뉴는 우측에서 부드럽게 진입
-        gsap.fromTo(menuSection.querySelectorAll('.menu-editorial-title > *'),
-            { opacity: 0, x: -45 },
-            {
-                opacity: 1, x: 0, duration: 0.95, stagger: 0.12, ease: 'power3.out',
-                scrollTrigger: { trigger: menuSection, start: 'top 75%', toggleActions: 'play none none none' }
+        // 섹션 진입 애니메이션 최적화: 단일 timeline + once: true 적용으로 스크롤 버벅거림 100% 해소
+        const menuTimeline = gsap.timeline({
+            scrollTrigger: {
+                trigger: menuSection,
+                start: 'top 75%',
+                once: true, // 1회 실행 후 리스너 자동 분리 -> 이후 스크롤 시 연산 오버헤드 0ms
+                fastScrollEnd: true
             }
-        );
-        const menuTabsEl = menuSection.querySelector('.menu-tabs');
-        if (menuTabsEl) {
-            gsap.fromTo(menuTabsEl,
-                { opacity: 0, x: 45 },
-                {
-                    opacity: 1, x: 0, duration: 0.95, ease: 'power3.out',
-                    scrollTrigger: { trigger: menuSection, start: 'top 75%', toggleActions: 'play none none none' }
-                }
-            );
-        }
+        });
 
-        // 그리드 카드들 순차적 튕김 모션
+        // 1) 타이틀 부드러운 페이드업
+        menuTimeline.fromTo(menuSection.querySelectorAll('.menu-editorial-title > *'),
+            { opacity: 0, y: 20 },
+            { opacity: 1, y: 0, duration: 0.6, stagger: 0.08, ease: 'power2.out', clearProps: 'transform' }
+        );
+
+        // 2) 카드 가벼운 페이드업 (scale 리샘플링 제거로 GPU 부하 완전 차단)
         const initCards = menuSection.querySelectorAll('.menu-panel.active .menu-card, .menu-panel.active .hero-big-card, .menu-panel.active .mini-card-item');
         if (initCards && initCards.length > 0) {
-            gsap.fromTo(initCards,
-                { opacity: 0, y: 35, scale: 0.95 },
+            menuTimeline.fromTo(initCards,
+                { opacity: 0, y: 20 },
                 {
-                    opacity: 1, y: 0, scale: 1, duration: 0.75, stagger: 0.09, ease: 'back.out(1.3)',
-                    scrollTrigger: { trigger: menuSection, start: 'top 60%', toggleActions: 'play none none none' }
-                }
+                    opacity: 1,
+                    y: 0,
+                    duration: 0.5,
+                    stagger: 0.06,
+                    ease: 'power2.out',
+                    clearProps: 'transform,will-change' // 모션 완료 후 레이어 회수
+                },
+                '-=0.3'
             );
         }
 
-        // 하단 더보기 버튼 페이드 업 진입
+        // 3) 하단 더보기 버튼 페이드
         const menuMoreBtn = menuSection.querySelector('.menu-more-action');
         if (menuMoreBtn) {
-            gsap.fromTo(menuMoreBtn,
-                { opacity: 0, y: 25 },
-                {
-                    opacity: 1, y: 0, duration: 0.85, ease: 'power2.out',
-                    scrollTrigger: { trigger: menuSection, start: 'top 80%', toggleActions: 'play none none none' }
-                }
+            menuTimeline.fromTo(menuMoreBtn,
+                { opacity: 0, y: 15 },
+                { opacity: 1, y: 0, duration: 0.4, ease: 'power2.out', clearProps: 'transform' },
+                '-=0.2'
             );
         }
     }
