@@ -6,7 +6,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let lenis = null;
     if (typeof Lenis !== 'undefined') {
         lenis = new Lenis({
-            duration: isTouchDevice ? 0.8 : 1.2,
+            duration: isTouchDevice ? 0.65 : 0.85, // 스크롤 지연감 및 이중 보간 버벅거림 해소를 위해 반응성 개선
             easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
             orientation: 'vertical',
             gestureOrientation: 'vertical',
@@ -90,7 +90,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 headerElement.classList.remove('scrolled');
             }
         };
-        window.addEventListener('scroll', checkScroll);
+        window.addEventListener('scroll', checkScroll, { passive: true });
         checkScroll(); // 초기 상태 체크
     }
 
@@ -265,7 +265,9 @@ document.addEventListener('DOMContentLoaded', () => {
                     trigger: heroDarkSection,
                     start: 'top top',
                     end: isMobile ? '+=320' : 'bottom top',
-                    scrub: isMobile ? 0.7 : 1.2,
+                    scrub: isMobile ? 0.5 : 0.4, // Lenis와의 이중 보간 지연을 줄여 핀 전환 시 버벅거림 제거
+                    anticipatePin: 1,
+                    fastScrollEnd: true,
                     pin: true,
                     pinSpacing: true,
                     invalidateOnRefresh: true
@@ -417,7 +419,9 @@ document.addEventListener('DOMContentLoaded', () => {
                     end: scrollDistance,
                     pin: true,
                     pinSpacing: true,
-                    scrub: isMobile ? 1.0 : 1.2, // 묵직하고 부드러운 감쇠 적용
+                    scrub: isMobile ? 0.5 : 0.45, // Lenis와의 이중 보간 지연을 줄여 3D 카드 전환 반응성 확보
+                    anticipatePin: 1,
+                    fastScrollEnd: true,
                     invalidateOnRefresh: true
                 }
             });
@@ -1916,7 +1920,8 @@ document.addEventListener('DOMContentLoaded', () => {
                     trigger: '.reveal-section',
                     start: 'top top',
                     end: '+=200%',
-                    scrub: 1,
+                    scrub: 0.45,
+                    fastScrollEnd: true,
                     pin: true,
                     anticipatePin: 1
                 }
@@ -2825,11 +2830,37 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             });
         }, {
-            rootMargin: '200px 0px 200px 0px',
+            rootMargin: '450px 0px 450px 0px', // 뷰포트 진입 전에 미리 디코더를 준비하여 스크롤 도중 멈춤 현상 방지
             threshold: 0.1
         });
 
         lazyVideos.forEach(vid => videoObserver.observe(vid));
+
+        // 히어로 배경 비디오도 화면 밖으로 벗어나면 일시정지하여 디코더 자원 확보
+        const heroBgVideo = document.querySelector('.hero-video-bg');
+        if (heroBgVideo) {
+            videoObserver.observe(heroBgVideo);
+        }
+
+        // 화면 밖 무한 CSS 키프레임 애니메이션 섹션들을 자동으로 일시정지하여 스크롤 합성 부하 차단
+        const animSections = document.querySelectorAll(
+            '.section-solution, .section-philosophy, .section-marquee-banner, .section-hours, .section-model, .section-factory'
+        );
+        if (animSections.length > 0) {
+            const offscreenAnimObserver = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.remove('is-offscreen');
+                    } else {
+                        entry.target.classList.add('is-offscreen');
+                    }
+                });
+            }, {
+                rootMargin: '150px 0px 150px 0px',
+                threshold: 0
+            });
+            animSections.forEach(sec => offscreenAnimObserver.observe(sec));
+        }
     }
 });
 

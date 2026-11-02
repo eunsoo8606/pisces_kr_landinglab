@@ -1889,7 +1889,8 @@ main {
     height: 100%;
     object-fit: cover;
     transform: scale(1.05);
-    filter: blur(2.5px) brightness(0.68) contrast(1.05);
+    /* 실시간 비디오 프레임에 대한 blur 연산 부하를 제거하여 스크롤 버벅거림 방지 */
+    filter: brightness(0.62) contrast(1.05);
 }
 
 .circle-overlay {
@@ -2936,7 +2937,8 @@ footer {
     z-index: 4;
     opacity: 0.95;
     filter: brightness(1.05);
-    transition: all 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+    /* GSAP transform 모션과의 프레임 충돌을 막기 위해 opacity, filter만 트랜지션 적용 */
+    transition: opacity 0.45s cubic-bezier(0.16, 1, 0.3, 1), filter 0.45s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 /* 2. 주변 정보 요소들 (기본 상태) */
@@ -2946,7 +2948,8 @@ footer {
 .growth-text-block-right,
 .growth-sales-spot,
 .growth-bar-chart {
-    transition: all 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+    /* GSAP transform 모션과의 프레임 충돌을 막기 위해 opacity, filter만 트랜지션 적용 */
+    transition: opacity 0.45s cubic-bezier(0.16, 1, 0.3, 1), filter 0.45s cubic-bezier(0.16, 1, 0.3, 1);
     opacity: 0.45;
     filter: brightness(0.65);
 }
@@ -6758,7 +6761,8 @@ footer {
     background-image: url('/images/sec12_back.webp');
     background-size: cover;
     background-position: center;
-    background-attachment: fixed;
+    /* background-attachment: fixed로 인한 매 픽셀 전체 뷰포트 리페인트(스크롤 끊김) 제거 */
+    background-attachment: scroll;
     /* 파라랙스 효과 */
     padding: 35px 0 85px;
     overflow: hidden;
@@ -8370,7 +8374,8 @@ footer {
     position: relative;
     width: 100%;
     background: url('/images/sec_4.webp') center top / cover no-repeat;
-    background-attachment: fixed;
+    /* background-attachment: fixed로 인한 매 픽셀 전체 뷰포트 리페인트(스크롤 끊김) 제거 */
+    background-attachment: scroll;
     padding: 90px 0;
     overflow: hidden;
     font-family: 'Pretendard', sans-serif;
@@ -12849,7 +12854,8 @@ footer {
     filter: grayscale(100%) contrast(1.15) brightness(0.55);
     opacity: 0;
     transform: scale(1.08);
-    transition: opacity 1s cubic-bezier(0.25, 1, 0.5, 1), transform 1.2s cubic-bezier(0.25, 1, 0.5, 1);
+    /* GSAP scrub이 매 프레임 opacity/transform을 직접 제어하므로 CSS transition 충돌을 제거하고 GPU 레이어로 분리 */
+    will-change: transform, opacity;
     z-index: 1;
 }
 
@@ -12973,8 +12979,9 @@ footer {
     background: linear-gradient(145deg, rgba(22, 28, 42, 0.95) 0%, rgba(12, 16, 26, 0.98) 100%);
     border: 1px solid rgba(255, 77, 77, 0.35);
     box-shadow: 0 25px 50px rgba(0, 0, 0, 0.7), 0 0 30px rgba(255, 77, 77, 0.12);
-    backdrop-filter: blur(16px);
-    -webkit-backdrop-filter: blur(16px);
+    /* 3중 겹침 3D 카드 회전 시 매 프레임 다중 가우시안 블러 재연산으로 인한 프레임 드롭 차단 */
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
     transform-origin: center top;
     will-change: transform, opacity;
     z-index: 1;
@@ -13788,7 +13795,8 @@ footer {
     border: 1px solid rgba(11, 15, 25, 0.05);
     border-radius: 16px;
     padding: 30px;
-    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    /* GSAP y/opacity 진입 모션과 CSS transition이 충돌하지 않도록 호버 속성만 트랜지션 지정 */
+    transition: background-color 0.4s ease, box-shadow 0.4s ease, border-color 0.4s ease;
     opacity: 0;
     /* GSAP stagger로 드러남 */
     transform: translateY(30px);
@@ -15094,4 +15102,21 @@ footer {
     .menu-card-info .card-price {
         font-size: 12px !important;
     }
+}
+
+
+/* 화면 밖(Off-screen) 섹션의 무한 CSS 키프레임 애니메이션 자동 일시정지 (스크롤 합성 스레드 부하 절감) */
+.is-offscreen *,
+.is-offscreen *::before,
+.is-offscreen *::after {
+    animation-play-state: paused !important;
+}
+
+
+
+/* 화면 밖(Off-screen) 섹션의 무한 CSS 키프레임 애니메이션 자동 일시정지 (스크롤 합성 스레드 부하 절감) */
+.is-offscreen *,
+.is-offscreen *::before,
+.is-offscreen *::after {
+    animation-play-state: paused !important;
 }

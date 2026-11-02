@@ -28,6 +28,9 @@
     clip-path: circle(20% at 50% 50%);
     background-color: #00182e;
     pointer-events: none;
+    /* 스크롤 scrub 시 clip-path 연산을 별도 합성 레이어로 분리하여 프레임 드롭 방지 */
+    will-change: clip-path;
+    transform: translateZ(0);
 }
 
 .reveal-image-container {
@@ -96,9 +99,11 @@
     border-radius: 20px;
     overflow: hidden;
     border: 1px solid rgba(255, 255, 255, 0.1);
-    transition: all 0.3s ease;
+    /* GSAP scrub(transform, opacity)과 CSS transition이 매 프레임 충돌하는 현상 차단 */
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
     opacity: 0;
     transform: translateY(-80px);
+    will-change: transform, opacity;
     box-shadow: 0 30px 60px rgba(0, 0, 0, 0.5);
     position: relative;
     visibility: visible;
