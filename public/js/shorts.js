@@ -182,12 +182,58 @@
             }, { passive: true });
         }
 
-        // 뷰포트 진입 시 자동 재생 (IntersectionObserver)
+        // [성능] 유튜브 iframe 지연 로딩: 처음엔 썸네일만, 섹션 근처(1.5화면 전)에서 플레이어 로드
+        const loadShortsIframes = () => {
+            shortsCards.forEach(card => {
+                const iframe = card.querySelector('iframe');
+                if (iframe && !iframe.getAttribute('src') && iframe.dataset.src) {
+                    iframe.setAttribute('src', iframe.dataset.src);
+                }
+            });
+        };
+        shortsCards.forEach(card => {
+            const id = card.dataset.videoId;
+            if (id) card.style.backgroundImage = `url(https://i.ytimg.com/vi/${id}/hqdefault.jpg)`;
+        });
+
+        // 페이지 load 이벤트 이후에만 iframe을 붙임 (load 전에 붙이면 유튜브 로딩이 끝날 때까지 load가 늦어져,
+        // 그 뒤에 실행되는 ScrollTrigger.refresh가 사용자가 이 섹션을 스크롤하는 도중에 걸리는 문제 방지)
+        const startShortsPreload = () => {
+            if ('IntersectionObserver' in window) {
+                const preloadObserver = new IntersectionObserver((entries, obs) => {
+                    if (entries.some(e => e.isIntersecting)) {
+                        loadShortsIframes();
+                        obs.disconnect();
+                    }
+                }, { rootMargin: '150% 0px 150% 0px' });
+                preloadObserver.observe(revealSectionEl);
+            } else {
+                loadShortsIframes();
+            }
+        };
+        if (document.readyState === 'complete') {
+            startShortsPreload();
+        } else {
+            window.addEventListener('load', startShortsPreload, { once: true });
+        }
+
+        // 자동 재생 제어
+        // - 데스크톱: 원형 리빌이 끝나고 카드가 보일 때(main.js의 shorts:reveal 이벤트)만 재생
+        // - 모바일: 기존처럼 섹션이 20% 보이면 재생
+        const isDesktopReveal = () => window.innerWidth > 768;
+
+        document.addEventListener('shorts:reveal', () => {
+            if (isDesktopReveal()) playShortsIndex(currentShortsIndex);
+        });
+        document.addEventListener('shorts:hide', () => {
+            if (isDesktopReveal()) pauseShortsIndex(currentShortsIndex);
+        });
+
         if ('IntersectionObserver' in window) {
             const shortsSectionObserver = new IntersectionObserver((entries) => {
                 entries.forEach(entry => {
                     if (entry.isIntersecting) {
-                        playShortsIndex(currentShortsIndex);
+                        if (!isDesktopReveal()) playShortsIndex(currentShortsIndex);
                     } else {
                         pauseShortsIndex(currentShortsIndex);
                     }

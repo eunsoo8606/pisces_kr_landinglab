@@ -147,16 +147,16 @@
     margin-bottom: 30px;
     line-height: 1.3;
     font-weight: 700;
-    opacity: 0;
-    transform: translateX(30px);
+    opacity: 1;
+    transform: none;
 }
 
 .shorts-metrics {
     display: flex;
     flex-direction: column;
     gap: 15px;
-    opacity: 0;
-    transform: translateX(30px);
+    opacity: 1;
+    transform: none;
 }
 
 .shorts-desc-group {
@@ -357,10 +357,10 @@
     }
 
     .shorts-title {
-        font-size: 20px !important;
+        font-size: 26px !important;
         text-align: center !important;
-        margin-bottom: 15px !important;
-        line-height: 1.4 !important;
+        margin-bottom: 18px !important;
+        line-height: 1.35 !important;
         opacity: 1 !important;
         transform: none !important;
     }
@@ -380,12 +380,12 @@
     }
 
     .shorts-desc-item {
-        font-size: 13.5px !important;
+        font-size: 15.5px !important;
         line-height: 1.6 !important;
     }
 
     .shorts-desc-item.highlight-desc {
-        font-size: 15px !important;
+        font-size: 17.5px !important;
         padding-left: 0 !important;
     }
 
@@ -417,11 +417,77 @@
     }
 
     .shorts-title {
-        font-size: 17px !important;
-        margin-bottom: 10px !important;
+        font-size: 22px !important;
+        margin-bottom: 14px !important;
+        line-height: 1.35 !important;
     }
 
     .shorts-desc-item {
-        font-size: 12.5px !important;
+        font-size: 14.5px !important;
+        line-height: 1.6 !important;
     }
+
+    .shorts-desc-item.highlight-desc {
+        font-size: 16.5px !important;
+    }
+}
+/* ==========================================================================
+   [성능] 데스크톱 원형 리빌: clip-path 대신 원형 틀 scale(GPU 합성) 방식
+   - clip-path 스크럽은 매 프레임 화면 전체를 다시 그려 버벅임 발생
+   - 원형 틀(.reveal-image-container)을 scale로 키우고, 안쪽 이미지는 역스케일로 고정
+   - filter: brightness(0.35)는 동일한 밝기의 검정 반투명 레이어로 대체
+   ========================================================================== */
+@media (min-width: 769px) {
+    .reveal-overlay {
+        clip-path: none;
+        -webkit-clip-path: none;
+        background-color: transparent;
+        overflow: hidden;
+        will-change: auto;
+        transform: none;
+    }
+
+    .reveal-image-container {
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        width: var(--reveal-d, 2210px);
+        height: var(--reveal-d, 2210px);
+        margin-left: calc(var(--reveal-d, 2210px) / -2);
+        margin-top: calc(var(--reveal-d, 2210px) / -2);
+        border-radius: 50%;
+        overflow: hidden;
+        background-color: #00182e;
+        transform: scale(0.28);
+        transform-origin: 50% 50%;
+        will-change: transform;
+    }
+
+    .reveal-image-container img {
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        width: 100vw;
+        height: 100vh;
+        margin-left: -50vw;
+        margin-top: -50vh;
+        object-fit: cover;
+        filter: none;
+        transform-origin: 50% 50%;
+        will-change: transform;
+    }
+
+    .reveal-image-container::after {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.65);
+        pointer-events: none;
+    }
+}
+
+/* [성능] 유튜브 플레이어 지연 로딩 전 썸네일 표시 */
+.shorts-card {
+    background-size: cover;
+    background-position: center;
 }

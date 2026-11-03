@@ -19,6 +19,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // GSAP ScrollTrigger 연동
         gsap.registerPlugin(ScrollTrigger);
+        // 모바일 주소창이 접히고 펴질 때 발생하는 높이 변화로 refresh가 돌며 스크롤이 멈추는 현상 방지
+        ScrollTrigger.config({ ignoreMobileResize: true });
         lenis.on('scroll', ScrollTrigger.update);
 
         gsap.ticker.add((time) => {
@@ -1113,6 +1115,24 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
+    // [성능] 성장사 섹션: 스크롤 중에는 좌우 호버 딤드(filter 전환)를 잠시 끔
+    // 휠 스크롤 시 마우스 아래로 섹션이 지나가며 hover가 켜졌다 꺼지는 것을 막아 프레임 드롭 방지
+    if (sectionGrowth) {
+        const growthWrap = sectionGrowth.querySelector('.growth-showcase-wrap');
+        let growthScrollTimer = null;
+        if (growthWrap) {
+            window.addEventListener('scroll', () => {
+                if (!growthWrap.classList.contains('is-scrolling')) {
+                    growthWrap.classList.add('is-scrolling');
+                }
+                clearTimeout(growthScrollTimer);
+                growthScrollTimer = setTimeout(() => {
+                    growthWrap.classList.remove('is-scrolling');
+                }, 180);
+            }, { passive: true });
+        }
+    }
+
     // 12. 여덟 번째 섹션 (.section-ranking) 매출 데이터 및 전광판 오토 롤링 인터렉션
     const sectionRanking = document.querySelector('.section-ranking');
     const rankingHeader = document.querySelector('.ranking-header');
@@ -1915,6 +1935,28 @@ document.addEventListener('DOMContentLoaded', () => {
             gsap.set('.shorts-desc-item', { opacity: 1, y: 0 });
         } else {
             // 데스크톱: 시네마틱 clipPath & Pin 타임라인 적용
+            // 원형 마스크: clip-path(매 프레임 전체 리페인트) 대신 원형 틀의 scale(GPU 합성)로 확대
+            // 원이 화면 대각선을 덮는 크기를 기준으로, 기존 circle(20%) 시작 크기와 동일하게 맞춤
+            const revealCircle = revealElem.querySelector('.reveal-image-container');
+            const revealImg = revealElem.querySelector('.reveal-image-container img');
+            const getRevealStartScale = () => {
+                const w = revealElem.offsetWidth || window.innerWidth;
+                const h = revealElem.offsetHeight || window.innerHeight;
+                const coverR = Math.hypot(w / 2, h / 2) + 2;
+                const startR = 0.2 * Math.sqrt((w * w + h * h) / 2);
+                revealElem.style.setProperty('--reveal-d', (coverR * 2) + 'px');
+                return Math.min(1, startR / coverR);
+            };
+            const syncRevealImg = () => {
+                const s = gsap.getProperty(revealCircle, 'scale') || 1;
+                gsap.set(revealImg, { scale: 1 / s });
+            };
+            gsap.set(revealCircle, { scale: getRevealStartScale() });
+            syncRevealImg();
+
+            // 쇼츠 영상 재생 타이밍: 원형 리빌이 끝나고 카드가 보일 때만 재생 (리빌 애니메이션 중 디코딩 부하 분리)
+            let shortsRevealed = false;
+
             const revealTimeline = gsap.timeline({
                 scrollTrigger: {
                     trigger: '.reveal-section',
@@ -1923,47 +1965,45 @@ document.addEventListener('DOMContentLoaded', () => {
                     scrub: 0.45,
                     fastScrollEnd: true,
                     pin: true,
-                    anticipatePin: 1
+                    anticipatePin: 1,
+                    invalidateOnRefresh: true,
+                    onRefreshInit: () => {
+                        gsap.set(revealCircle, { scale: getRevealStartScale() });
+                        syncRevealImg();
+                    },
+                    onUpdate: (self) => {
+                        const shouldPlay = self.progress >= 0.5;
+                        if (shouldPlay !== shortsRevealed) {
+                            shortsRevealed = shouldPlay;
+                            document.dispatchEvent(new CustomEvent(shouldPlay ? 'shorts:reveal' : 'shorts:hide'));
+                        }
+                    }
                 }
             });
 
+            // 기존 clip-path circle(20%→150%)는 약 0.78 지점에서 화면을 다 덮으므로 동일 타이밍으로 맞춤
             revealTimeline
-                .to('.reveal-overlay', {
-                    clipPath: 'circle(150% at 50% 50%)',
-                    duration: 2,
-                    ease: 'none'
-                })
+                .fromTo(revealCircle, {
+                    scale: () => getRevealStartScale()
+                }, {
+                    scale: 1,
+                    duration: 0.78,
+                    ease: 'none',
+                    onUpdate: syncRevealImg
+                }, 0)
                 .to('.shorts-container', {
                     opacity: 1,
                     pointerEvents: 'auto',
                     duration: 1,
                     ease: 'power2.out'
-                }, '-=1')
+                }, 1)
                 .to('.shorts-card', {
                     opacity: 1,
                     y: 0,
                     duration: 1.2,
                     stagger: 0.15,
                     ease: 'expo.out'
-                }, '-=0.5')
-                .to('.shorts-title', {
-                    opacity: 1,
-                    x: 0,
-                    y: 0,
-                    duration: 1.2,
-                    ease: 'power3.out'
-                }, '-=0.8')
-                .to('.shorts-metrics', {
-                    opacity: 1,
-                    x: 0,
-                    duration: 0.6,
-                    ease: 'power2.out'
-                }, '-=0.6')
-                .fromTo('.shorts-desc-item',
-                    { opacity: 0, y: 30 },
-                    { opacity: 1, y: 0, duration: 1.0, stagger: 0.25, ease: 'power2.out' },
-                    '-=0.5'
-                );
+                }, '-=0.5');
         }
     }
 
@@ -2865,20 +2905,50 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 // 리소스 로드 및 폰트 렌더링 완료 시점에 ScrollTrigger 위치를 재계산하여 레이아웃 시프트로 인한 좌표 왜곡 해결
+// [모바일 스크롤 멈춤 방지] refresh()는 내부적으로 스크롤 위치를 다시 지정하므로,
+// 사용자가 터치 관성 스크롤 중일 때 실행되면 스크롤이 '뚝' 멈춥니다.
+// (시크릿 모드처럼 캐시가 없으면 load가 늦게 떠서, 사용자가 중간 섹션을 스크롤하는 도중에 실행됨)
+// → 스크롤/터치가 멈춘 뒤에만 refresh 하도록 지연합니다.
+const safeScrollTriggerRefresh = (() => {
+    let pending = false;
+    let idleTimer = null;
+    let touching = false;
+    let lastScrollAt = 0;
+
+    window.addEventListener('scroll', () => { lastScrollAt = performance.now(); }, { passive: true });
+    window.addEventListener('touchstart', () => { touching = true; }, { passive: true });
+    window.addEventListener('touchend', () => { touching = false; }, { passive: true });
+    window.addEventListener('touchcancel', () => { touching = false; }, { passive: true });
+
+    const tryRun = () => {
+        clearTimeout(idleTimer);
+        const idleFor = performance.now() - lastScrollAt;
+        if (touching || idleFor < 250) {
+            idleTimer = setTimeout(tryRun, 250);
+            return;
+        }
+        pending = false;
+        ScrollTrigger.refresh();
+    };
+
+    return () => {
+        if (pending) return;
+        pending = true;
+        tryRun();
+    };
+})();
+
 window.addEventListener('load', () => {
     if (document.fonts && document.fonts.ready) {
         document.fonts.ready.then(() => {
-            ScrollTrigger.refresh();
+            safeScrollTriggerRefresh();
         });
     } else {
-        requestAnimationFrame(() => ScrollTrigger.refresh());
+        requestAnimationFrame(() => safeScrollTriggerRefresh());
     }
 
-    // 비동기 이미지 및 외부 요소 지연 렌더링에 대응하기 위한 시차 재조정 루프
+    // 비동기 이미지 및 외부 요소 지연 렌더링에 대응하기 위한 시차 재조정 (스크롤이 멈췄을 때만 실행)
     setTimeout(() => {
-        ScrollTrigger.refresh();
-    }, 300);
-    setTimeout(() => {
-        ScrollTrigger.refresh();
+        safeScrollTriggerRefresh();
     }, 800);
 });
