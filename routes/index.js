@@ -23,20 +23,20 @@ router.get('/', async (req, res) => {
         const [menuList] = await db.query('SELECT * FROM menus ORDER BY sort_order ASC, id ASC');
 
         res.render('index', {
-            title: '물고기자리 - 프리미엄 숙성회',
+            title: '물고기자리 창업 공식 홈페이지 | 숙성회 횟집 프랜차이즈 가맹',
             branding: 'PISCES since 2002',
-            metaDescription: '20여 년 노하우의 프리미엄 숙성회 전문 프랜차이즈 물고기자리. 최상급 활선어 무한리필과 성공적인 소자본 횟집 창업 솔루션을 제공합니다.',
-            metaKeywords: '물고기자리, 숙성회, 무한리필, 활어회, 프랜차이즈, 창업, 횟집, 소자본창업, 일식창업',
+            metaDescription: '물고기자리 공식 홈페이지. 물고기자리 창업, 회 기술자 없이 시작하는 숙성회 횟집 프랜차이즈. 2002년부터 이어온 노하우와 자체 필렛가공센터의 손질 완료 필렛 공급으로 초보 창업자도 1주일 교육이면 오픈합니다. 가맹 문의 1566-6851',
+            metaKeywords: '물고기자리 창업, 물고기자리 공식 홈페이지, 물고기자리 홈페이지, 물고기자리 가맹, 숙성회 창업, 횟집 창업, 횟집 프랜차이즈, 숙성회 프랜차이즈, 소자본창업, 물고기자리, 숙성회, 무한리필',
             popups: popups,
             menuList: menuList || []
         });
     } catch (err) {
         console.error('❌ Failed to fetch active popups or menus for landing page:', err);
         res.render('index', {
-            title: '물고기자리 - 프리미엄 숙성회',
+            title: '물고기자리 창업 공식 홈페이지 | 숙성회 횟집 프랜차이즈 가맹',
             branding: 'PISCES since 2002',
-            metaDescription: '20여 년 노하우의 프리미엄 숙성회 전문 프랜차이즈 물고기자리. 최상급 활선어 무한리필과 성공적인 소자본 횟집 창업 솔루션을 제공합니다.',
-            metaKeywords: '물고기자리, 숙성회, 무한리필, 활어회, 프랜차이즈, 창업, 횟집, 소자본창업, 일식창업',
+            metaDescription: '물고기자리 공식 홈페이지. 물고기자리 창업, 회 기술자 없이 시작하는 숙성회 횟집 프랜차이즈. 2002년부터 이어온 노하우와 자체 필렛가공센터의 손질 완료 필렛 공급으로 초보 창업자도 1주일 교육이면 오픈합니다. 가맹 문의 1566-6851',
+            metaKeywords: '물고기자리 창업, 물고기자리 공식 홈페이지, 물고기자리 홈페이지, 물고기자리 가맹, 숙성회 창업, 횟집 창업, 횟집 프랜차이즈, 숙성회 프랜차이즈, 소자본창업, 물고기자리, 숙성회, 무한리필',
             popups: [],
             menuList: []
         });
@@ -63,7 +63,7 @@ router.get(['/menu', '/menu/:category'], async (req, res) => {
         const [menuList] = await db.query('SELECT * FROM menus ORDER BY sort_order ASC, id ASC');
 
         res.render('menu', {
-            title: '메뉴소개 | 물고기자리 - 프리미엄 숙성회',
+            title: '메뉴소개 | 물고기자리 창업 공식 홈페이지',
             branding: 'PISCES since 2002',
             activeTab: activeTab,
             menuList: menuList,
@@ -104,7 +104,7 @@ router.get(['/stores', '/brand/stores'], async (req, res) => {
         }
 
         res.render('stores/index', {
-            title: '가맹점 현황 | 물고기자리 - 프리미엄 숙성회',
+            title: '가맹점 현황 | 물고기자리 창업 공식 홈페이지',
             branding: 'PISCES since 2002',
             storesData: stores,
             kakaoKey: process.env.KAKAO_MAP_JAVASCRIPT_KEY || '',
@@ -125,7 +125,7 @@ router.use('/franchise', (req, res) => {
 // 4. 브랜드소개 라우트
 router.get('/brand/about', (req, res) => {
     res.render('brand/about', {
-        title: '브랜드소개 | 물고기자리 - 프리미엄 숙성회',
+        title: '브랜드소개 | 물고기자리 창업 공식 홈페이지',
         branding: 'PISCES since 2002',
         metaDescription: 'since 2002 물고기자리의 철학과 역사. 왜 물고기자리 숙성회인가? 최고의 맛을 향한 타협 없는 고집과 가치를 지켜나가는 브랜드 스토리입니다.',
         metaKeywords: '물고기자리 스토리, 숙성회 철학, 횟집 역사, 브랜드스토리, 물고기자리 브랜드'
@@ -135,7 +135,7 @@ router.get('/brand/about', (req, res) => {
 // 4-2. 오시는길 라우트
 router.get('/brand/location', (req, res) => {
     res.render('brand/location', {
-        title: '오시는길 | 물고기자리 - 프리미엄 숙성회',
+        title: '오시는길 | 물고기자리 창업 공식 홈페이지',
         branding: 'PISCES since 2002',
         kakaoKey: process.env.KAKAO_MAP_JAVASCRIPT_KEY || '',
         metaDescription: '물고기자리 본사 오시는 길을 안내해 드립니다. 경기도 용인시 기흥구 보정동 풍산프라자 703호에서 성공적인 프랜차이즈 상담을 시작해 보세요.',
@@ -169,7 +169,7 @@ router.get(['/community', '/community/:category'], async (req, res) => {
         const [listResult] = await db.query(listQuery, [activeTab]);
 
         res.render('community', {
-            title: '커뮤니티 | 물고기자리 - 프리미엄 숙성회',
+            title: '커뮤니티 | 물고기자리 창업 공식 홈페이지',
             branding: 'PISCES since 2002',
             activeTab: activeTab,
             list: listResult,
@@ -244,8 +244,8 @@ router.get(['/sitemap.xml', '/sitemap'], async (req, res) => {
 router.get(['/rss.xml', '/rss'], async (req, res) => {
     try {
         const baseUrl = getBaseUrl(req);
-        const siteTitle = '물고기자리 - 프리미엄 숙성회 전문 프랜차이즈';
-        const siteDescription = '20여 년 노하우의 프리미엄 숙성회 전문 프랜차이즈 물고기자리. 최상급 활선어 무한리필과 성공적인 소자본 횟집 창업 솔루션을 제공합니다.';
+        const siteTitle = '물고기자리 창업 공식 홈페이지 | 숙성회 횟집 프랜차이즈 가맹';
+        const siteDescription = '24년 노하우의 프리미엄 숙성회 전문 프랜차이즈 물고기자리. 최상급 활선어 무한리필과 성공적인 소자본 횟집 창업 솔루션을 제공합니다.';
 
         let itemsXml = '';
 
@@ -256,7 +256,7 @@ router.get(['/rss.xml', '/rss'], async (req, res) => {
                 menus.forEach(menu => {
                     const menuTitle = `[대표메뉴] ${menu.name} ${menu.badge ? '(' + menu.badge + ')' : ''}`;
                     const menuLink = `${baseUrl}/menu`;
-                    const menuDesc = `${menu.name} - 가격: ${menu.price}. 23년 노하우의 명품 숙성회 전문 물고기자리 시그니처 메뉴입니다.`;
+                    const menuDesc = `${menu.name} - 가격: ${menu.price}. 24년 노하우의 명품 숙성회 전문 물고기자리 시그니처 메뉴입니다.`;
 
                     itemsXml += `
         <item>
